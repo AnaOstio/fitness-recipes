@@ -43,23 +43,14 @@ dataframe["Rating"] = typeRating
 # Macro Nutrients %
 macro = ["carbohydrates", "greases", "protein", "fiber"]
 
-randomPercentage = np.random.dirichlet(np.ones(4), len(dataframe))
+randomPercentage = np.round(np.random.dirichlet(np.ones(4), len(dataframe))*100, decimals=2)
 
-randomPercentage *= 100
+macroSet = [{macro[j]:randomPercentage[i][j] for j in range(len(macro))} for i in range(len(randomPercentage))]
 
-randomPercentage = np.round(randomPercentage, decimals=2)
-
-macro = [randomPercentage[i] for i in range(len(dataframe))]
-
-dataframe["MacroNutrients"] = macro
-
-macro = ["carbohydrates", "greases", "protein", "fiber"]
-macroSet = {}
-print(macroSet)
-
+dataframe["macronutrientsPercentages"] = macroSet
 
 # Guarda el dataframe actualizado en un nuevo archivo CSV
-ruta_nuevo_archivo = os.path.join(directorio_actual, 'food5.csv')
+ruta_nuevo_archivo = os.path.join(directorio_actual, 'food6.csv')
 dataframe.to_csv(ruta_nuevo_archivo, index=False)
 
 print("Columna eliminada y archivo CSV actualizado correctamente.")
