@@ -13,6 +13,10 @@ dataFrame = pd.read_csv(filePath)
 nombre_columna = 'Cleaned_Ingredients'
 dataFrame = dataFrame.drop(nombre_columna, axis=1)
 
+# Rename field Image_Name to ImageName
+
+dataFrame = dataFrame.rename(columns=({"Image_Name" : "ImageName"}))
+
 # Add missing fields
 typeOfMeal = ["Breakfast", "Lunch", "Dinner", "Dessert", "Mid-morning meal"]
 randomTypeOfMeal = [random.choice(typeOfMeal) for _ in range(len(dataFrame))]
