@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public class Recipe {
@@ -36,7 +35,10 @@ public class Recipe {
     public Recipe(String[] recipe){
         this.id = Long.parseLong(recipe[0]);
         this.title = recipe[1];
-        this.ingredients = recipe[2].replaceAll("\\[(.*?)\\]", "").split(", ");
+        this.ingredients = recipe[2].replaceAll("^\"|\"$", "")
+                .replaceAll("^\\[|\\]$", "")
+                .replaceAll("^\'|\'$", "")
+                .split("\', \'");
         this.instructions = recipe[3].replaceAll("^\"|\"$", "");
         this.imageName = recipe[4];
         this.typeOfMeal = recipe[5];
