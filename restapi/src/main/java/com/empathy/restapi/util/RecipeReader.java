@@ -1,6 +1,7 @@
 package com.empathy.restapi.util;
 
 import com.empathy.restapi.model.Recipe;
+import org.springframework.context.annotation.Bean;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,15 +11,18 @@ import java.util.Scanner;
 
 public class RecipeReader {
 
+
+    List<Recipe> recipes = new ArrayList<>();
+
     public void readLines() throws FileNotFoundException {
-        //String filePath = "//Users//anafo//Documents//Proyectos//fitness-recipes//scripts//foodFilled2.csv";
-        String filePath = "//Users//carlosda//Documents//GitHub//fitness-recipes//scripts//foodFilled2.csv";
+        String filePath = "//Users//anafo//Documents//Proyectos//fitness-recipes//scripts//foodFilled2.csv";
+        // String filePath = "//Users//carlosda//Documents//GitHub//fitness-recipes//scripts//foodFilled2.csv";
 
         Scanner sc = new Scanner(new File(filePath));
         sc.useDelimiter("---\n");
 
-        List<Recipe> recipes = new ArrayList<>();
         String[] recipeFields;
+
         while (sc.hasNext()){
             recipeFields = sc.next().split("#");
 
@@ -27,6 +31,10 @@ public class RecipeReader {
         }
 
         sc.close();
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
     }
 
 }
