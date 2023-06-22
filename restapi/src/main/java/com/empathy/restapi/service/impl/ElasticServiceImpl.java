@@ -8,10 +8,11 @@ import com.empathy.restapi.model.Recipe;
 import com.empathy.restapi.service.ElasticService;
 import com.empathy.restapi.util.RecipeReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 
-@Component
+@Service
 public class ElasticServiceImpl implements ElasticService {
 
     private static final String INDEX = "recipes";
@@ -33,21 +34,19 @@ public class ElasticServiceImpl implements ElasticService {
 
         // Indexing recipes
         BulkRequest.Builder bulkRequest = new BulkRequest.Builder();
-        for(Recipe recipe: recipeReader.getRecipes()){
+        for (Recipe recipe : recipeReader.getRecipes()) {
             bulkRequest.operations(op -> op
                     .index(idx -> idx
                             .index(INDEX)
                             .id(recipe.getId().toString())
-                            .document(recipe)
-                    )
-            );
+                            .document(recipe)));
         }
 
         BulkResponse result = elasticsearchClient.bulk(bulkRequest.build());
 
         // Test if the indexing has errors
         if (result.errors()) {
-            for (BulkResponseItem item: result.items()) {
+            for (BulkResponseItem item : result.items()) {
                 if (item.error() != null) {
                     return item.error().reason();
                 }

@@ -1,7 +1,5 @@
 package com.empathy.restapi.configuration;
 
-
-
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;

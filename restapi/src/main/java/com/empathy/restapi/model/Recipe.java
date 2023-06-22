@@ -6,12 +6,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-@Document(indexName = "recipeindex")
+
+@Document(indexName = "recipes")
 public class Recipe {
 
     @Id

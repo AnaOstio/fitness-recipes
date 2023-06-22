@@ -7,15 +7,13 @@ import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.empathy.restapi.model.Recipe;
 import com.empathy.restapi.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class QueryServiceImpl implements QueryService {
 
     private static final String INDEX = "recipes";
@@ -24,37 +22,28 @@ public class QueryServiceImpl implements QueryService {
     private ElasticsearchClient elasticsearchClient;
 
     @Override
-    public ResponseEntity<Recipe> getRecipeById(Long id) throws IOException {
+    public Recipe getRecipeById(Long id) throws IOException {
         GetResponse<Recipe> response = elasticsearchClient.get(g -> g
-                        .index(INDEX)
-                        .id(id.toString()),
-                Recipe.class
-        );
+                .index(INDEX)
+                .id(id.toString()),
+                Recipe.class);
 
-        if (response.found()) {
-            Recipe product = response.source();
-            return new ResponseEntity<>(product,  HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return response.source();
     }
 
     @Override
     public List<Recipe> getRecipeByTitle(String title) throws IOException {
         SearchResponse<Recipe> response = elasticsearchClient.search(s -> s
-                        .index(INDEX)
-                        .query(q -> q
-                                .match(t -> t
-                                        .field("title")
-                                        .query(title)
-                                )
-                        ),
-                        Recipe.class
-        );
+                .index(INDEX)
+                .query(q -> q
+                        .match(t -> t
+                                .field("title")
+                                .query(title))),
+                Recipe.class);
 
         List<Hit<Recipe>> hits = response.hits().hits();
         List<Recipe> recipes = new ArrayList<>();
-        for (Hit<Recipe> hit: hits) {
+        for (Hit<Recipe> hit : hits) {
             recipes.add(hit.source());
         }
 

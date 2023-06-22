@@ -25,28 +25,24 @@ public class RecipeController {
         this.queryService = queryService;
     }
 
-    @PostMapping("/recipe")
-    public ResponseEntity<String> saveRecipe() throws IOException {
+    @GetMapping("/bulk-recipes")
+    public ResponseEntity<String> bulkRecipes() throws IOException {
         String indexing = indexService.indexRecipes();
-        if(indexing == "No errors"){
+        if (indexing == "No errors") {
             return new ResponseEntity<>("No errors indexing the elements", HttpStatus.OK);
         }
-         return new ResponseEntity<>(indexing, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
-    @GetMapping("/recipes")
-    public ResponseEntity<String> getRecipes() throws IOException {
-        return  saveRecipe();
+        return new ResponseEntity<>(indexing, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/recipe/{id}")
     public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) throws IOException {
-        return queryService.getRecipeById(id);
+        return new ResponseEntity<Recipe>(queryService.getRecipeById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/recipe/title/{title}")
+    @GetMapping("/recipes/title/{title}")
     public ResponseEntity<List<Recipe>> getRecipesByTitle(@PathVariable String title) throws IOException {
         List<Recipe> recipes = queryService.getRecipeByTitle(title);
-        return new ResponseEntity<>(recipes, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 }
