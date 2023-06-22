@@ -2,22 +2,36 @@ package com.empathy.restapi.configuration;
 
 
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration;
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RestClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 
 @Configuration
-@EnableAutoConfiguration(exclude = SpringApplicationAdminJmxAutoConfiguration.class)
-public class ElasticSearchConfiguration extends ElasticsearchConfiguration {
+public class ElasticSearchConfiguration {
 
+    @Bean
+    public ElasticsearchClient getElasticClient(){
 
-    @Override
-    public ClientConfiguration clientConfiguration() {
-        return ClientConfiguration.builder()
-                .connectedTo("localhost:9200")
-                .withSocketTimeout(999999999)
-                .build();
+        // Create the low-level client
+        // To put it on the Docker I have to change the HttpPost
+        // in this case to "elasticsearch"
+        RestClient restClient = RestClient.builder(
+                new HttpHost("localhost", 9200)).build();
+
+        // Create the transport with a Jackson mapper
+        ElasticsearchTransport transport = new RestClientTransport(
+                restClient, new JacksonJsonpMapper());
+
+        // And create the API client
+        ElasticsearchClient client = new ElasticsearchClient(transport);
+
+        return client;
     }
+
+
 }

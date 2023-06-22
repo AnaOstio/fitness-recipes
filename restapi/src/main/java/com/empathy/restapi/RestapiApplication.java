@@ -10,18 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class RestapiApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(RestapiApplication.class, args);
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.scan("com.empathy.restapi");
-		context.refresh();
-
-		RecipeReader rec =  context.getBean(RecipeReader.class);
-		try {
-			rec.readLines();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }

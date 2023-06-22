@@ -1,58 +1,52 @@
 package com.empathy.restapi.controller;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import com.empathy.restapi.model.Recipe;
-import com.empathy.restapi.util.RecipeReader;
-import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.springframework.data.elasticsearch.client.elc.QueryBuilders;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.IndexedObjectInformation;
-import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import com.empathy.restapi.service.ElasticService;
+import com.empathy.restapi.service.QueryService;
+import com.empathy.restapi.service.impl.ElasticServiceImpl;
+import com.empathy.restapi.service.impl.QueryServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
 public class RecipeController {
 
-    private ElasticsearchOperations elasticsearchOperations;
-    private static final String INDEX = "recipes";
+    private ElasticService indexService;
+    private QueryService queryService;
 
-    public RecipeController(ElasticsearchOperations elasticsearchOperations) {
-        this.elasticsearchOperations = elasticsearchOperations;
+    @Autowired
+    public RecipeController(ElasticServiceImpl indexService, QueryServiceImpl queryService) {
+        this.indexService = indexService;
+        this.queryService = queryService;
     }
 
     @PostMapping("/recipe")
-    public List<String> saveRecipe() {
-        RecipeReader recipeReader = new RecipeReader();
-        try {
-            recipeReader.readLines();
-        } catch (Exception e) {
-            e.printStackTrace();
+    public ResponseEntity<String> saveRecipe() throws IOException {
+        String indexing = indexService.indexRecipes();
+        if(indexing == "No errors"){
+            return new ResponseEntity<>("No errors indexing the elements", HttpStatus.OK);
         }
-
-        List<IndexQuery> queries = recipeReader.getRecipes().stream().map(recipe -> {
-            IndexQuery indexQuery = new IndexQuery();
-            indexQuery.setId(recipe.getId().toString());
-            indexQuery.setObject(recipe);
-            return indexQuery;
-        }).collect(Collectors.toList());
-
-        return elasticsearchOperations.bulkIndex(queries, IndexCoordinates.of(INDEX))
-                .stream()
-                .map(indexQuery -> indexQuery.toString())
-                .collect(Collectors.toList());
+         return new ResponseEntity<>(indexing, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/recipes")
-    public List<String> getRecipes(){
+    public ResponseEntity<String> getRecipes() throws IOException {
         return  saveRecipe();
+    }
+
+    @GetMapping("/recipe/{id}")
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) throws IOException {
+        return queryService.getRecipeById(id);
+    }
+
+    @GetMapping("/recipe/title/{title}")
+    public ResponseEntity<List<Recipe>> getRecipesByTitle(@PathVariable String title) throws IOException {
+        List<Recipe> recipes = queryService.getRecipeByTitle(title);
+        return new ResponseEntity<>(recipes, HttpStatus.ACCEPTED);
     }
 }
