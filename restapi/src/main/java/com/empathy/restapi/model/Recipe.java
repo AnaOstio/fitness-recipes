@@ -15,7 +15,7 @@ import java.util.Map;
 public class Recipe {
 
     @Id
-    private Long id;
+    private String id;
 
     @Field(type = FieldType.Text, name = "title")
     private String title;
@@ -29,8 +29,8 @@ public class Recipe {
     @Field(type = FieldType.Text, name = "typeOfMeal")
     private String typeOfMeal;
 
-    @Field(type = FieldType.Double, name = "rating")
-    private double rating;
+    @Field(type = FieldType.Object, name = "rating")
+    private Map<String, Double> rating;
 
     @Field(type = FieldType.Text, name = "timeOfPreparation")
     private String timeOfPreparation;
@@ -41,9 +41,12 @@ public class Recipe {
     @Field(name = "ingredientList")
     private List<String> ingredientList;
 
-    public Recipe() {}
+    public Recipe() {
+    }
 
-    public Recipe(Long id, String title, List<String> ingredientList, String instructions, String imageName, String typeOfMeal, double rating, Map<String, Double> macronutrientsPercentages, String timeOfPreparation){
+    public Recipe(String id, String title, List<String> ingredientList, String instructions, String imageName,
+            String typeOfMeal, Map<String, Double> rating, Map<String, Double> macronutrientsPercentages,
+            String timeOfPreparation) {
         this.id = id;
         this.title = title;
         this.imageName = imageName;
@@ -55,8 +58,8 @@ public class Recipe {
         this.timeOfPreparation = timeOfPreparation;
     }
 
-    public Recipe(String[] recipe){
-        this.id = Long.parseLong(recipe[0]);
+    public Recipe(String[] recipe) {
+        this.id = recipe[0];
         this.title = recipe[1];
         this.ingredientList = Arrays.stream(recipe[2].replaceAll("^\"|\"$", "")
                 .replaceAll("^\\[|\\]$", "")
@@ -65,22 +68,26 @@ public class Recipe {
         this.instructions = recipe[3].replaceAll("^\"|\"$", "");
         this.imageName = recipe[4];
         this.typeOfMeal = recipe[5];
-        this.rating = Double.parseDouble(recipe[6]);
         this.timeOfPreparation = recipe[8];
 
         ObjectMapper objectMapper = new ObjectMapper();
-        try{
-            this.macronutrientsPercentages = objectMapper.readValue(recipe[7].replaceAll("\'", "\""), new TypeReference<Map<String, Double>>() {});
-            }catch (IOException e){
+        try {
+            this.macronutrientsPercentages = objectMapper.readValue(recipe[7].replaceAll("\'", "\""),
+                    new TypeReference<Map<String, Double>>() {
+                    });
+            this.rating = objectMapper.readValue(recipe[6].replaceAll("\'", "\""),
+                    new TypeReference<Map<String, Double>>() {
+                    });
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -104,7 +111,7 @@ public class Recipe {
         return typeOfMeal;
     }
 
-    public double getRating() {
+    public Map<String, Double> getRating() {
         return rating;
     }
 
@@ -136,7 +143,7 @@ public class Recipe {
         this.typeOfMeal = typeOfMeal;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Map<String, Double> rating) {
         this.rating = rating;
     }
 

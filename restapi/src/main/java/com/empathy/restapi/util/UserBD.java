@@ -1,6 +1,7 @@
 package com.empathy.restapi.util;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.empathy.restapi.model.User;
 
@@ -20,8 +21,8 @@ public class UserBD {
         this.userList.add(user);
     }
 
-    public User getUserById(long id) {
-        return this.userList.stream().filter((user) -> user.getId() == id).findFirst().get();
+    public Optional<User> getUserById(String id) {
+        return this.userList.stream().filter((user) -> user.getId().equals(id)).findFirst();
     }
 
     public void deleteUserById(User user) {

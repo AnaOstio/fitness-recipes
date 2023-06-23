@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
-public class RecipeReader {
+public class RecipeDB {
 
     List<Recipe> recipes = new ArrayList<>();
 
@@ -33,5 +34,17 @@ public class RecipeReader {
 
     public List<Recipe> getRecipes() {
         return recipes;
+    }
+
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
+    }
+
+    public Optional<Recipe> getRecipeById(String id) {
+        return recipes.stream().filter((recipe) -> recipe.getId().equals(id)).findFirst();
+    }
+
+    public void deleteRecipe(Recipe recipe) {
+        recipes.remove(recipe);
     }
 }

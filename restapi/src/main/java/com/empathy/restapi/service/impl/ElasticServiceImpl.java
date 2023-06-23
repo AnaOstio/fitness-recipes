@@ -6,7 +6,7 @@ import co.elastic.clients.elasticsearch.core.BulkResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import com.empathy.restapi.model.Recipe;
 import com.empathy.restapi.service.ElasticService;
-import com.empathy.restapi.util.RecipeReader;
+import com.empathy.restapi.util.RecipeDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +21,20 @@ public class ElasticServiceImpl implements ElasticService {
     private ElasticsearchClient elasticsearchClient;
 
     @Autowired
-    private RecipeReader recipeReader;
+    private RecipeDB recipeDB;
 
     @Override
     public String indexRecipes() throws IOException {
         // Read elements from CSV file
         try {
-            recipeReader.readLines();
+            recipeDB.readLines();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Indexing recipes
         BulkRequest.Builder bulkRequest = new BulkRequest.Builder();
-        for (Recipe recipe : recipeReader.getRecipes()) {
+        for (Recipe recipe : recipeDB.getRecipes()) {
             bulkRequest.operations(op -> op
                     .index(idx -> idx
                             .index(INDEX)

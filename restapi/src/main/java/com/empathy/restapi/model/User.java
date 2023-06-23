@@ -2,23 +2,23 @@ package com.empathy.restapi.model;
 
 public class User {
 
-    private long id;
+    private String id;
     private String username;
     private String email;
     private String password;
 
-    public User(long id, String username, String email, String password) {
+    public User(String id, String username, String email, String password) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

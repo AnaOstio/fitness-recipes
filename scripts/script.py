@@ -22,8 +22,9 @@ dataFrame = dataFrame.rename(columns=({"Image_Name" : "imageName", "Ingredients"
 typeOfMeal = ["Breakfast", "Lunch", "Dinner", "Dessert", "Mid-morning meal"]
 randomTypeOfMeal = [random.choice(typeOfMeal) for _ in range(len(dataFrame))]
 
-rating = np.arange(0, 5.5, 0.5).tolist()
-randomRating = [random.choice(rating) for _ in range(len(dataFrame))]
+ratingValues = np.arange(0, 5.5, 0.5).tolist()
+ids = np.arange(10000, 10005, 1).tolist()
+randomRating = [{str(ids[j]):random.choice(ratingValues) for j in range(len(ids))} for _ in range(len(dataFrame))]
 
 macroLabels = ["Carbohydrates", "Greases", "Protein", "Fiber"]
 randomMacroPercentage = np.round(np.random.dirichlet(np.ones(4), len(dataFrame))*100, decimals=2)
