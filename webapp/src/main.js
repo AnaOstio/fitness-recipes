@@ -1,14 +1,18 @@
 import Vue from "vue";
+import Login from "./components/Login.vue";
+import Signup from "./components/Signup.vue";
 
 Vue.config.productionTip = false;
 
-const NotFound = { template: "<p>Page bot found</p>" };
+const NotFound = { template: "<p>Page not found</p>" };
 const Home = { template: "<p>Toy en home</p>" };
 const About = { template: "<p>Toy en about</p>" };
 
 const routes = {
   "/": Home,
   "/about": About,
+  "/login": Login,
+  "/signup": Signup,
 };
 
 const app = new Vue({
