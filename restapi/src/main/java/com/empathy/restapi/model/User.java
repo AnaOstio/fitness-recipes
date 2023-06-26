@@ -70,4 +70,8 @@ public class User {
     public void addRecipe(String recipeId){
         this.userRecipesId.add(recipeId);
     }
+
+    public void deleteRecipe(String recipeId) {
+        this.userRecipesId.remove(recipeId);
+    }
 }

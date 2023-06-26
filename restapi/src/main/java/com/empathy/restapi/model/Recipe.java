@@ -41,12 +41,15 @@ public class Recipe {
     @Field(name = "ingredientList")
     private List<String> ingredientList;
 
+    @Field(type = FieldType.Text, name = "userId")
+    private String userId;
+
     public Recipe() {
     }
 
     public Recipe(String id, String title, List<String> ingredientList, String instructions, String imageName,
             String typeOfMeal, Map<String, Double> rating, Map<String, Double> macronutrientsPercentages,
-            String timeOfPreparation) {
+            String timeOfPreparation, String userId) {
         this.id = id;
         this.title = title;
         this.imageName = imageName;
@@ -56,6 +59,7 @@ public class Recipe {
         this.rating = rating;
         this.macronutrientsPercentages = macronutrientsPercentages;
         this.timeOfPreparation = timeOfPreparation;
+        this.userId = userId;
     }
 
     public Recipe(String[] recipe) {
@@ -69,6 +73,7 @@ public class Recipe {
         this.imageName = recipe[4];
         this.typeOfMeal = recipe[5];
         this.timeOfPreparation = recipe[8];
+        this.userId = recipe[9];
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -155,4 +160,11 @@ public class Recipe {
         this.macronutrientsPercentages = macronutrientsPercentages;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }
