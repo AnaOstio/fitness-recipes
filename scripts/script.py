@@ -33,10 +33,14 @@ macroPerentagesSet = [{macroLabels[j]:randomMacroPercentage[i][j] for j in range
 minutes = np.arange(10, 180, 2).tolist()
 timeOfPreparation = [str(random.choice(minutes)) + " minutes" for _ in range(len(dataFrame))]
 
+userId = np.arange(0, 5, 1).tolist()
+userListId = [str(random.choice(userId))  for _ in range(len(dataFrame))]
+
 dataFrame["typeOfMeal"] = randomTypeOfMeal
 dataFrame["rating"] = randomRating
 dataFrame["macronutrientsPercentages"] = macroPerentagesSet
 dataFrame["timeOfPReparation"] = timeOfPreparation
+dataFrame["userId"] = userListId
 dataFrame["separator"] = ["---" for _ in range(len(dataFrame))]
 
 # Save the cleaned dataSet file

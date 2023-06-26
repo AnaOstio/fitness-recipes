@@ -9,7 +9,7 @@ public class UserBD {
 
     private List<User> userList;
 
-    public void setuserList(List<User> userList) {
+    public void setUserList(List<User> userList) {
         this.userList = userList;
     }
 
@@ -27,5 +27,9 @@ public class UserBD {
 
     public void deleteUserById(User user) {
         this.userList.remove(user);
+    }
+
+    public void addRecipeUser(String recipeId, String userId){
+        this.userList.stream().filter((user) -> user.getId().equals(userId)).findFirst().get().addRecipe(recipeId);
     }
 }
