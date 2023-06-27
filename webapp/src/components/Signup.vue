@@ -37,6 +37,7 @@
 
 <script>
 export default {
+  name: "Signup",
   data: function () {
     return {
       errorsEmail: [],
