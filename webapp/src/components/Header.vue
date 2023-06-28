@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style>
-nav {
+/* nav {
   display: flex;
   justify-content: space-between;
   list-style: none;
@@ -43,5 +43,5 @@ nav figure {
   margin: 0;
   height: 50%;
   padding: 20px;
-}
+} */
 </style>
