@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekplan</title>
+
+</head>
+
+<body>
+    <h2>Weekly Plan</h2>
+    <div class="week">
+        <div class="day"><h3>Monday</h3></div>
+        <div class="day"><h3>Tuesday</h3></div>
+        <div class="day"><h3>Wednesday</h3></div>
+        <div class="day"><h3>Thursday</h3></div>
+        <div class="day"><h3>Friday</h3></div>
+        <div class="day"><h3>Saturday</h3></div>
+        <div class="day"><h3>Sunday</h3></div>
+    </div>
+</body>
+
+<style>
+    .day {
+        display: inline-block;
+        width: calc(100% / 7);
+        height: 100vh;
+        border-left: 1px solid black;
+            
+    }
+    .week {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        text-align: center;
+    }
+
+    .day:nth-child(7) {
+        border-right: 1px solid black;
+    }
+    body{
+        margin: 0 100px;
+        margin-top: 40px;
+    }
+    @media screen and (max-width: 600px) {
+        .week {
+            flex-wrap: wrap;
+            overflow-x: scroll;
+        }
+
+        .day {
+            width: 100vh;
+        }
+    }
+</style>
+
+</html>
