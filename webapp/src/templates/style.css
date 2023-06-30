@@ -1,0 +1,38 @@
+.week {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.day {
+    width: calc(100% / 7);
+    height: 100vh;
+    border-left: 1px solid black;  
+}
+
+.day:nth-child(7) {
+    border-right: 1px solid black;
+}
+
+body{
+    margin: 0 100px;
+    margin-top: 40px;
+}
+
+@media screen and (max-width: 800px) {
+    h1 {
+        color: blueviolet;
+    }
+
+    .week {
+        overflow-x: scroll;
+        background-color: aqua;
+        width: 700%;
+    }
+
+    .day {
+        width: 100%;
+    }
+}
