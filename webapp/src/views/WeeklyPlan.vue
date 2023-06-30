@@ -2,13 +2,13 @@
   <div>
     <h1>Week Plan</h1>
     <div class="week">
-        <recipe-list-week-component></recipe-list-week-component>
-        <recipe-list-week-component></recipe-list-week-component>
-        <recipe-list-week-component></recipe-list-week-component>
-        <recipe-list-week-component></recipe-list-week-component>
-        <recipe-list-week-component></recipe-list-week-component>
-        <recipe-list-week-component></recipe-list-week-component>
-        <recipe-list-week-component></recipe-list-week-component>
+        <recipe-list-week-component day="Monday"></recipe-list-week-component>
+        <recipe-list-week-component day="Tuesday"></recipe-list-week-component>
+        <recipe-list-week-component day="Wednesday"></recipe-list-week-component>
+        <recipe-list-week-component day="Thursday"></recipe-list-week-component>
+        <recipe-list-week-component day="Friday"></recipe-list-week-component>
+        <recipe-list-week-component day="Saturday"></recipe-list-week-component>
+        <recipe-list-week-component day="Sunday"></recipe-list-week-component>
     </div>
   </div>
 

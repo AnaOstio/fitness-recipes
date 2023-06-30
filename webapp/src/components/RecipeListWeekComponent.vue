@@ -1,6 +1,6 @@
 <template>
   <div class="day">
-    <h2>Monday</h2>
+    <h2>{{ day }}</h2>
     <div class="listRecipes">
       <recipe-week-card-component></recipe-week-card-component>
     </div>
@@ -13,6 +13,12 @@ export  default {
   name: "RecipeListWeekComponent",
   components: {
     RecipeWeekCardComponent,
+  },
+  props: {
+    day: {
+      type: String,
+      required: true,
+    },
   },
 }
 
