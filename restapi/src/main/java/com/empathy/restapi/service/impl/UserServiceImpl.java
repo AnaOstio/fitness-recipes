@@ -38,4 +38,8 @@ public class UserServiceImpl implements UserService {
         userBD.deleteUserById(user);
     }
 
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userBD.getUserByEmail(email);
+    }
 }

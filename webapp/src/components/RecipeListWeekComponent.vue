@@ -3,16 +3,19 @@
     <h2>{{ day }}</h2>
     <div class="listRecipes">
       <recipe-week-card-component></recipe-week-card-component>
+      <week-plan-add-button></week-plan-add-button>
     </div>
   </div>
 </template>
 
 <script>
 import RecipeWeekCardComponent from "@/components/RecipeWeekCardComponent.vue";
+import WeekPlanAddButton from "@/components/WeekPlanAddButton.vue";
 export  default {
   name: "RecipeListWeekComponent",
   components: {
     RecipeWeekCardComponent,
+    WeekPlanAddButton,
   },
   props: {
     day: {

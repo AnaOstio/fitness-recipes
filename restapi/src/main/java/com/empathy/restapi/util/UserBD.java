@@ -43,6 +43,10 @@ public class UserBD {
         this.userList.stream().filter((user) -> user.getId().equals(userId)).findFirst().get().deleteRecipe(recipeId);
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        return this.userList.stream().filter((user) -> user.getEmail().equals(email)).findFirst();
+    }
+
     public void loadUsers(){
         for(int i = 0; i < 6; i++){
             User user = new User(Integer.toString(i)  , "user" + i, "user" + i + "@email.com",
