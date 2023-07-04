@@ -18,4 +18,5 @@ public class BeanConfiguration {
     public UserBD userBD() {
         return new UserBD();
     }
+
 }

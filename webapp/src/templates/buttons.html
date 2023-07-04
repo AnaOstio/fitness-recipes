@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buttons Templates</title>
+    <style>
+
+        button {
+            margin: 30px;
+        }
+
+        .addButton {
+            position: relative;
+            display: flex;
+            height: 3rem;
+            width: 3rem;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30%;
+            border: none;
+            background-color: rgb(0, 255, 127);
+        } 
+
+        .updateButton {
+            position: relative;
+            display: flex;
+            height: 3rem;
+            width: 3rem;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30%;
+            border: none;
+            background-color: transparent;
+        } 
+        
+        .trashButton {
+            position: relative;
+            display: flex;
+            height: 3rem;
+            width: 3rem;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30%;
+            border: none;
+            background-color: transparent;
+        } 
+        
+        
+        .deleteButton {
+            position: relative;
+            display: flex;
+            height: 3rem;
+            width: 3rem;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100%;
+            border: none;
+            background-color: #F92D52;
+        } 
+
+        button:hover .tooltip {
+            display: block;
+        }
+
+        img {
+            height: 1.5rem;
+            width: 1.5rem;  
+        }
+        
+        body {
+            margin: 100px;
+        }
+
+        .tooltip {
+            position: absolute;
+            display: none;
+            border: 1px solid black;
+            padding: 3px;
+            background-color: gray;
+            color: white;
+            width: 100px;
+            right: 60%;
+            top: 100%;
+        }
+    </style>
+</head>
+<body>
+    <button class="addButton">
+        <img class="list__icon" src="./assets/add.png" alt="add" />
+        <span class="tooltip">Add</span>
+    </button>
+
+    <button class="deleteButton">
+        <img class="list__icon" src="./assets/minus.png" alt="add" />
+        <span class="tooltip">Delete</span>
+    </button>
+
+    <button class="trashButton">
+        <img class="list__icon" src="./assets/trash.png" alt="add" />
+        <span class="tooltip">Delete recipe</span>
+    </button>
+
+    <button class="updateButton">
+        <img class="list__icon" src="./assets/pencil.png" alt="add" />
+        <span class="tooltip">Update Recipe</span>
+    </button>
+</body>
+</html>
