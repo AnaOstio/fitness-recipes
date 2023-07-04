@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import userService from "@/services/userService";
 export default {
   name: "Login",
   data: function () {
@@ -54,7 +55,17 @@ export default {
       e.preventDefault();
 
       if (!this.errorsPassword.length && !this.errorsEmail.length) {
-        console.log("Sin errores");
+        userService.login(this.email, this.password)
+          .then((res) => {
+            if (res.status >= 200 && res.status < 400) {
+              console.log("esta completada esta parte")
+            } else {
+              this.errorsPassword.push("Credentials error, try it again")
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
     validEmail: function (email) {
