@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.empathy.restapi.model.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserBD {
 
@@ -50,8 +51,9 @@ public class UserBD {
     public void loadUsers(){
         for(int i = 0; i < 6; i++){
             User user = new User(Integer.toString(i)  , "user" + i, "user" + i + "@email.com",
-                    "user" + i);
+                    new BCryptPasswordEncoder().encode("user" + i));
             this.addUser(user);
         }
     }
+
 }
