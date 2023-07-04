@@ -11,7 +11,8 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Collections;
 
-@CrossOrigin
+// @CrossOrigin
+@CrossOrigin(origins = "*", allowCredentials = "true")
 @Configuration
 public class RestConfiguration {
 

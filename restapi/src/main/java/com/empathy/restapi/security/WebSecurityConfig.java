@@ -22,7 +22,7 @@ import java.util.Collections;
 public class WebSecurityConfig {
 
     private UserDetailsService userDetailsService;
-    private  JWTAuthorization jwtAuthorization;
+    private JWTAuthorization jwtAuthorization;
 
     public WebSecurityConfig(UserDetailsService userDetailsService, JWTAuthorization jwtAuthorization) {
         this.userDetailsService = userDetailsService;
@@ -55,28 +55,14 @@ public class WebSecurityConfig {
 
     @Bean
     AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class).
-                userDetailsService(userDetailsService).passwordEncoder(passwordEncoder)
+        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder)
                 .and()
                 .build();
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Collections.singletonList("*"));
-        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
