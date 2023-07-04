@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style>
-section {
+/* section {
   font-family: "Inter", sans-serif;
   position: absolute;
   left: 50%;
@@ -124,5 +124,5 @@ h1 {
 
 a {
   display: block;
-}
+} */
 </style>
