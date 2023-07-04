@@ -1,12 +1,10 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <button class="btn">Log out</button>
 </template>
 
 <script>
 export default {
-  name: "App",
+  name: "LogOutBtn",
 };
 </script>
 

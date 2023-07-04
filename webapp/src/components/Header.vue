@@ -2,46 +2,53 @@
   <header>
     <nav>
       <router-link to="/" class="nav-btn">
-        <figure><img src="" alt="Logo" /></figure>
+        <!-- <figure><img src="" alt="Logo" /></figure> -->
+        <div id="logo">Logo</div>
       </router-link>
-      <!-- <router-link to="/all">All recipes</router-link>
-      <router-link to="/weekplan">Week plan</router-link> -->
 
-      <input id="searchbox" type="text" />
-      <router-link to="/signup" class="nav-btn">Signup</router-link>
-      <router-link to="/login" class="nav-btn">Login</router-link>
+      <router-link to="#" class="nav-btn">All recipes</router-link>
+
+      <SearchBox />
+
+      <router-link to="#" class="nav-btn">Weekly plan</router-link>
+      <router-link to="#" class="nav-btn">Your recipes</router-link>
+
+      <LogOutBtn />
     </nav>
   </header>
 </template>
 
 <script>
+import SearchBox from "./SearchBox.vue";
+import LogOutBtn from "./LogOutBtn.vue";
+
 export default {
   name: "Header",
-  data: function () {
-    return {};
-  },
-
-  methods: {},
+  components: { SearchBox, LogOutBtn },
 };
 </script>
 
 <style>
-/* nav {
+nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   list-style: none;
-  margin: 0;
-  padding: 0;
-}
-nav figure {
-  margin: 0px;
+  padding: 10px;
 }
 
 .nav-btn {
   text-decoration: none;
   color: black;
-  margin: 0;
-  height: 50%;
-  padding: 20px;
-} */
+}
+
+#logo {
+  display: flex;
+  background-color: #eeeeee;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+}
 </style>
