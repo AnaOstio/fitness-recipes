@@ -7,6 +7,8 @@ import com.empathy.restapi.service.RecipeService;
 import com.empathy.restapi.service.impl.ElasticServiceImpl;
 import com.empathy.restapi.service.impl.QueryServiceImpl;
 import com.empathy.restapi.service.impl.RecipeServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,12 +55,14 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/user/{userId}")
-    public ResponseEntity<List<Recipe>> getRecipesByUserId(@PathVariable String userId) throws IOException {
+    public ResponseEntity<HashMap<String, Object>> getRecipesByUserId(@PathVariable String userId) throws IOException {
         List<Recipe> recipes = queryService.getRecipesByUserId(userId);
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("name", "test1");
-        map.put("sex", "male");
-        return new ResponseEntity<>(recipes, HttpStatus.OK);
+
+        HashMap<String, Object> response = new HashMap<String, Object>();
+        response.put("data", recipes);
+        response.put("status", HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/recipes/update/{id}")

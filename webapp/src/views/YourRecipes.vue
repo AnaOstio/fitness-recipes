@@ -46,9 +46,10 @@ export default {
     getRecipes(userId) {
       recipeService
         .getUserRecipes(userId)
-        .then((res) => {
-          if (res.status == 200) {
-            this.recipes = res.data;
+        .then((result) => {
+          console.log(result);
+          if (result.status == 200) {
+            this.recipes = result.data;
           } else {
             console.log("holaaa");
           }
