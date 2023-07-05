@@ -58,7 +58,7 @@ export default {
         userService.login(this.email, this.password)
           .then((res) => {
             if (res.status >= 200 && res.status < 400) {
-              console.log("esta completada esta parte")
+              this.$router.push('/your-recipes');
             } else {
               this.errorsPassword.push("Credentials error, try it again")
             }
@@ -77,8 +77,8 @@ export default {
 };
 </script>
 
-<style>
-/* section {
+<style scoped>
+section {
   font-family: "Inter", sans-serif;
   position: absolute;
   left: 50%;
@@ -124,5 +124,5 @@ h1 {
 
 a {
   display: block;
-} */
+}
 </style>
