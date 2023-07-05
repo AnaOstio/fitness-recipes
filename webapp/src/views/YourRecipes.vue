@@ -12,11 +12,6 @@
         <section>
           <div class="grid grid-recipes">
             <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
           </div>
         </section>
       </main>
@@ -30,6 +25,7 @@ import SideBar from "@/components/SideBar.vue";
 import PageTitle from "@/components/PageTitle.vue";
 import RecipeCard from "@/components/RecipeCard.vue";
 import AddRecipeBtn from "@/components/AddRecipeBtn.vue";
+import recipeService from "@/services/recipeService";
 
 export default {
   name: "YourRecipes",
@@ -39,6 +35,28 @@ export default {
     PageTitle,
     RecipeCard,
     AddRecipeBtn,
+  },
+  data() {
+    return { recipes: [] };
+  },
+  created() {
+    this.getRecipes(0);
+  },
+  methods: {
+    getRecipes(userId) {
+      recipeService
+        .getUserRecipes(userId)
+        .then((res) => {
+          if (res.status == 200) {
+            this.recipes = res.data;
+          } else {
+            console.log("holaaa");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>

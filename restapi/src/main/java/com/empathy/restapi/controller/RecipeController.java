@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,8 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @Autowired
-    public RecipeController(ElasticServiceImpl indexService, QueryServiceImpl queryService, RecipeServiceImpl recipeService) {
+    public RecipeController(ElasticServiceImpl indexService, QueryServiceImpl queryService,
+            RecipeServiceImpl recipeService) {
         this.indexService = indexService;
         this.queryService = queryService;
         this.recipeService = recipeService;
@@ -50,8 +52,18 @@ public class RecipeController {
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 
+    @GetMapping("/recipes/user/{userId}")
+    public ResponseEntity<List<Recipe>> getRecipesByUserId(@PathVariable String userId) throws IOException {
+        List<Recipe> recipes = queryService.getRecipesByUserId(userId);
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("name", "test1");
+        map.put("sex", "male");
+        return new ResponseEntity<>(recipes, HttpStatus.OK);
+    }
+
     @GetMapping("/recipes/update/{id}")
-    public ResponseEntity<Recipe> updateRecipeById(@PathVariable String id, @RequestBody Recipe updateRecipe) throws IOException {
+    public ResponseEntity<Recipe> updateRecipeById(@PathVariable String id, @RequestBody Recipe updateRecipe)
+            throws IOException {
         Recipe update = recipeService.updateRecipeById(id, updateRecipe);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }

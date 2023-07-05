@@ -37,10 +37,10 @@ public class WebSecurityConfig {
         jwtAuthentication.setFilterProcessesUrl("/api/login");
 
         return http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
+                // .authorizeRequests()
+                // .anyRequest()
+                // .authenticated()
+                // .and()
                 .httpBasic()
                 .disable()
                 .formLogin()
