@@ -1,25 +1,47 @@
 <template>
   <div class="card-recipe">
+    <div class="card-hover"></div>
     <div class="card-recipe-img">Recipe image</div>
     <div class="card-recipe-body">
-      <h2 class="recipe-name">Recipes Name</h2>
-      <h3 class="recipe-type">Type: breakfast</h3>
+      <h2 class="recipe-name">{{ recipe.title }}</h2>
+      <h3 class="recipe-type">Type: {{ recipe.typeOfMeal }}</h3>
       <div class="recipe-time">
-        <div class="time-icon">T</div>
-        <h3 class="time">30 min</h3>
+        <i class="fa-solid fa-clock"></i>
+        <h3 class="time">{{ recipe.timeOfPreparation }}</h3>
       </div>
     </div>
     <div class="card-recipe-footer">
-      <h3 class="recipe-rating">Stars</h3>
-      <div class="card-btn-update">U</div>
-      <div class="card-btn-delete">D</div>
+      <div class="recipe-rating">
+        <h3>{{ rating }}</h3>
+        <i class="fa-solid fa-star"></i>
+      </div>
+      <UpdateRecipeBtn />
+      <DeleteRecipeBtn />
     </div>
   </div>
 </template>
 
 <script>
+import DeleteRecipeBtn from "./DeleteRecipeBtn.vue";
+import UpdateRecipeBtn from "./UpdateRecipeBtn.vue";
+
 export default {
   name: "RecipeCard",
+  components: {
+    DeleteRecipeBtn,
+    UpdateRecipeBtn,
+  },
+  props: {
+    recipe: Object,
+  },
+  computed: {
+    //Change this with correct field is created
+    rating: function () {
+      const ratin = Object.values(this.recipe.rating);
+
+      return ratin.reduce((sum, number) => sum + number, 0) / ratin.length;
+    },
+  },
 };
 </script>
 
@@ -32,6 +54,32 @@ export default {
   border-radius: 12px;
   padding: 13px;
   margin: auto;
+  position: relative;
+}
+
+.card-hover {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.card-hover:hover {
+  background-color: #ffffff33;
+  cursor: pointer;
+}
+
+.card-recipe-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 35%;
+  background-color: #eeeeee;
+  border-radius: 8px;
 }
 
 .card-recipe-body {
@@ -45,40 +93,48 @@ export default {
 
 .card-recipe-footer {
   display: flex;
+  align-items: center;
   width: 100%;
   height: 10%;
 }
 
 .recipe-time {
   display: flex;
+  align-items: center;
+  gap: 2%;
 }
 
-.time-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eeeeee;
-  width: 10%;
-  height: 100%;
-  margin-right: 2%;
+.recipe-time i::before {
+  font-size: 16px;
 }
 
 .recipe-rating {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eeeeee;
-  height: 100%;
-  width: 60%;
+  gap: 2%;
+  width: 70%;
+  height: fit-content;
 }
 
-.card-recipe-img {
+.recipe-rating i::before {
+  font-size: 13px;
+}
+
+/* Common */
+.card-crud-btn i::before {
+  font-size: 20px;
+}
+
+.card-crud-btn i:hover {
+  color: #7f7f7f;
+  cursor: pointer;
+}
+
+.card-crud-btn {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 35%;
-  background-color: #eeeeee;
-  border-radius: 8px;
+  justify-content: center;
+  width: 15%;
+  height: 100%;
+  z-index: 2;
 }
 </style>
