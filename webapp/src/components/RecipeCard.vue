@@ -16,7 +16,7 @@
         <i class="fa-solid fa-star"></i>
       </div>
       <UpdateRecipeBtn />
-      <DeleteRecipeBtn />
+      <DeleteRecipeBtn :id="recipe.id" />
     </div>
   </div>
 </template>
