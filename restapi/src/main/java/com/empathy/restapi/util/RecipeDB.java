@@ -54,4 +54,7 @@ public class RecipeDB {
     public void deleteRecipe(Recipe recipe) {
         recipes.remove(recipe);
     }
+    public void indexingRecipes(Recipe recipe){
+
+    }
 }

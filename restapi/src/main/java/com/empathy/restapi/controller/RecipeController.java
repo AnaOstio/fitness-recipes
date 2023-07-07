@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -44,8 +45,12 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) throws IOException {
-        return new ResponseEntity<Recipe>(queryService.getRecipeById(id), HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> getRecipeById(@PathVariable Long id) throws IOException {
+        Recipe recipe = queryService.getRecipeById(id);
+        HashMap<String, Object> response = new HashMap<>();
+        response.put("recipe", recipe);
+        response.put("status", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/recipes/title/{title}")
@@ -70,5 +75,11 @@ public class RecipeController {
             throws IOException {
         Recipe update = recipeService.updateRecipeById(id, updateRecipe);
         return new ResponseEntity<>(update, HttpStatus.OK);
+    }
+
+    @PostMapping("/recipes/add/{id}")
+    public ResponseEntity<Recipe> addRecipeById(@PathVariable String id, @RequestBody Recipe addRecipe) throws IOException {
+        Recipe add = recipeService.addRecipeById(id, addRecipe);
+        return new ResponseEntity<>(add, HttpStatus.OK);
     }
 }

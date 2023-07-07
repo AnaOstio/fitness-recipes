@@ -9,4 +9,6 @@ public interface RecipeService {
     void add(Recipe recipe, String userId);
 
     Recipe updateRecipeById(String id, Recipe updateRecipe);
+
+    Recipe addRecipeById(String id, Recipe addRecipe);
 }
