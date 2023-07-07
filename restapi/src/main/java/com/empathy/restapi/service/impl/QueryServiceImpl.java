@@ -49,4 +49,23 @@ public class QueryServiceImpl implements QueryService {
 
         return recipes;
     }
+
+    @Override
+    public List<Recipe> getRecipesByUserId(String userId) throws IOException {
+        SearchResponse<Recipe> response = elasticsearchClient.search(s -> s
+                .index(INDEX)
+                .query(q -> q
+                        .match(t -> t
+                                .field("userId")
+                                .query(userId))),
+                Recipe.class);
+
+        List<Hit<Recipe>> hits = response.hits().hits();
+        List<Recipe> recipes = new ArrayList<>();
+        for (Hit<Recipe> hit : hits) {
+            recipes.add(hit.source());
+        }
+
+        return recipes;
+    }
 }

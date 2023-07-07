@@ -11,12 +11,11 @@
         </div>
         <section>
           <div class="grid grid-recipes">
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
-            <RecipeCard />
+            <RecipeCard
+              v-for="(recipe, index) in recipes"
+              :key="index"
+              :recipe="recipe"
+            />
           </div>
         </section>
       </main>
@@ -30,6 +29,7 @@ import SideBar from "@/components/SideBar.vue";
 import PageTitle from "@/components/PageTitle.vue";
 import RecipeCard from "@/components/RecipeCard.vue";
 import AddRecipeBtn from "@/components/AddRecipeBtn.vue";
+import recipeService from "@/services/recipeService";
 
 export default {
   name: "YourRecipes",
@@ -39,6 +39,26 @@ export default {
     PageTitle,
     RecipeCard,
     AddRecipeBtn,
+  },
+  data() {
+    return { recipes: [] };
+  },
+  created() {
+    this.getRecipes(0);
+  },
+  methods: {
+    getRecipes(userId) {
+      recipeService
+        .getUserRecipes(userId)
+        .then((result) => {
+          if (result.status == 200) {
+            this.recipes = result.data;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
@@ -123,18 +143,5 @@ main {
 
 .btn:hover {
   filter: brightness(95%);
-}
-
-/* Provisional */
-
-.card-btn-update,
-.card-btn-delete {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eeeeee;
-  width: 18%;
-  height: 100%;
-  margin-left: 2%;
 }
 </style>

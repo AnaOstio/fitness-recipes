@@ -7,7 +7,7 @@ import com.empathy.restapi.util.RecipeDB;
 import com.empathy.restapi.util.UserBD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
@@ -32,7 +32,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe updateRecipeById(String id, Recipe updateRecipe) {
         Optional<Recipe> toUpdate = recipeDB.getRecipeById(id);
-        if(toUpdate.isPresent()){
+        if (toUpdate.isPresent()) {
             toUpdate.get().setTitle(updateRecipe.getTitle());
             toUpdate.get().setIngredients(updateRecipe.getIngredients());
             toUpdate.get().setInstructions(updateRecipe.getInstructions());

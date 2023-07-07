@@ -7,6 +7,8 @@ import com.empathy.restapi.service.RecipeService;
 import com.empathy.restapi.service.impl.ElasticServiceImpl;
 import com.empathy.restapi.service.impl.QueryServiceImpl;
 import com.empathy.restapi.service.impl.RecipeServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,8 @@ public class RecipeController {
     private RecipeService recipeService;
 
     @Autowired
-    public RecipeController(ElasticServiceImpl indexService, QueryServiceImpl queryService, RecipeServiceImpl recipeService) {
+    public RecipeController(ElasticServiceImpl indexService, QueryServiceImpl queryService,
+            RecipeServiceImpl recipeService) {
         this.indexService = indexService;
         this.queryService = queryService;
         this.recipeService = recipeService;
@@ -56,8 +59,20 @@ public class RecipeController {
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 
+    @GetMapping("/recipes/user/{userId}")
+    public ResponseEntity<HashMap<String, Object>> getRecipesByUserId(@PathVariable String userId) throws IOException {
+        List<Recipe> recipes = queryService.getRecipesByUserId(userId);
+
+        HashMap<String, Object> response = new HashMap<String, Object>();
+        response.put("data", recipes);
+        response.put("status", HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/recipes/update/{id}")
-    public ResponseEntity<Recipe> updateRecipeById(@PathVariable String id, @RequestBody Recipe updateRecipe) throws IOException {
+    public ResponseEntity<Recipe> updateRecipeById(@PathVariable String id, @RequestBody Recipe updateRecipe)
+            throws IOException {
         Recipe update = recipeService.updateRecipeById(id, updateRecipe);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
