@@ -22,21 +22,21 @@ import java.util.Map;
 @RequestMapping("/")
 public class RecipeController {
 
-    private ElasticService indexService;
+    private ElasticService elasticService;
     private QueryService queryService;
     private RecipeService recipeService;
 
     @Autowired
-    public RecipeController(ElasticServiceImpl indexService, QueryServiceImpl queryService,
+    public RecipeController(ElasticServiceImpl elasticService, QueryServiceImpl queryService,
             RecipeServiceImpl recipeService) {
-        this.indexService = indexService;
+        this.elasticService = elasticService;
         this.queryService = queryService;
         this.recipeService = recipeService;
     }
 
     @GetMapping("/bulk-recipes")
     public ResponseEntity<String> bulkRecipes() throws IOException {
-        String indexing = indexService.indexRecipes();
+        String indexing = elasticService.indexRecipes();
         if (indexing == "No errors") {
             return new ResponseEntity<>("No errors indexing the elements", HttpStatus.OK);
         }
@@ -77,8 +77,21 @@ public class RecipeController {
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 
+    @DeleteMapping("/recipes/delete/{id}")
+    public ResponseEntity<HashMap<String, Object>> updateRecipeById(@PathVariable String id)
+            throws IOException {
+
+        // TODO: handle errors for the response
+        HashMap<String, Object> response = new HashMap<String, Object>();
+        response.put("data", elasticService.DeleteRecipeById(id));
+        response.put("status", HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/recipes/add/{id}")
-    public ResponseEntity<Recipe> addRecipeById(@PathVariable String id, @RequestBody Recipe addRecipe) throws IOException {
+    public ResponseEntity<Recipe> addRecipeById(@PathVariable String id, @RequestBody Recipe addRecipe)
+            throws IOException {
         Recipe add = recipeService.addRecipeById(id, addRecipe);
         return new ResponseEntity<>(add, HttpStatus.OK);
     }

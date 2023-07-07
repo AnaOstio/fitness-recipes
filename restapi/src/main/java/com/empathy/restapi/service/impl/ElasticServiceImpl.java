@@ -74,4 +74,22 @@ public class ElasticServiceImpl implements ElasticService {
         return "No errors";
     }
 
+    @Override
+    public String DeleteRecipeById(String id) throws IOException {
+        BulkRequest.Builder bulkRequest = new BulkRequest.Builder();
+        bulkRequest.operations(op -> op
+                .delete(idx -> idx
+                        .index(INDEX)
+                        .id(id)));
+
+        BulkResponse result = elasticsearchClient.bulk(bulkRequest.build());
+
+        if (result.errors()) {
+            if (result.items().get(0).error() != null) {
+                return result.items().get(0).error().reason();
+            }
+        }
+        return "Recipe deleted successfully";
+    }
+
 }
