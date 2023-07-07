@@ -8,4 +8,7 @@ public interface QueryService {
     Recipe getRecipeById(Long id) throws IOException;
 
     List<Recipe> getRecipeByTitle(String title) throws IOException;
+
+    List<Recipe> getRecipesByUserId(String userId) throws IOException;
+
 }
