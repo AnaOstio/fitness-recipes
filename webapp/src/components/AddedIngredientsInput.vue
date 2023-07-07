@@ -1,14 +1,15 @@
 <template>
-
   <li class="list-item">
     <p class="ingredient-text">{{ ingredient.value }}</p>
-    <button @click="$emit('removeIngredient', ingredient.id)" type="button" class="deleteButtonIngredients">
+    <button
+      @click="$emit('removeIngredient', ingredient.id)"
+      type="button"
+      class="deleteButtonIngredients"
+    >
       <img class="list__icon" src="../assets/minus.png" alt="add" />
       <span class="tooltip">Delete</span>
     </button>
   </li>
-
-
 </template>
 
 <script>
@@ -23,9 +24,7 @@ export default {
 };
 </script>
 
-
 <style scoped>
-
 .list-item {
   display: flex;
   align-items: center;
@@ -42,7 +41,7 @@ export default {
   align-items: center;
   border-radius: 100%;
   border: none;
-  background-color: #F92D52;
+  background-color: #f92d52;
   float: right;
 }
 
@@ -67,6 +66,4 @@ img {
   right: 60%;
   top: 100%;
 }
-
-
 </style>
