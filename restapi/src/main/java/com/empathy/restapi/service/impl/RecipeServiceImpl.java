@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -48,7 +49,11 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe addRecipeById(String id, Recipe addRecipe) {
         try {
             addRecipe.setRating(new HashMap<>());
-            addRecipe.setId("40000");
+            addRecipe.setImageName("https://picsum.photos/200/300");
+            Random r = new Random();
+            int aux = r.nextInt(13500, 99999);
+            addRecipe.setId( aux + "");
+            System.out.println("Valor del Id de la receta "+ aux);
             elasticService.indexRecipe(addRecipe);
         } catch (Exception e) {
             e.printStackTrace();

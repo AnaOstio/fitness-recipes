@@ -29,7 +29,6 @@ export default {
             body: JSON.stringify(aux),
         }).catch((error) => { console.log(error) });
         const data = await response;
-        console.log(data);
         return data;
     }
 }
