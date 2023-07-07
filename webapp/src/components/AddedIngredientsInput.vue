@@ -1,8 +1,8 @@
 <template>
 
   <li class="list-item">
-    <p class="ingredient-text">{{ ingredient }}</p>
-    <button type="button" class="deleteButtonIngredients">
+    <p class="ingredient-text">{{ ingredient.value }}</p>
+    <button @click="$emit('removeIngredient', ingredient.id)" type="button" class="deleteButtonIngredients">
       <img class="list__icon" src="../assets/minus.png" alt="add" />
       <span class="tooltip">Delete</span>
     </button>
@@ -16,7 +16,7 @@ export default {
   name: "AddedIngredientsInput",
   props: {
     ingredient: {
-      type: String,
+      type: Object,
       required: true,
     },
   },

@@ -55,4 +55,10 @@ public class RecipeController {
         Recipe update = recipeService.updateRecipeById(id, updateRecipe);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
+
+    @PostMapping("/recipes/add/{id}")
+    public ResponseEntity<Recipe> addRecipeById(@PathVariable String id, @RequestBody Recipe addRecipe) throws IOException {
+        Recipe add = recipeService.addRecipeById(id, addRecipe);
+        return new ResponseEntity<>(add, HttpStatus.OK);
+    }
 }

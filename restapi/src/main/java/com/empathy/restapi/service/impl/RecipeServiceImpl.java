@@ -1,12 +1,14 @@
 package com.empathy.restapi.service.impl;
 
 import com.empathy.restapi.model.Recipe;
+import com.empathy.restapi.service.ElasticService;
 import com.empathy.restapi.service.RecipeService;
 import com.empathy.restapi.util.RecipeDB;
 import com.empathy.restapi.util.UserBD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -16,6 +18,9 @@ public class RecipeServiceImpl implements RecipeService {
     private RecipeDB recipeDB;
     @Autowired
     private UserBD userBD;
+
+    @Autowired
+    private ElasticService elasticService;
 
     @Override
     public void add(Recipe recipe, String userId) {
@@ -37,5 +42,17 @@ public class RecipeServiceImpl implements RecipeService {
             toUpdate.get().setMacronutrientsPercentages(updateRecipe.getMacronutrientsPercentages());
         }
         return toUpdate.get();
+    }
+
+    @Override
+    public Recipe addRecipeById(String id, Recipe addRecipe) {
+        try {
+            addRecipe.setRating(new HashMap<>());
+            addRecipe.setId("40000");
+            elasticService.indexRecipe(addRecipe);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return addRecipe;
     }
 }

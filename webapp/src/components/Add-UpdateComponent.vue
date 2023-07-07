@@ -10,20 +10,20 @@
 
       <label for="ingredients">Ingredients (*)</label>
       <div class="input-ingredients separated">
-        <input type="text" id="ingredients" class="border tam" />
-        <button type="button" class="addButtonIngredients">
+        <input type="text" id="ingredients" class="border tam" v-model="inputTextIngredients"/>
+        <button type="button" class="addButtonIngredients" @click="addIngredientsList">
           <img class="list__icon" src="../assets/add.png" alt="add" />
           <span class="tooltip">Add</span>
         </button>
       </div>
 
-      <p>Added ingredients</p>
-      <div class="added-ingredients separated">
+      <p v-if="ingredients.length">Added ingredients</p>
+      <div class="added-ingredients separated" v-if="ingredients.length">
         <ul>
-          <added-ingredients-input ingredient="Ingredient 1"></added-ingredients-input>
-          <li>Ingredient 2</li>
-          <li>Ingredient 3</li>
-          <li>Ingredient 4</li>
+          <added-ingredients-input v-for="ingredient in ingredients"
+                                   :ingredient= "ingredient"
+                                   @removeIngredient = "deleteIngredient"
+          ></added-ingredients-input>
         </ul>
       </div>
 
@@ -42,7 +42,7 @@
       </div>
 
       <label for="typeMeal">Type of Meal (*)</label>
-      <select id="typeMeal" class="separated">
+      <select id="typeMeal" class="separated" v-model="typeMeal">
         <option value="breakfast">Breakfast</option>
         <option value="lunch">Lunch</option>
         <option value="dinner">Dinner</option>
@@ -79,6 +79,8 @@
 
 <script>
 import AddedIngredientsInput from "./AddedIngredientsInput.vue";
+import recipesService from "@/services/recipesService";
+import {ref} from "vue";
 export default {
   name: "AddUpdateComponent",
   components: {
@@ -94,7 +96,6 @@ export default {
       carbohydrates: "",
       greases: "",
       fiber: "",
-      ingredients: [],
       errors: new Map(),
     };
   },
@@ -170,9 +171,41 @@ export default {
       event.preventDefault();
       // then here we will send the data to the server
       if(this.errors.size === 0){
-        console.log("ta limpio")
+        console.log("ingredients" + this.ingredients)
+        recipesService.addRecipe(this.title,
+            this.ingredients.map((ingredient) => ingredient.value),
+            this.description, this.preparationTime, this.typeMeal, this.protein,
+            this.carbohydrates, this.greases, this.fiber)
+            .then( (res) => {
+                console.log(res);
+            })
       }
     },
+  },
+  setup() {
+    const ingredients = ref([]);
+    const inputTextIngredients = ref("");
+    const addIngredientsList = () => {
+        inputTextIngredients.value !== ""
+            ? ingredients.value.push(
+                {
+                  value: inputTextIngredients.value,
+                  id: ingredients.value.length + 1
+                })
+            : "";
+        inputTextIngredients.value = "";
+    }
+
+    const deleteIngredient = (deleteId) => {
+        ingredients.value = ingredients.value.filter((ingredient) => ingredient.id !== deleteId);
+    }
+
+    return {
+      addIngredientsList,
+      inputTextIngredients,
+      ingredients,
+      deleteIngredient
+    };
   },
 }
 </script>
