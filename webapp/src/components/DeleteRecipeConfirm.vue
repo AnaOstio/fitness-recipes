@@ -4,7 +4,7 @@
     <p>The recipe will be removed permanently</p>
     <div class="delete-confirm-footer">
       <button class="btn cancel-btn">Cancel</button>
-      <button class="btn accept-btn">Accept</button>
+      <button @click="deleteRecipe" class="btn accept-btn">Accept</button>
     </div>
   </div>
 </template>
@@ -14,6 +14,11 @@ export default {
   name: "DeleteRecipeConfirm",
   props: {
     id: String,
+  },
+  methods: {
+    deleteRecipe: function () {
+      this.$store.dispatch("deleteRecipe", { id: this.id });
+    },
   },
 };
 </script>

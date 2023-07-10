@@ -1,13 +1,13 @@
 <template>
   <div>
-    <button @click="toogleModal" id="show-modal" class="btn btn-add-recipe">
+    <button @click="toggleModal" id="show-modal" class="btn btn-add-recipe">
       Add new recipe
     </button>
-    <modal-view @close="toogleModal" :modal-active="modalActive">
+    <!-- <modal-view @close="toggleModal" :modal-active="modalActive">
       <div class="modal-content">
         <add-update-component />
       </div>
-    </modal-view>
+    </modal-view> -->
   </div>
 </template>
 
@@ -21,10 +21,10 @@ export default {
   components: { ModalView, AddUpdateComponent },
   setup() {
     const modalActive = ref(false);
-    const toogleModal = () => {
+    const toggleModal = () => {
       modalActive.value = !modalActive.value;
     };
-    return { modalActive, toogleModal };
+    return { modalActive, toggleModal };
   },
 };
 </script>
