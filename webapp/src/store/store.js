@@ -8,12 +8,13 @@ export default new Vuex.Store({
   state: {},
   mutations: {},
   actions: {
-    deleteRecipe({ id }) {
+    deleteRecipe(context, payload) {
       recipeService
-        .deleteRecipe(id)
+        .deleteRecipe(payload.id)
         .then((result) => {
           if (result.status == 200) {
-            // TODO OK message
+            payload.spliceRecipe();
+            payload.toggleModal();
           }
         })
         .catch((err) => {

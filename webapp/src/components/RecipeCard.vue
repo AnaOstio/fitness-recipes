@@ -29,7 +29,12 @@
     </div>
     <modal-view @close="toggleModal" :modal-active="modalActive">
       <div class="modal-content">
-        <DeleteRecipeConfirm v-show="modalContent == 0" />
+        <DeleteRecipeConfirm
+          v-show="modalContent == 0"
+          :id="recipe.id"
+          :spliceRecipe="spliceRecipe"
+          :toggleModal="toggleModal"
+        />
         <AddUpdateComponent v-show="modalContent == 1" />
       </div>
     </modal-view>
@@ -59,9 +64,7 @@ export default {
       modalContent: ref(0),
     };
   },
-  props: {
-    recipe: Object,
-  },
+  props: ["recipe", "spliceRecipe"],
   computed: {
     //Change this with correct field is created
     rating: function () {

@@ -3,7 +3,7 @@
     <h1>Delete recipe</h1>
     <p>The recipe will be removed permanently</p>
     <div class="delete-confirm-footer">
-      <button class="btn cancel-btn">Cancel</button>
+      <button @click="this.toggleModal" class="btn cancel-btn">Cancel</button>
       <button @click="deleteRecipe" class="btn accept-btn">Accept</button>
     </div>
   </div>
@@ -12,12 +12,14 @@
 <script>
 export default {
   name: "DeleteRecipeConfirm",
-  props: {
-    id: String,
-  },
+  props: ["id", "spliceRecipe", "toggleModal"],
   methods: {
     deleteRecipe: function () {
-      this.$store.dispatch("deleteRecipe", { id: this.id });
+      this.$store.dispatch("deleteRecipe", {
+        id: this.id,
+        spliceRecipe: this.spliceRecipe,
+        toggleModal: this.toggleModal,
+      });
     },
   },
 };

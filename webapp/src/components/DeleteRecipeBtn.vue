@@ -15,7 +15,7 @@
 <script>
 export default {
   name: "DeleteRecipeBtn",
-  props: ["id", "toggleModal", "setModalContent"],
+  props: ["toggleModal", "setModalContent"],
 };
 </script>
 
