@@ -32,6 +32,9 @@ public class Recipe {
     @Field(type = FieldType.Object, name = "rating")
     private Map<String, Double> rating;
 
+    @Field(type = FieldType.Double, name = "averageRating")
+    private Double averageRating;
+
     @Field(type = FieldType.Text, name = "timeOfPreparation")
     private String timeOfPreparation;
 
@@ -60,9 +63,11 @@ public class Recipe {
         this.macronutrientsPercentages = macronutrientsPercentages;
         this.timeOfPreparation = timeOfPreparation;
         this.userId = userId;
+        this.averageRating = 0.0;
     }
 
     public Recipe(String[] recipe) {
+        this.averageRating = 0.0;
         this.id = recipe[0];
         this.title = recipe[1];
         this.ingredientList = Arrays.stream(recipe[2].replaceAll("^\"|\"$", "")
@@ -166,5 +171,13 @@ public class Recipe {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
     }
 }

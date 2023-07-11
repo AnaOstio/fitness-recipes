@@ -49,6 +49,9 @@ export default {
   padding: 40px;
   border-radius: 10px;
   position: relative;
+  max-height: 85%;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .modal-close-btn {

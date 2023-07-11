@@ -30,5 +30,5 @@ export default {
         }).catch((error) => { console.log(error) });
         const data = await response;
         return data;
-    }
+    },
 }
