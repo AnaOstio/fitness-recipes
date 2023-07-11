@@ -26,4 +26,7 @@ export default {
         return result;
       });
   },
+  async updateRecipe(recipe){
+    console.log("Estoy en RecipeService de actualizar")
+  }
 };

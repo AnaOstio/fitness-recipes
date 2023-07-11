@@ -95,4 +95,6 @@ public class RecipeController {
         Recipe add = recipeService.addRecipeById(id, addRecipe);
         return new ResponseEntity<>(add, HttpStatus.OK);
     }
+
+    // Cuando haga un actualizar, acordarse de volver a actualizar el averageRating
 }

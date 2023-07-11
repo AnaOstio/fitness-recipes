@@ -19,6 +19,7 @@
         <UpdateRecipeBtn
           :toggleModal="toggleModal"
           :setModalContent="setModalContent"
+          :recipe="recipe"
         />
         <DeleteRecipeBtn
           :id="recipe.id"
@@ -26,8 +27,6 @@
           :setModalContent="setModalContent"
         />
       </div>
-      <UpdateRecipeBtn :recipe="recipe"/>
-      <DeleteRecipeBtn :id="recipe.id" />
     </div>
     <modal-view @close="toggleModal" :modal-active="modalActive">
       <div class="modal-content">
@@ -37,7 +36,11 @@
           :spliceRecipe="spliceRecipe"
           :toggleModal="toggleModal"
         />
-        <AddUpdateComponent v-show="modalContent == 1" />
+        <AddUpdateComponent v-show="modalContent == 1"
+                            :recipe="recipe"
+                            :updateRecipeData="(recipe) => updateRecipeData()"
+                            :toggleModal="toggleModal"
+        />
       </div>
     </modal-view>
   </div>
@@ -82,6 +85,9 @@ export default {
     setModalContent(modalContent) {
       this.modalContent = modalContent;
     },
+    updateRecipeData(recipeUpdated){
+      console.log(recipeUpdated + "para actualizar");
+    }
   },
 };
 </script>
