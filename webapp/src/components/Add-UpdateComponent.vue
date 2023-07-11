@@ -3,25 +3,29 @@
     <h1 class="separated">Add new Recipe</h1>
     <form @submit="addRecipeForm">
       <label for="recipeTitle">Title (*)</label>
-      <input type="text" id="recipeTitle" class="separated" v-model="title"/>
+      <input type="text" id="recipeTitle" class="separated" v-model="title" />
       <div v-if="errors.get('title')">
-        <span>{{ errors.get('title') }}</span>
+        <span>{{ errors.get("title") }}</span>
       </div>
 
-
-
       <label for="instructions">Instructions (*)</label>
-      <textarea id="instructions" class="separated" v-model="description"></textarea>
+      <textarea
+        id="instructions"
+        class="separated"
+        v-model="description"
+      ></textarea>
       <div v-if="errors.get('description')">
-        <span>{{ errors.get('description') }}</span>
+        <span>{{ errors.get("description") }}</span>
       </div>
 
       <div class="preparation-time separated">
-        <label for="prepTime" class="border">Preparation Time in minutes (*)</label>
-        <input type="number" id="prepTime" v-model="preparationTime"/>
+        <label for="prepTime" class="border"
+          >Preparation Time in minutes (*)</label
+        >
+        <input type="number" id="prepTime" v-model="preparationTime" />
       </div>
       <div v-if="errors.get('preparationTime')">
-        <span>{{ errors.get('preparationTime') }}</span>
+        <span>{{ errors.get("preparationTime") }}</span>
       </div>
 
       <label for="typeMeal">Type of Meal (*)</label>
@@ -33,25 +37,26 @@
       </select>
 
       <table class="separated">
-        <caption>Macronutrients Percentages in Gr. (*)</caption>
+        <caption>
+          Macronutrients Percentages in Gr. (*)
+        </caption>
         <tr>
           <th>Protein</th>
-          <td><input id="protein" v-model="protein"></td>
+          <td><input id="protein" v-model="protein" /></td>
         </tr>
         <tr>
           <th>Carbohydrates</th>
-          <td><input id="carbo" v-model="carbohydrates"></td>
+          <td><input id="carbo" v-model="carbohydrates" /></td>
         </tr>
         <tr>
           <th>Greases</th>
-          <td><input id="greases" v-model="greases"></td>
+          <td><input id="greases" v-model="greases" /></td>
         </tr>
         <tr>
           <th>Fiber</th>
-          <td><input id="fiber" v-model="fiber"></td>
+          <td><input id="fiber" v-model="fiber" /></td>
         </tr>
       </table>
-
 
       <label for="ingredients">Ingredients (*)</label>
       <div class="input-ingredients separated">
@@ -74,7 +79,6 @@
       </div>
 
       <button class="addRecipes" type="submit">Add Recipe</button>
-
     </form>
   </div>
 </template>
@@ -82,7 +86,7 @@
 <script>
 import AddedIngredientsInput from "./AddedIngredientsInput.vue";
 import recipesService from "@/services/recipesService";
-import {ref} from "vue";
+import { ref } from "vue";
 export default {
   name: "AddUpdateComponent",
   components: {
@@ -140,49 +144,55 @@ export default {
     },
 
     addRecipeForm: function (event) {
-        this.errors = new Map();
-        // check title errors
-        if(this.title === ""){
-            this.errors.set("title", "Title is required");
-        } else if (this.title.length < 3) {
-            this.errors.set("title", "Title must be at least 3 characters");
-        } else if (this.title.length > 50) {
-            this.errors.set("title", "Title must be less than 50 characters");
-        } else {
-            this.errors.delete("title");
-        }
+      this.errors = new Map();
+      // check title errors
+      if (this.title === "") {
+        this.errors.set("title", "Title is required");
+      } else if (this.title.length < 3) {
+        this.errors.set("title", "Title must be at least 3 characters");
+      } else if (this.title.length > 50) {
+        this.errors.set("title", "Title must be less than 50 characters");
+      } else {
+        this.errors.delete("title");
+      }
 
-        // check description errors
-        if(this.description === ""){
-            this.errors.set("description", "Description is required");
-        } else if (this.description.length < 3) {
-            this.errors.set("description", "Description must be at least 3 characters");
-        }  else {
-            this.errors.delete("description");
-        }
+      // check description errors
+      if (this.description === "") {
+        this.errors.set("description", "Description is required");
+      } else if (this.description.length < 3) {
+        this.errors.set(
+          "description",
+          "Description must be at least 3 characters"
+        );
+      } else {
+        this.errors.delete("description");
+      }
 
-        this.errors.set("table", []);
+      this.errors.set("table", []);
 
-        // check preparationTime errors
-        if(this.preparationTime === ""){
-            this.errors.set("preparationTime", "Preparation Time is required");
-        } else if (this.preparationTime < 1) {
-            this.errors.set("preparationTime", "Preparation Time must be at least 1 minute");
-        } else {
-            this.errors.delete("preparationTime");
-        }
-
-        // table errors
-        if(this.protein === ""){
-            this.errors.get("table").push("Protein is required");
-        } else if (this.protein < 1) {
-          this.errors.get("table").push("Protein must be at least 1 gr");
-        } else {
-            this.errors.delete("table");
-        }
+      // check preparationTime errors
+      if (this.preparationTime === "") {
+        this.errors.set("preparationTime", "Preparation Time is required");
+      } else if (this.preparationTime < 1) {
+        this.errors.set(
+          "preparationTime",
+          "Preparation Time must be at least 1 minute"
+        );
+      } else {
+        this.errors.delete("preparationTime");
+      }
 
       // table errors
-      if(this.carbohydrates === ""){
+      if (this.protein === "") {
+        this.errors.get("table").push("Protein is required");
+      } else if (this.protein < 1) {
+        this.errors.get("table").push("Protein must be at least 1 gr");
+      } else {
+        this.errors.delete("table");
+      }
+
+      // table errors
+      if (this.carbohydrates === "") {
         this.errors.get("table").push("carbohydrates is required");
       } else if (this.protein < 1) {
         this.errors.get("table").push("carbohydrates must be at least 1 gr");
@@ -191,7 +201,7 @@ export default {
       }
 
       // table errors
-      if(this.greases === ""){
+      if (this.greases === "") {
         this.errors.get("table").push("greases is required");
       } else if (this.protein < 1) {
         this.errors.get("table").push("greases must be at least 1 gr");
@@ -199,7 +209,7 @@ export default {
         this.errors.delete("table");
       }
 
-      if(this.fiber === ""){
+      if (this.fiber === "") {
         this.errors.get("table").push("fiber is required");
       } else if (this.protein < 1) {
         this.errors.get("table").push("fiber must be at least 1 gr");
@@ -209,15 +219,23 @@ export default {
 
       event.preventDefault();
       // then here we will send the data to the server
-      if(this.errors.size === 0){
-        console.log("ingredients" + this.ingredients)
-        recipesService.addRecipe(this.title,
+      if (this.errors.size === 0) {
+        console.log("ingredients" + this.ingredients);
+        recipesService
+          .addRecipe(
+            this.title,
             this.ingredients.map((ingredient) => ingredient.value),
-            this.description, this.preparationTime, this.typeMeal, this.protein,
-            this.carbohydrates, this.greases, this.fiber)
-            .then( (res) => {
-                console.log(res);
-            })
+            this.description,
+            this.preparationTime,
+            this.typeMeal,
+            this.protein,
+            this.carbohydrates,
+            this.greases,
+            this.fiber
+          )
+          .then((res) => {
+            console.log(res);
+          });
       }
     },
   },
@@ -237,28 +255,25 @@ export default {
     }
 
     const deleteIngredient = (deleteId) => {
-        ingredients.value = ingredients.value.filter((ingredient) => ingredient.id !== deleteId);
-    }
+      ingredients.value = ingredients.value.filter(
+        (ingredient) => ingredient.id !== deleteId
+      );
+    };
 
     return {
       addIngredientsList,
       inputTextIngredients,
       ingredients,
-      deleteIngredient
+      deleteIngredient,
     };
   },
-}
+};
 </script>
 
 <style scoped>
 form {
   display: flex;
   flex-direction: column;
-}
-
-.form-recipe {
-  background-color: whitesmoke;
-  padding: 5%;
 }
 
 .tam {
@@ -275,7 +290,6 @@ form {
 
 th {
   background-color: rgb(218, 226, 232);
-
 }
 
 .preparation-time {
@@ -292,14 +306,17 @@ li {
   margin-bottom: 0.5rem;
 }
 
-input, textarea, select, li {
+input,
+textarea,
+select,
+li {
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid rgb(218, 226, 232);
 }
 
-.addRecipes{
+.addRecipes {
   margin-bottom: 10px;
   max-width: 50%;
   width: 100%;
@@ -358,5 +375,4 @@ body {
   flex: 1;
   margin-right: 10px;
 }
-
 </style>

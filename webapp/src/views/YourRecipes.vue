@@ -15,6 +15,7 @@
               v-for="(recipe, index) in recipes"
               :key="index"
               :recipe="recipe"
+              :spliceRecipe="() => spliceRecipe(index)"
             />
           </div>
         </section>
@@ -58,6 +59,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    spliceRecipe(index) {
+      console.log(index);
+      this.recipes.splice(index, 1);
     },
   },
 };

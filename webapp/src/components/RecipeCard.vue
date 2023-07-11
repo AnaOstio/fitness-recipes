@@ -1,45 +1,86 @@
 <template>
-  <div class="card-recipe">
-    <div class="card-hover"></div>
-    <div class="card-recipe-img">Recipe image</div>
-    <div class="card-recipe-body">
-      <h2 class="recipe-name">{{ recipe.title }}</h2>
-      <h3 class="recipe-type">Type: {{ recipe.typeOfMeal }}</h3>
-      <div class="recipe-time">
-        <i class="fa-solid fa-clock"></i>
-        <h3 class="time">{{ recipe.timeOfPreparation }}</h3>
+  <div>
+    <div class="card-recipe">
+      <div class="card-hover"></div>
+      <div class="card-recipe-img">Recipe image</div>
+      <div class="card-recipe-body">
+        <h2 class="recipe-name">{{ recipe.title }}</h2>
+        <h3 class="recipe-type">Type: {{ recipe.typeOfMeal }}</h3>
+        <div class="recipe-time">
+          <i class="fa-solid fa-clock"></i>
+          <h3 class="time">{{ recipe.timeOfPreparation }}</h3>
+        </div>
       </div>
-    </div>
-    <div class="card-recipe-footer">
-      <div class="recipe-rating">
-        <h3>{{ rating }}</h3>
-        <i class="fa-solid fa-star"></i>
+      <div class="card-recipe-footer">
+        <div class="recipe-rating">
+          <h3>{{ rating }}</h3>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <UpdateRecipeBtn
+          :toggleModal="toggleModal"
+          :setModalContent="setModalContent"
+        />
+        <DeleteRecipeBtn
+          :id="recipe.id"
+          :toggleModal="toggleModal"
+          :setModalContent="setModalContent"
+        />
       </div>
       <UpdateRecipeBtn :recipe="recipe"/>
       <DeleteRecipeBtn :id="recipe.id" />
     </div>
+    <modal-view @close="toggleModal" :modal-active="modalActive">
+      <div class="modal-content">
+        <DeleteRecipeConfirm
+          v-show="modalContent == 0"
+          :id="recipe.id"
+          :spliceRecipe="spliceRecipe"
+          :toggleModal="toggleModal"
+        />
+        <AddUpdateComponent v-show="modalContent == 1" />
+      </div>
+    </modal-view>
   </div>
 </template>
 
 <script>
 import DeleteRecipeBtn from "./DeleteRecipeBtn.vue";
 import UpdateRecipeBtn from "./UpdateRecipeBtn.vue";
+import ModalView from "./Modal.vue";
+import DeleteRecipeConfirm from "./DeleteRecipeConfirm.vue";
+import AddUpdateComponent from "./Add-UpdateComponent.vue";
+import { ref } from "vue";
 
 export default {
   name: "RecipeCard",
   components: {
     DeleteRecipeBtn,
     UpdateRecipeBtn,
+    DeleteRecipeConfirm,
+    AddUpdateComponent,
+    ModalView,
   },
-  props: {
-    recipe: Object,
+  data() {
+    return {
+      modalActive: ref(false),
+      modalContent: ref(0),
+    };
   },
+  props: ["recipe", "spliceRecipe"],
   computed: {
     //Change this with correct field is created
     rating: function () {
       const ratin = Object.values(this.recipe.rating);
 
       return ratin.reduce((sum, number) => sum + number, 0) / ratin.length;
+    },
+  },
+  methods: {
+    toggleModal: function () {
+      this.modalActive = !this.modalActive;
+    },
+    setModalContent(modalContent) {
+      this.modalContent = modalContent;
     },
   },
 };
