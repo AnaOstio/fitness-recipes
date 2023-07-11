@@ -3,11 +3,11 @@
     <button @click="toggleModal" id="show-modal" class="btn btn-add-recipe">
       Add new recipe
     </button>
-    <!-- <modal-view @close="toggleModal" :modal-active="modalActive">
+    <modal-view @close="toggleModal" :modal-active="modalActive">
       <div class="modal-content">
         <add-update-component />
       </div>
-    </modal-view> -->
+    </modal-view>
   </div>
 </template>
 
@@ -35,6 +35,10 @@ export default {
   bottom: 0;
   right: 0;
   max-width: 350px;
+}
+
+.modal-content {
+  width: 50vw;
 }
 
 @media screen and (max-width: 800px) {

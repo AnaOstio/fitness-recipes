@@ -1,6 +1,7 @@
 <template>
   <div class="form-recipe">
-    <h1 class="separated">Add new Recipe</h1>
+    <h1 class="separated" v-if="recipe">Update Recipe</h1>
+    <h1 class="separated" v-else>Add new Recipe</h1>
     <form @submit="addRecipeForm">
       <label for="recipeTitle">Title (*)</label>
       <input type="text" id="recipeTitle" class="separated" v-model="title" />
@@ -18,45 +19,50 @@
         <span>{{ errors.get("description") }}</span>
       </div>
 
-      <div class="preparation-time separated">
-        <label for="prepTime" class="border"
-          >Preparation Time in minutes (*)</label
-        >
-        <input type="number" id="prepTime" v-model="preparationTime" />
-      </div>
-      <div v-if="errors.get('preparationTime')">
-        <span>{{ errors.get("preparationTime") }}</span>
-      </div>
+      <div class="second-part">
+        <table class="separated">
+          <caption>
+            Macronutrients Percentages in Gr. (*)
+          </caption>
+          <tr>
+            <th>Protein</th>
+            <td><input id="protein" v-model="protein" /></td>
+          </tr>
+          <tr>
+            <th>Carbohydrates</th>
+            <td><input id="carbo" v-model="carbohydrates" /></td>
+          </tr>
+          <tr>
+            <th>Greases</th>
+            <td><input id="greases" v-model="greases" /></td>
+          </tr>
+          <tr>
+            <th>Fiber</th>
+            <td><input id="fiber" v-model="fiber" /></td>
+          </tr>
+        </table>
 
-      <label for="typeMeal">Type of Meal (*)</label>
-      <select id="typeMeal" class="separated" v-model="typeMeal">
-        <option value="Breakfast">Breakfast</option>
-        <option value="Launch">Lunch</option>
-        <option value="Dinner">Dinner</option>
-        <option value="Dessert">Dessert</option>
-      </select>
+        <div class="state">
+          <div class="preparation-time separated">
+            <label for="prepTime" class="border"
+            >Preparation Time in minutes (*)</label
+            >
+            <input type="number" id="prepTime" v-model="preparationTime"  min="0" />
+          </div>
+          <div v-if="errors.get('preparationTime')">
+            <span>{{ errors.get("preparationTime") }}</span>
+          </div>
 
-      <table class="separated">
-        <caption>
-          Macronutrients Percentages in Gr. (*)
-        </caption>
-        <tr>
-          <th>Protein</th>
-          <td><input id="protein" v-model="protein" /></td>
-        </tr>
-        <tr>
-          <th>Carbohydrates</th>
-          <td><input id="carbo" v-model="carbohydrates" /></td>
-        </tr>
-        <tr>
-          <th>Greases</th>
-          <td><input id="greases" v-model="greases" /></td>
-        </tr>
-        <tr>
-          <th>Fiber</th>
-          <td><input id="fiber" v-model="fiber" /></td>
-        </tr>
-      </table>
+          <label for="typeMeal" class="type-of-meal">Type of Meal (*)</label>
+          <select id="typeMeal" class="separated" v-model="typeMeal">
+            <option value="" selected>Select an option...</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Launch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Dessert">Dessert</option>
+          </select>
+        </div>
+      </div>
 
       <label for="ingredients">Ingredients (*)</label>
       <div class="input-ingredients separated">
@@ -78,7 +84,11 @@
         </ul>
       </div>
 
-      <button class="addRecipes" type="submit">Add Recipe</button>
+      <div class="add-update-confirm-footer">
+        <button v-if="recipe" @click="updateRecipe" type="button" class="btn">Update Recipe</button>
+        <button v-else @click="addRecipeForm" type="button" class="btn">Add recipe</button>
+      </div>
+
     </form>
   </div>
 </template>
@@ -92,24 +102,7 @@ export default {
   components: {
     AddedIngredientsInput,
   },
-  props: {
-    recipe: {
-      type: Object,
-      required: false,
-      default: () => {
-        return {
-          title: "",
-          description: "",
-          preparationTime: "",
-          typeMeal: "",
-          protein: "",
-          carbohydrates: "",
-          greases: "",
-          fiber: "",
-        };
-      },
-    },
-  },
+  props: ["recipe", "updateRecipeData", "toggleModal"],
   data: function () {
     return {
       title: "",
@@ -125,14 +118,15 @@ export default {
     };
   },
   created() {
-    if(this.recipe)
+    if(this.recipe) {
       this.getInfoFromRecipe();
+    }
   },
   methods: {
     getInfoFromRecipe() {
       this.title = this.recipe.title;
       this.description = this.recipe.instructions;
-      this.preparationTime = parseInt(this.recipe.timeOfPreparation.split(" ")[0]);;
+      this.preparationTime = this.recipe.timeOfPreparation.split(" ")[0];
       this.typeMeal = this.recipe.typeOfMeal;
       this.protein = this.recipe.macronutrientsPercentages.Protein;
       this.carbohydrates = this.recipe.macronutrientsPercentages.Carbohydrates;
@@ -143,7 +137,47 @@ export default {
       }
     },
 
+    updateRecipe: function() {
+      let aux = {
+        title: this.title,
+        instructions: this.description,
+        timeOfPreparation: this.preparationTime + " minutes",
+        typeOfMeal: this.typeMeal,
+        macronutrientsPercentages: {
+          Protein: this.protein,
+          Carbohydrates: this.carbohydrates,
+          Greases: this.greases,
+          Fiber: this.fiber,
+        },
+        ingredients: this.ingredients.map((ingredient) => ingredient.value),
+      };
+
+      this.$store.dispatch("updateRecipe",
+          {recipe: aux, toggleModal: this.toggleModal});
+    },
     addRecipeForm: function (event) {
+      event.preventDefault();
+      // then here we will send the data to the server
+      if (this.validateForm()) {
+        console.log("ingredients" + this.ingredients);
+        recipesService
+          .addRecipe(
+            this.title,
+            this.ingredients.map((ingredient) => ingredient.value),
+            this.description,
+            this.preparationTime,
+            this.typeMeal,
+            this.protein,
+            this.carbohydrates,
+            this.greases,
+            this.fiber
+          )
+          .then((res) => {
+            console.log(res);
+          });
+      }
+    },
+    validateForm(){
       this.errors = new Map();
       // check title errors
       if (this.title === "") {
@@ -161,8 +195,8 @@ export default {
         this.errors.set("description", "Description is required");
       } else if (this.description.length < 3) {
         this.errors.set(
-          "description",
-          "Description must be at least 3 characters"
+            "description",
+            "Description must be at least 3 characters"
         );
       } else {
         this.errors.delete("description");
@@ -175,8 +209,8 @@ export default {
         this.errors.set("preparationTime", "Preparation Time is required");
       } else if (this.preparationTime < 1) {
         this.errors.set(
-          "preparationTime",
-          "Preparation Time must be at least 1 minute"
+            "preparationTime",
+            "Preparation Time must be at least 1 minute"
         );
       } else {
         this.errors.delete("preparationTime");
@@ -217,27 +251,8 @@ export default {
         this.errors.delete("table");
       }
 
-      event.preventDefault();
-      // then here we will send the data to the server
-      if (this.errors.size === 0) {
-        console.log("ingredients" + this.ingredients);
-        recipesService
-          .addRecipe(
-            this.title,
-            this.ingredients.map((ingredient) => ingredient.value),
-            this.description,
-            this.preparationTime,
-            this.typeMeal,
-            this.protein,
-            this.carbohydrates,
-            this.greases,
-            this.fiber
-          )
-          .then((res) => {
-            console.log(res);
-          });
-      }
-    },
+      return this.errors.size === 0;
+    }
   },
   setup() {
     const ingredients = ref([]);
@@ -276,6 +291,13 @@ form {
   flex-direction: column;
 }
 
+.second-part {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 5%;
+}
+
 .tam {
   width: 80%;
 }
@@ -294,6 +316,10 @@ th {
 
 .preparation-time {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 input[type="number"] {
@@ -314,17 +340,6 @@ li {
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid rgb(218, 226, 232);
-}
-
-.addRecipes {
-  margin-bottom: 10px;
-  max-width: 50%;
-  width: 100%;
-  align-self: center;
-  background-color: rgb(0, 255, 127);
-  color: rgb(73, 41, 86);
-  height: 30px;
-  border-radius: 13px;
 }
 
 .input-ingredients {
@@ -374,5 +389,43 @@ body {
 .input-ingredients input {
   flex: 1;
   margin-right: 10px;
+}
+
+.add-update-confirm-footer {
+  display: flex;
+  justify-content: center;
+}
+
+textarea {
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 10vh;
+}
+
+
+.state {
+  display: inline-block;
+}
+
+label, caption, .type-of-meal {
+  margin-bottom: 10px;
+}
+
+select {
+  margin-top: 5px;
+}
+
+caption {
+  text-align: left;
+}
+
+table {
+  
+}
+
+@media screen and (max-width: 1000px) {
+  .second-part {
+    flex-direction: column;
+  }
 }
 </style>

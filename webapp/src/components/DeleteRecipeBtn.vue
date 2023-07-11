@@ -18,5 +18,3 @@ export default {
   props: ["toggleModal", "setModalContent"],
 };
 </script>
-
-<style></style>

@@ -149,5 +149,6 @@ main {
 
 .btn:hover {
   filter: brightness(95%);
+  cursor: pointer;
 }
 </style>

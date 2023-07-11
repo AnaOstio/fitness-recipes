@@ -21,4 +21,11 @@ export default {
     text-align: center;
   }
 }
+
+@media screen and (max-width: 640px) {
+  .page-title {
+    font-size: 3rem;
+  }
+}
+
 </style>
