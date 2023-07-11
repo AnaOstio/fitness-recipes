@@ -26,6 +26,8 @@
           :setModalContent="setModalContent"
         />
       </div>
+      <UpdateRecipeBtn :recipe="recipe"/>
+      <DeleteRecipeBtn :id="recipe.id" />
     </div>
     <modal-view @close="toggleModal" :modal-active="modalActive">
       <div class="modal-content">

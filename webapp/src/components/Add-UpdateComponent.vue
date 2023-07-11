@@ -8,35 +8,6 @@
         <span>{{ errors.get("title") }}</span>
       </div>
 
-      <label for="ingredients">Ingredients (*)</label>
-      <div class="input-ingredients separated">
-        <input
-          type="text"
-          id="ingredients"
-          class="border tam"
-          v-model="inputTextIngredients"
-        />
-        <button
-          type="button"
-          class="addButtonIngredients"
-          @click="addIngredientsList"
-        >
-          <img class="list__icon" src="../assets/add.png" alt="add" />
-          <span class="tooltip">Add</span>
-        </button>
-      </div>
-
-      <p v-if="ingredients.length">Added ingredients</p>
-      <div class="added-ingredients separated" v-if="ingredients.length">
-        <ul>
-          <added-ingredients-input
-            v-for="ingredient in ingredients"
-            :ingredient="ingredient"
-            @removeIngredient="deleteIngredient"
-          ></added-ingredients-input>
-        </ul>
-      </div>
-
       <label for="instructions">Instructions (*)</label>
       <textarea
         id="instructions"
@@ -59,10 +30,10 @@
 
       <label for="typeMeal">Type of Meal (*)</label>
       <select id="typeMeal" class="separated" v-model="typeMeal">
-        <option value="breakfast">Breakfast</option>
-        <option value="lunch">Lunch</option>
-        <option value="dinner">Dinner</option>
-        <option value="dessert">Dessert</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Launch">Lunch</option>
+        <option value="Dinner">Dinner</option>
+        <option value="Dessert">Dessert</option>
       </select>
 
       <table class="separated">
@@ -87,6 +58,26 @@
         </tr>
       </table>
 
+      <label for="ingredients">Ingredients (*)</label>
+      <div class="input-ingredients separated">
+        <input type="text" id="ingredients" class="border tam" v-model="inputTextIngredients"/>
+        <button type="button" class="addButtonIngredients" @click="addIngredientsList">
+          <img class="list__icon" src="../assets/add.png" alt="add" />
+          <span class="tooltip">Add</span>
+        </button>
+      </div>
+
+      <p v-if="ingredients.length">Added ingredients</p>
+      <div class="added-ingredients separated" v-if="ingredients.length">
+        <ul>
+          <added-ingredients-input v-for="ingredient in ingredients"
+                                   :ingredient= "ingredient"
+                                   :key="ingredient.id"
+                                   @removeIngredient = "deleteIngredient"
+          ></added-ingredients-input>
+        </ul>
+      </div>
+
       <button class="addRecipes" type="submit">Add Recipe</button>
     </form>
   </div>
@@ -101,6 +92,24 @@ export default {
   components: {
     AddedIngredientsInput,
   },
+  props: {
+    recipe: {
+      type: Object,
+      required: false,
+      default: () => {
+        return {
+          title: "",
+          description: "",
+          preparationTime: "",
+          typeMeal: "",
+          protein: "",
+          carbohydrates: "",
+          greases: "",
+          fiber: "",
+        };
+      },
+    },
+  },
   data: function () {
     return {
       title: "",
@@ -111,10 +120,29 @@ export default {
       carbohydrates: "",
       greases: "",
       fiber: "",
+      ingredients: [],
       errors: new Map(),
     };
   },
+  created() {
+    if(this.recipe)
+      this.getInfoFromRecipe();
+  },
   methods: {
+    getInfoFromRecipe() {
+      this.title = this.recipe.title;
+      this.description = this.recipe.instructions;
+      this.preparationTime = parseInt(this.recipe.timeOfPreparation.split(" ")[0]);;
+      this.typeMeal = this.recipe.typeOfMeal;
+      this.protein = this.recipe.macronutrientsPercentages.Protein;
+      this.carbohydrates = this.recipe.macronutrientsPercentages.Carbohydrates;
+      this.greases = this.recipe.macronutrientsPercentages.Greases;
+      this.fiber = this.recipe.macronutrientsPercentages.Fiber;
+      for(let i = 0; i  < this.recipe.ingredients.length; i++){
+        this.ingredients.push( {value: this.recipe.ingredients[i], id: i} );
+      }
+    },
+
     addRecipeForm: function (event) {
       this.errors = new Map();
       // check title errors
@@ -215,14 +243,16 @@ export default {
     const ingredients = ref([]);
     const inputTextIngredients = ref("");
     const addIngredientsList = () => {
-      inputTextIngredients.value !== ""
-        ? ingredients.value.push({
-            value: inputTextIngredients.value,
-            id: ingredients.value.length + 1,
-          })
-        : "";
-      inputTextIngredients.value = "";
-    };
+      console.log("entro " + inputTextIngredients.value)
+        inputTextIngredients.value !== ""
+            ? ingredients.value.push(
+                {
+                  value: inputTextIngredients.value,
+                  id: ingredients.value.length + 1
+                })
+            : "";
+        inputTextIngredients.value = "";
+    }
 
     const deleteIngredient = (deleteId) => {
       ingredients.value = ingredients.value.filter(
