@@ -3,7 +3,7 @@
     <button type="button" @click="toogleModal" id="show-modal"><i class="fa-solid fa-pen"></i></button>
     <modal-view @close="toogleModal" :modal-active="modalActive">
       <div class="modal-content">
-        <add-update-component />
+        <add-update-component :recipe="recipe"/>
       </div>
     </modal-view>
    </div>
@@ -17,6 +17,9 @@ import {ref} from "vue";
 export default {
   name: "UpdateRecipeBtn",
   components: {ModalView, AddUpdateComponent},
+  props: {
+    recipe: Object,
+  },
   setup() {
     const modalActive = ref(false);
     const toogleModal = () => {
@@ -39,6 +42,7 @@ export default {
   top: 0;
   left: 0;
   overflow-y: auto;
+  z-index: 9999;
   background-color: rgb(255, 255, 255, 0.9) ;
 }
 </style>
