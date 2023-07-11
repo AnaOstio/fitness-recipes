@@ -15,7 +15,7 @@
         <h3>{{ rating }}</h3>
         <i class="fa-solid fa-star"></i>
       </div>
-      <UpdateRecipeBtn />
+      <UpdateRecipeBtn :recipe="recipe"/>
       <DeleteRecipeBtn :id="recipe.id" />
     </div>
   </div>

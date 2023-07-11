@@ -54,6 +54,7 @@ export default {
   top: 0;
   left: 0;
   overflow-y: auto;
+  z-index: 3;
   background-color: rgb(255, 255, 255, 0.9) ;
 }
 
