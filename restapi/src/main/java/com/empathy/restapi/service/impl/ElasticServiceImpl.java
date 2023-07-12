@@ -75,6 +75,22 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
     @Override
+    public String updateRecipe(Recipe recipe) throws IOException {
+        // First delete the recipe
+        String res = DeleteRecipeById(recipe.getId().toString());
+        if(res.equals("Recipe deleted successfully")){
+            // Now I added the new recipe
+            res = indexRecipe(recipe);
+            if(res.equals("No errors")){
+                return "Recipe updated successfully";
+            }
+            return res;
+        }
+
+        return res;
+    }
+
+    @Override
     public String DeleteRecipeById(String id) throws IOException {
         BulkRequest.Builder bulkRequest = new BulkRequest.Builder();
         bulkRequest.operations(op -> op
