@@ -27,6 +27,16 @@ export default {
       });
   },
   async updateRecipe(recipe){
-    console.log("Estoy en RecipeService de actualizar")
+    const response = await fetch(`http://localhost:8080/recipes/update/${recipe.id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recipe),
+    }).catch((error) => { console.log(error) });
+    const data = await response.json();
+    console.log(data)
+    return data;
   }
 };

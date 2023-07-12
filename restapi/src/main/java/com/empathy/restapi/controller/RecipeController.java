@@ -7,8 +7,6 @@ import com.empathy.restapi.service.RecipeService;
 import com.empathy.restapi.service.impl.ElasticServiceImpl;
 import com.empathy.restapi.service.impl.QueryServiceImpl;
 import com.empathy.restapi.service.impl.RecipeServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,13 +68,6 @@ public class RecipeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/recipes/update/{id}")
-    public ResponseEntity<Recipe> updateRecipeById(@PathVariable String id, @RequestBody Recipe updateRecipe)
-            throws IOException {
-        Recipe update = recipeService.updateRecipeById(id, updateRecipe);
-        return new ResponseEntity<>(update, HttpStatus.OK);
-    }
-
     @DeleteMapping("/recipes/delete/{id}")
     public ResponseEntity<HashMap<String, Object>> updateRecipeById(@PathVariable String id)
             throws IOException {
@@ -97,4 +88,15 @@ public class RecipeController {
     }
 
     // Cuando haga un actualizar, acordarse de volver a actualizar el averageRating
+    @PutMapping("/recipes/update/{id}")
+    public ResponseEntity<HashMap<String, Object>> updateRecipe(@PathVariable String id, @RequestBody Recipe updateRecipe) throws IOException {
+        String updated = recipeService.updateRecipeById(id, updateRecipe);
+        if(updated.equals("Recipe updated successfully")) {
+            HashMap<String, Object> response = new HashMap<String, Object>();
+            response.put("data", updateRecipe);
+            response.put("status", HttpStatus.OK.value());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
 }
