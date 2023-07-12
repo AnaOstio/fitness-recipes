@@ -45,9 +45,14 @@
         <div class="state">
           <div class="preparation-time separated">
             <label for="prepTime" class="border"
-            >Preparation Time in minutes (*)</label
+              >Preparation Time in minutes (*)</label
             >
-            <input type="number" id="prepTime" v-model="preparationTime"  min="0" />
+            <input
+              type="number"
+              id="prepTime"
+              v-model="preparationTime"
+              min="0"
+            />
           </div>
           <div v-if="errors.get('preparationTime')">
             <span>{{ errors.get("preparationTime") }}</span>
@@ -66,8 +71,17 @@
 
       <label for="ingredients">Ingredients (*)</label>
       <div class="input-ingredients separated">
-        <input type="text" id="ingredients" class="border tam" v-model="inputTextIngredients"/>
-        <button type="button" class="addButtonIngredients" @click="addIngredientsList">
+        <input
+          type="text"
+          id="ingredients"
+          class="border tam"
+          v-model="inputTextIngredients"
+        />
+        <button
+          type="button"
+          class="addButtonIngredients"
+          @click="addIngredientsList"
+        >
           <img class="list__icon" src="../assets/add.png" alt="add" />
           <span class="tooltip">Add</span>
         </button>
@@ -76,19 +90,23 @@
       <p v-if="ingredients.length">Added ingredients</p>
       <div class="added-ingredients separated" v-if="ingredients.length">
         <ul>
-          <added-ingredients-input v-for="ingredient in ingredients"
-                                   :ingredient= "ingredient"
-                                   :key="ingredient.id"
-                                   @removeIngredient = "deleteIngredient"
+          <added-ingredients-input
+            v-for="ingredient in ingredients"
+            :ingredient="ingredient"
+            :key="ingredient.id"
+            @removeIngredient="deleteIngredient"
           ></added-ingredients-input>
         </ul>
       </div>
 
       <div class="add-update-confirm-footer">
-        <button v-if="recipe" @click="updateRecipe" type="button" class="btn">Update Recipe</button>
-        <button v-else @click="addRecipeForm" type="button" class="btn">Add recipe</button>
+        <button v-if="recipe" @click="updateRecipe" type="button" class="btn">
+          Update Recipe
+        </button>
+        <button v-else @click="addRecipeForm" type="button" class="btn">
+          Add recipe
+        </button>
       </div>
-
     </form>
   </div>
 </template>
@@ -118,7 +136,7 @@ export default {
     };
   },
   created() {
-    if(this.recipe) {
+    if (this.recipe) {
       this.getInfoFromRecipe();
     }
   },
@@ -132,12 +150,12 @@ export default {
       this.carbohydrates = this.recipe.macronutrientsPercentages.Carbohydrates;
       this.greases = this.recipe.macronutrientsPercentages.Greases;
       this.fiber = this.recipe.macronutrientsPercentages.Fiber;
-      for(let i = 0; i  < this.recipe.ingredients.length; i++){
-        this.ingredients.push( {value: this.recipe.ingredients[i], id: i} );
+      for (let i = 0; i < this.recipe.ingredients.length; i++) {
+        this.ingredients.push({ value: this.recipe.ingredients[i], id: i });
       }
     },
 
-    updateRecipe: function() {
+    updateRecipe: function () {
       let aux = {
         title: this.title,
         instructions: this.description,
@@ -152,8 +170,10 @@ export default {
         ingredients: this.ingredients.map((ingredient) => ingredient.value),
       };
 
-      this.$store.dispatch("updateRecipe",
-          {recipe: aux, toggleModal: this.toggleModal});
+      this.$store.dispatch("updateRecipe", {
+        recipe: aux,
+        toggleModal: this.toggleModal,
+      });
     },
     addRecipeForm: function (event) {
       event.preventDefault();
@@ -177,7 +197,7 @@ export default {
           });
       }
     },
-    validateForm(){
+    validateForm() {
       this.errors = new Map();
       // check title errors
       if (this.title === "") {
@@ -195,8 +215,8 @@ export default {
         this.errors.set("description", "Description is required");
       } else if (this.description.length < 3) {
         this.errors.set(
-            "description",
-            "Description must be at least 3 characters"
+          "description",
+          "Description must be at least 3 characters"
         );
       } else {
         this.errors.delete("description");
@@ -209,8 +229,8 @@ export default {
         this.errors.set("preparationTime", "Preparation Time is required");
       } else if (this.preparationTime < 1) {
         this.errors.set(
-            "preparationTime",
-            "Preparation Time must be at least 1 minute"
+          "preparationTime",
+          "Preparation Time must be at least 1 minute"
         );
       } else {
         this.errors.delete("preparationTime");
@@ -252,22 +272,21 @@ export default {
       }
 
       return this.errors.size === 0;
-    }
+    },
   },
   setup() {
     const ingredients = ref([]);
     const inputTextIngredients = ref("");
     const addIngredientsList = () => {
-      console.log("entro " + inputTextIngredients.value)
-        inputTextIngredients.value !== ""
-            ? ingredients.value.push(
-                {
-                  value: inputTextIngredients.value,
-                  id: ingredients.value.length + 1
-                })
-            : "";
-        inputTextIngredients.value = "";
-    }
+      console.log("entro " + inputTextIngredients.value);
+      inputTextIngredients.value !== ""
+        ? ingredients.value.push({
+            value: inputTextIngredients.value,
+            id: ingredients.value.length + 1,
+          })
+        : "";
+      inputTextIngredients.value = "";
+    };
 
     const deleteIngredient = (deleteId) => {
       ingredients.value = ingredients.value.filter(
@@ -291,9 +310,14 @@ form {
   flex-direction: column;
 }
 
+.form-recipe {
+  width: 40vw;
+}
+
 .second-part {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   gap: 5%;
 }
@@ -311,7 +335,8 @@ form {
 }
 
 th {
-  background-color: rgb(218, 226, 232);
+  background-color: rgb(217, 227, 235);
+  padding: 0px 10px;
 }
 
 .preparation-time {
@@ -402,12 +427,14 @@ textarea {
   min-height: 10vh;
 }
 
-
 .state {
   display: inline-block;
+  width: 50%;
 }
 
-label, caption, .type-of-meal {
+label,
+caption,
+.type-of-meal {
   margin-bottom: 10px;
 }
 
@@ -420,12 +447,27 @@ caption {
 }
 
 table {
-  
+  width: 50%;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1150px) {
+  .form-recipe {
+    width: 60vw;
+  }
+
   .second-part {
     flex-direction: column;
+  }
+
+  table,
+  .state {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .form-recipe {
+    width: 72vw;
   }
 }
 </style>
