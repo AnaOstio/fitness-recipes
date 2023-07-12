@@ -37,10 +37,6 @@ export default {
   max-width: 350px;
 }
 
-.modal-content {
-  width: 50vw;
-}
-
 @media screen and (max-width: 800px) {
   .btn-add-recipe {
     width: 100%;
