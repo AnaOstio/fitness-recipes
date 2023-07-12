@@ -113,7 +113,7 @@ export default {
       carbohydrates: "",
       greases: "",
       fiber: "",
-      ingredients: [],
+      recipeId: "",
       errors: new Map(),
     };
   },
@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     getInfoFromRecipe() {
+      this.recipeId = this.recipe.id;
       this.title = this.recipe.title;
       this.description = this.recipe.instructions;
       this.preparationTime = this.recipe.timeOfPreparation.split(" ")[0];
@@ -139,6 +140,7 @@ export default {
 
     updateRecipe: function() {
       let aux = {
+        id: this.recipeId,
         title: this.title,
         instructions: this.description,
         timeOfPreparation: this.preparationTime + " minutes",
@@ -149,11 +151,14 @@ export default {
           Greases: this.greases,
           Fiber: this.fiber,
         },
+        rating: this.recipe.rating,
+        userId: this.recipe.userId,
         ingredients: this.ingredients.map((ingredient) => ingredient.value),
       };
 
       this.$store.dispatch("updateRecipe",
-          {recipe: aux, toggleModal: this.toggleModal});
+          {recipe: aux, toggleModal: this.toggleModal,
+            updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe)} );
     },
     addRecipeForm: function (event) {
       event.preventDefault();
@@ -420,7 +425,7 @@ caption {
 }
 
 table {
-  
+
 }
 
 @media screen and (max-width: 1000px) {

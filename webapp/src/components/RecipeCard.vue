@@ -4,11 +4,11 @@
       <div class="card-hover"></div>
       <div class="card-recipe-img">Recipe image</div>
       <div class="card-recipe-body">
-        <h2 class="recipe-name">{{ recipe.title }}</h2>
-        <h3 class="recipe-type">Type: {{ recipe.typeOfMeal }}</h3>
+        <h2 class="recipe-name">{{ recipeData.title }}</h2>
+        <h3 class="recipe-type">Type: {{ recipeData.typeOfMeal }}</h3>
         <div class="recipe-time">
           <i class="fa-solid fa-clock"></i>
-          <h3 class="time">{{ recipe.timeOfPreparation }}</h3>
+          <h3 class="time">{{ recipeData.timeOfPreparation }}</h3>
         </div>
       </div>
       <div class="card-recipe-footer">
@@ -19,10 +19,10 @@
         <UpdateRecipeBtn
           :toggleModal="toggleModal"
           :setModalContent="setModalContent"
-          :recipe="recipe"
+          :recipe="recipeData"
         />
         <DeleteRecipeBtn
-          :id="recipe.id"
+          :id="recipeData.id"
           :toggleModal="toggleModal"
           :setModalContent="setModalContent"
         />
@@ -32,13 +32,13 @@
       <div class="modal-content">
         <DeleteRecipeConfirm
           v-show="modalContent == 0"
-          :id="recipe.id"
+          :id="recipeData.id"
           :spliceRecipe="spliceRecipe"
           :toggleModal="toggleModal"
         />
         <AddUpdateComponent v-show="modalContent == 1"
-                            :recipe="recipe"
-                            :updateRecipeData="(recipe) => updateRecipeData()"
+                            :recipe="recipeData"
+                            :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
                             :toggleModal="toggleModal"
         />
       </div>
@@ -67,16 +67,20 @@ export default {
     return {
       modalActive: ref(false),
       modalContent: ref(0),
+      recipeData: {},
     };
   },
   props: ["recipe", "spliceRecipe"],
   computed: {
     //Change this with correct field is created
     rating: function () {
-      const ratin = Object.values(this.recipe.rating);
+      const ratin = Object.values(this.recipeData.rating);
 
       return ratin.reduce((sum, number) => sum + number, 0) / ratin.length;
     },
+  },
+  created() {
+    this.recipeData = { ...this.recipe };
   },
   methods: {
     toggleModal: function () {
@@ -86,7 +90,7 @@ export default {
       this.modalContent = modalContent;
     },
     updateRecipeData(recipeUpdated){
-      console.log(recipeUpdated + "para actualizar");
+      this.recipe = recipeUpdated;
     }
   },
 };

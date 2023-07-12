@@ -25,9 +25,10 @@ export default new Vuex.Store({
         recipeService
             .updateRecipe(payload.recipe)
             .then((result) => {
-                //if (result.status == 200) {
+                if (result.status === 200) {
                     payload.toggleModal();
-                // }
+                    payload.updateRecipeData(result.data);
+                }
             }).catch((err) => {
                 console.log(err);
             });

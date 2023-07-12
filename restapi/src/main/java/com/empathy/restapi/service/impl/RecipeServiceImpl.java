@@ -7,6 +7,8 @@ import com.empathy.restapi.util.RecipeDB;
 import com.empathy.restapi.util.UserBD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Optional;
@@ -30,9 +32,10 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe updateRecipeById(String id, Recipe updateRecipe) {
+    public String updateRecipeById(String id, Recipe updateRecipe) throws IOException {
         Optional<Recipe> toUpdate = recipeDB.getRecipeById(id);
         if (toUpdate.isPresent()) {
+            toUpdate.get().setId(id);
             toUpdate.get().setTitle(updateRecipe.getTitle());
             toUpdate.get().setIngredients(updateRecipe.getIngredients());
             toUpdate.get().setInstructions(updateRecipe.getInstructions());
@@ -41,8 +44,11 @@ public class RecipeServiceImpl implements RecipeService {
             toUpdate.get().setImageName(updateRecipe.getImageName());
             toUpdate.get().setTypeOfMeal(updateRecipe.getTypeOfMeal());
             toUpdate.get().setMacronutrientsPercentages(updateRecipe.getMacronutrientsPercentages());
+            toUpdate.get().setAverageRating(updateRecipe.getAverageRating());
+            toUpdate.get().setUserId(updateRecipe.getUserId());
+            return elasticService.updateRecipe(toUpdate.get());
         }
-        return toUpdate.get();
+        return "This recipe is not present in the database";
     }
 
     @Override
