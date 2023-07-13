@@ -45,7 +45,7 @@ export default {
     return { recipes: [] };
   },
   created() {
-    this.getRecipes(0);
+    this.getRecipes(1);
   },
   methods: {
     getRecipes(userId) {
@@ -62,7 +62,6 @@ export default {
     },
 
     spliceRecipe(index) {
-      console.log(index);
       this.recipes.splice(index, 1);
     },
   },

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface QueryService {
-    Recipe getRecipeById(Long id) throws IOException;
+    Recipe getRecipeById(String id) throws IOException;
 
     List<Recipe> getRecipeByTitle(String title) throws IOException;
 

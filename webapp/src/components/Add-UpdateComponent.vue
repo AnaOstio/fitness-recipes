@@ -113,7 +113,7 @@
 
 <script>
 import AddedIngredientsInput from "./AddedIngredientsInput.vue";
-import recipesService from "@/services/recipesService";
+import recipeService from "@/services/recipeService";
 import { ref } from "vue";
 export default {
   name: "AddUpdateComponent",
@@ -134,6 +134,11 @@ export default {
       recipeId: "",
       errors: new Map(),
     };
+  },
+  watch: {
+    recipe(recipe) {
+      this.getInfoFromRecipe();
+    },
   },
   created() {
     if (this.recipe) {
@@ -174,27 +179,34 @@ export default {
         ingredients: this.ingredients.map((ingredient) => ingredient.value),
       };
 
-      this.$store.dispatch("updateRecipe",
-          {recipe: aux, toggleModal: this.toggleModal,
-            updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe)} );
+      this.$store.dispatch("updateRecipe", {
+        recipe: aux,
+        toggleModal: this.toggleModal,
+        updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe),
+      });
     },
     addRecipeForm: function (event) {
       event.preventDefault();
       // then here we will send the data to the server
       if (this.validateForm()) {
         console.log("ingredients" + this.ingredients);
-        recipesService
-          .addRecipe(
-            this.title,
-            this.ingredients.map((ingredient) => ingredient.value),
-            this.description,
-            this.preparationTime,
-            this.typeMeal,
-            this.protein,
-            this.carbohydrates,
-            this.greases,
-            this.fiber
-          )
+        recipeService
+          .addRecipe({
+            title: this.title,
+            imageName: "default.jpg",
+            ingredients: this.ingredients.map((ingredient) => ingredient.value),
+            instructions: this.description,
+            timeOfPreparation: this.preparationTime,
+            typeOfMeal: this.typeMeal,
+            macronutrientsPercentages: {
+              Protein: this.protein,
+              Carbohydrates: this.carbohydrates,
+              Fiber: this.fiber,
+              Greases: this.greases,
+              // Get userId with Principal in back
+            },
+            userId: 1,
+          })
           .then((res) => {
             console.log(res);
           });

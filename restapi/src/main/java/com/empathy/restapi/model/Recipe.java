@@ -41,8 +41,8 @@ public class Recipe {
     @Field(type = FieldType.Object, name = "macronutrientsPercentages")
     private Map<String, Double> macronutrientsPercentages;
 
-    @Field(name = "ingredientList")
-    private List<String> ingredientList;
+    @Field(name = "ingredients")
+    private List<String> ingredients;
 
     @Field(type = FieldType.Text, name = "userId")
     private String userId;
@@ -50,13 +50,13 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String id, String title, List<String> ingredientList, String instructions, String imageName,
+    public Recipe(String id, String title, List<String> ingredients, String instructions, String imageName,
             String typeOfMeal, Map<String, Double> rating, Map<String, Double> macronutrientsPercentages,
             String timeOfPreparation, String userId) {
         this.id = id;
         this.title = title;
         this.imageName = imageName;
-        this.ingredientList = ingredientList;
+        this.ingredients = ingredients;
         this.instructions = instructions;
         this.typeOfMeal = typeOfMeal;
         this.rating = rating;
@@ -70,7 +70,7 @@ public class Recipe {
         this.averageRating = 0.0;
         this.id = recipe[0];
         this.title = recipe[1];
-        this.ingredientList = Arrays.stream(recipe[2].replaceAll("^\"|\"$", "")
+        this.ingredients = Arrays.stream(recipe[2].replaceAll("^\"|\"$", "")
                 .replaceAll("^\\[|\\]$", "")
                 .replaceAll("^\'|\'$", "")
                 .split("\', \'")).toList();
@@ -110,7 +110,7 @@ public class Recipe {
     }
 
     public List<String> getIngredients() {
-        return ingredientList;
+        return ingredients;
     }
 
     public String getInstructions() {
@@ -142,7 +142,7 @@ public class Recipe {
     }
 
     public void setIngredients(List<String> ingredients) {
-        this.ingredientList = ingredients;
+        this.ingredients = ingredients;
     }
 
     public void setInstructions(String instructions) {

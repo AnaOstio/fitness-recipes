@@ -13,8 +13,8 @@ export default new Vuex.Store({
         .deleteRecipe(payload.id)
         .then((result) => {
           if (result.status == 200) {
-            payload.spliceRecipe();
             payload.toggleModal();
+            payload.spliceRecipe();
           }
         })
         .catch((err) => {
@@ -22,16 +22,17 @@ export default new Vuex.Store({
         });
     },
     updateRecipe(context, payload) {
-        recipeService
-            .updateRecipe(payload.recipe)
-            .then((result) => {
-                if (result.status === 200) {
-                    payload.toggleModal();
-                    payload.updateRecipeData(result.data);
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
+      recipeService
+        .updateRecipe(payload.recipe)
+        .then((result) => {
+          if (result.status === 200) {
+            payload.toggleModal();
+            payload.updateRecipeData(result.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 });
