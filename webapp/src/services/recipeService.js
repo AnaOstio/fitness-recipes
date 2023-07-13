@@ -56,7 +56,6 @@ export default {
       console.log(error);
     });
     const data = await response.json();
-    console.log(data);
     return data;
   },
 };

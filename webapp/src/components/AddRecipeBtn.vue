@@ -5,7 +5,7 @@
     </button>
     <modal-view @close="toggleModal" :modal-active="modalActive">
       <div class="modal-content">
-        <add-update-component />
+        <add-update-component @toggleModalAdd="toggleModal" />
       </div>
     </modal-view>
   </div>

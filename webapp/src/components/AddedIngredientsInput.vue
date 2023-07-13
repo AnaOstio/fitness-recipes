@@ -35,14 +35,16 @@ export default {
 }
 
 .deleteButtonIngredients {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 1.75rem;
+  width: 1.75rem;
+  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 100%;
   border: none;
   background-color: #f92d52;
   float: right;
+  position: relative;
 }
 
 button:hover .tooltip {
@@ -52,18 +54,18 @@ button:hover .tooltip {
 img {
   height: 1rem;
   width: 1rem;
-  margin-top: 0.1rem;
 }
 
 .tooltip {
   position: absolute;
   display: none;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 5px;
   padding: 3px;
-  background-color: gray;
-  color: white;
+  background-color: rgb(224, 224, 224);
+  color: rgb(47, 15, 15);
   width: 100px;
-  right: 60%;
-  top: 100%;
+  right: -150%;
+  top: -110%;
 }
 </style>
