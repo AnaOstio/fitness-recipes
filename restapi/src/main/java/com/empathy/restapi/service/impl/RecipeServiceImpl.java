@@ -2,6 +2,7 @@ package com.empathy.restapi.service.impl;
 
 import com.empathy.restapi.model.Recipe;
 import com.empathy.restapi.service.ElasticService;
+import com.empathy.restapi.service.QueryService;
 import com.empathy.restapi.service.RecipeService;
 import com.empathy.restapi.util.RecipeDB;
 import com.empathy.restapi.util.UserBD;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
@@ -25,6 +25,9 @@ public class RecipeServiceImpl implements RecipeService {
     @Autowired
     private ElasticService elasticService;
 
+    @Autowired
+    private QueryService queryService;
+
     @Override
     public void add(Recipe recipe, String userId) {
         recipeDB.addRecipe(recipe);
@@ -33,22 +36,25 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public String updateRecipeById(String id, Recipe updateRecipe) throws IOException {
-        Optional<Recipe> toUpdate = recipeDB.getRecipeById(id);
-        if (toUpdate.isPresent()) {
-            toUpdate.get().setId(id);
-            toUpdate.get().setTitle(updateRecipe.getTitle());
-            toUpdate.get().setIngredients(updateRecipe.getIngredients());
-            toUpdate.get().setInstructions(updateRecipe.getInstructions());
-            toUpdate.get().setTimeOfPreparation(updateRecipe.getTimeOfPreparation());
-            toUpdate.get().setRating(updateRecipe.getRating());
-            toUpdate.get().setImageName(updateRecipe.getImageName());
-            toUpdate.get().setTypeOfMeal(updateRecipe.getTypeOfMeal());
-            toUpdate.get().setMacronutrientsPercentages(updateRecipe.getMacronutrientsPercentages());
-            toUpdate.get().setAverageRating(updateRecipe.getAverageRating());
-            toUpdate.get().setUserId(updateRecipe.getUserId());
-            return elasticService.updateRecipe(toUpdate.get());
+        Recipe toUpdate = queryService.getRecipeById(id);
+
+        if (toUpdate != null) {
+            toUpdate.setId(id);
+            toUpdate.setTitle(updateRecipe.getTitle());
+            toUpdate.setIngredients(updateRecipe.getIngredients());
+            toUpdate.setInstructions(updateRecipe.getInstructions());
+            toUpdate.setTimeOfPreparation(updateRecipe.getTimeOfPreparation());
+            toUpdate.setRating(updateRecipe.getRating());
+            toUpdate.setImageName(updateRecipe.getImageName());
+            toUpdate.setTypeOfMeal(updateRecipe.getTypeOfMeal());
+            toUpdate.setMacronutrientsPercentages(updateRecipe.getMacronutrientsPercentages());
+            toUpdate.setAverageRating(updateRecipe.getAverageRating());
+            toUpdate.setUserId(updateRecipe.getUserId());
+            return elasticService.updateRecipe(toUpdate);
         }
+
         return "This recipe is not present in the database";
+
     }
 
     @Override
@@ -58,8 +64,8 @@ public class RecipeServiceImpl implements RecipeService {
             addRecipe.setImageName("https://picsum.photos/200/300");
             Random r = new Random();
             int aux = r.nextInt(13500, 99999);
-            addRecipe.setId( aux + "");
-            System.out.println("Valor del Id de la receta "+ aux);
+            addRecipe.setId(aux + "");
+            System.out.println("Valor del Id de la receta " + aux);
             elasticService.indexRecipe(addRecipe);
         } catch (Exception e) {
             e.printStackTrace();

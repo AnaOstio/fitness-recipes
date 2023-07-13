@@ -23,10 +23,10 @@ public class QueryServiceImpl implements QueryService {
     private ElasticsearchClient elasticsearchClient;
 
     @Override
-    public Recipe getRecipeById(Long id) throws IOException {
+    public Recipe getRecipeById(String id) throws IOException {
         GetResponse<Recipe> response = elasticsearchClient.get(g -> g
                 .index(INDEX)
-                .id(id.toString()),
+                .id(id),
                 Recipe.class);
 
         return response.source();

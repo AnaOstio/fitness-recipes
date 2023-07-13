@@ -13,7 +13,7 @@
       </div>
       <div class="card-recipe-footer">
         <div class="recipe-rating">
-          <h3>{{ rating }}</h3>
+          <h3>{{ recipeData.averageRating }}</h3>
           <i class="fa-solid fa-star"></i>
         </div>
         <UpdateRecipeBtn
@@ -36,10 +36,11 @@
           :spliceRecipe="spliceRecipe"
           :toggleModal="toggleModal"
         />
-        <AddUpdateComponent v-show="modalContent == 1"
-                            :recipe="recipeData"
-                            :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
-                            :toggleModal="toggleModal"
+        <AddUpdateComponent
+          v-show="modalContent == 1"
+          :recipe="recipeData"
+          :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
+          :toggleModal="toggleModal"
         />
       </div>
     </modal-view>
@@ -71,12 +72,9 @@ export default {
     };
   },
   props: ["recipe", "spliceRecipe"],
-  computed: {
-    //Change this with correct field is created
-    rating: function () {
-      const ratin = Object.values(this.recipeData.rating);
-
-      return ratin.reduce((sum, number) => sum + number, 0) / ratin.length;
+  watch: {
+    recipe(recipe) {
+      this.recipeData = { ...recipe };
     },
   },
   created() {
@@ -89,9 +87,9 @@ export default {
     setModalContent(modalContent) {
       this.modalContent = modalContent;
     },
-    updateRecipeData(recipeUpdated){
-      this.recipe = recipeUpdated;
-    }
+    updateRecipeData(recipeUpdated) {
+      this.recipeData = recipeUpdated;
+    },
   },
 };
 </script>
