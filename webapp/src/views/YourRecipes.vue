@@ -31,10 +31,12 @@ import PageTitle from "@/components/PageTitle.vue";
 import RecipeCard from "@/components/RecipeCard.vue";
 import AddRecipeBtn from "@/components/AddRecipeBtn.vue";
 import recipeService from "@/services/recipeService";
+import SearchBox from "@/components/SearchBox.vue";
 
 export default {
   name: "YourRecipes",
   components: {
+    SearchBox,
     Header,
     SideBar,
     PageTitle,
