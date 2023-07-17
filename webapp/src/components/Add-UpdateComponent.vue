@@ -2,7 +2,7 @@
   <div class="form-recipe">
     <h1 class="separated" v-if="recipe">Update Recipe</h1>
     <h1 class="separated" v-else>Add new Recipe</h1>
-    <form @submit="addRecipeForm">
+    <form>
       <label for="recipeTitle">Title*</label>
       <input type="text" id="recipeTitle" class="separated" v-model="title" />
       <div class="errorMsg" v-if="errors.get('title')">
@@ -76,7 +76,7 @@
         <span>{{ errors.get("ingredients") }}</span>
       </div>
 
-      <p v-if="ingredients.length">Added ingredients</p>
+      <p v-if="ingredients.length" class="separated">Added ingredients</p>
       <div class="added-ingredients separated" v-if="ingredients.length">
         <ul>
           <added-ingredients-input
@@ -178,6 +178,7 @@ export default {
         updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe),
       });
     },
+
     addRecipeForm: function (event) {
       event.preventDefault();
       // then here we will send the data to the server

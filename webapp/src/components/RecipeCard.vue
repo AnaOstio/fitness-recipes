@@ -50,7 +50,11 @@
           :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
           :toggleModal="toggleModal"
         />
-        <RecipeVisualization v-show="modalContent == 2" :recipe="recipeData" />
+        <RecipeVisualization
+          v-show="modalContent == 2"
+          :recipe="recipeData"
+          :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
+        />
       </div>
     </modal-view>
   </div>
@@ -177,24 +181,5 @@ export default {
 
 .recipe-rating i::before {
   font-size: 13px;
-}
-
-/* Common */
-.card-crud-btn i::before {
-  font-size: 20px;
-}
-
-.card-crud-btn i:hover {
-  color: #7f7f7f;
-  cursor: pointer;
-}
-
-.card-crud-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 15%;
-  height: 100%;
-  z-index: 2;
 }
 </style>

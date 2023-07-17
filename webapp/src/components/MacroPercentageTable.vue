@@ -1,6 +1,6 @@
 <template>
   <table class="separated">
-    <caption>
+    <caption v-show="!readonly">
       Macronutrients Percentages in Gr.*
     </caption>
     <tr>
@@ -10,6 +10,7 @@
           id="protein"
           type="number"
           v-model="macronutrientsPercentages.protein"
+          :readonly="readonly"
         />
       </td>
     </tr>
@@ -20,6 +21,7 @@
           id="carbo"
           type="number"
           v-model="macronutrientsPercentages.carbohydrates"
+          :readonly="readonly"
         />
       </td>
     </tr>
@@ -30,6 +32,7 @@
           id="greases"
           type="number"
           v-model="macronutrientsPercentages.greases"
+          :readonly="readonly"
         />
       </td>
     </tr>
@@ -40,6 +43,7 @@
           id="fiber"
           type="number"
           v-model="macronutrientsPercentages.fiber"
+          :readonly="readonly"
         />
       </td>
     </tr>
@@ -47,11 +51,17 @@
 </template>
 
 <script>
-import { ref } from "vue";
-
 export default {
   name: "MacroPercentageTable",
-  props: ["macros"],
+  props: {
+    macros: {
+      type: Object,
+    },
+    readonly: {
+      default: false,
+      type: Boolean,
+    },
+  },
   data() {
     return {
       macronutrientsPercentages: {
@@ -82,12 +92,8 @@ export default {
   margin-bottom: 15px;
 }
 
-caption {
-  text-align: left;
-  margin-bottom: 10px;
-}
-
 input {
+  text-align: center;
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -96,6 +102,11 @@ input {
 
 table {
   width: 50%;
+}
+
+caption {
+  text-align: left;
+  margin-bottom: 10px;
 }
 
 th {
