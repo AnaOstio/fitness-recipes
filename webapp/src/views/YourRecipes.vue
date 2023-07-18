@@ -7,6 +7,7 @@
       <main>
         <div class="flex-top">
           <PageTitle />
+          <SearchBox class="search-box-mobile"/>
           <AddRecipeBtn />
         </div>
         <section>
@@ -44,7 +45,7 @@ export default {
     AddRecipeBtn,
   },
   data() {
-    return { recipes: [] };
+    return { recipes: []};
   },
   created() {
     this.getRecipes(1);
@@ -88,6 +89,10 @@ export default {
   margin-left: 25px;
 }
 
+.search-box-mobile {
+  display: none;
+}
+
 @media screen and (max-width: 1350px) {
   .grid-recipes {
     grid-template-columns: repeat(3, 1fr);
@@ -107,9 +112,15 @@ export default {
 
   .flex-top {
     flex-direction: column;
-    height: 130px;
+    height: 200px;
     justify-content: space-between;
     align-items: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .search-box-mobile {
+    display: block;
+    margin: 5px 0;
   }
 }
 
