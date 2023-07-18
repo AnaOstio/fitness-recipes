@@ -40,9 +40,7 @@
         ></i>
       </div>
 
-      <button v-if="recipe" @click="updateRecipe" type="button" class="btn">
-        Save Rate
-      </button>
+      <button @click="updateRecipe" type="button" class="btn">Save Rate</button>
     </form>
   </div>
 </template>
@@ -68,6 +66,7 @@ export default {
   },
   methods: {
     rate(index) {
+      this.rating = index;
       this.rates = this.rates.map((rate, i) => (rate = i < index));
     },
     updateRecipe: function () {
