@@ -1,10 +1,11 @@
 <template>
-  <button class="btn">Log out</button>
+  <button class="btn">{{ btnText }}</button>
 </template>
 
 <script>
 export default {
   name: "LogOutBtn",
+  props: ["btnText"],
 };
 </script>
 

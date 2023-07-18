@@ -48,7 +48,7 @@ export default {
     return { recipes: []};
   },
   created() {
-    this.getRecipes(1);
+    this.getRecipes(sessionStorage.getItem("userId"));
   },
   methods: {
     getRecipes(userId) {

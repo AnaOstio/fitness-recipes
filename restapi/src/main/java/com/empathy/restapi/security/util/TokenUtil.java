@@ -1,46 +1,89 @@
 package com.empathy.restapi.security.util;
 
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import io.jsonwebtoken.Claims;
+
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
+@Component
 public class TokenUtil {
 
-    private final static String ACCESS_TOKEN_SECRET = "4qhq8LrEBfYcaRHxhdb9zURb2rf8e7Ud";
-    private final static Long ACCESS_TOKEN_EXPIRATION = 86400000L;
+    private static final long serialVersionUID = 234234523523L;
 
-    public static String createToken(String username, String email) {
-        long exp = ACCESS_TOKEN_EXPIRATION * 1000;
-        Date expiration = new Date(System.currentTimeMillis() + exp);
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-        Map<String, Object> extra = new HashMap<>();
-        extra.put("username", username);
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    @Value("${jwt.expiration}")
+    private long expirationTime;
+
+    //retrieve username from jwt token
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    //retrieve expiration date from jwt token
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    //for retrieving any information from token we will need the secret key
+    private Claims getAllClaimsFromToken(String token) {
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes()); // Convert the secretKey to a Key object
+
+        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        return claims;
+    }
+
+    //check if the token has expired
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+
+    //generate token for user
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        return doGenerateToken(claims, userDetails.getUsername());
+    }
+
+    //while creating the token -
+    //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
+    //2. Sign the JWT using the HS512 algorithm and secret key.
+    private String doGenerateToken(Map<String, Object> claims, String subject) {
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes()); // Convert the secretKey to a Key object
+
         return Jwts.builder()
-                .setSubject(email)
-                .setExpiration(expiration)
-                .addClaims(extra)
-                .signWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime * 1000))
+                .signWith(key) // Use signWith(Key) instead
                 .compact();
     }
 
-    public static UsernamePasswordAuthenticationToken getAuthentication(String token){
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(ACCESS_TOKEN_SECRET.getBytes())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String email = claims.getSubject();
-            return new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
-        } catch (Exception e) {
-            return null;
-        }
-
+    //validate token
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
 }

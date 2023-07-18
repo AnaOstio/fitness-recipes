@@ -15,7 +15,8 @@
           <router-link to="#" class="nav-btn">Your recipes</router-link>
         </div>
 
-        <LogOutBtn />
+        <LogOutBtn v-if="isLogged == null" :btn-text='loginBtn'/>
+        <LogOutBtn v-else :btn-text='logoutBtn'/>
       </div>
     </nav>
   </header>
@@ -31,6 +32,9 @@ export default {
   data() {
     return {
       showMobileMenu: false,
+      loginBtn: "Log in",
+      logoutBtn: "Log out",
+      isLogged : (sessionStorage.getItem("token"))
     };
   },
   methods: {

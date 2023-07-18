@@ -57,7 +57,14 @@ export default {
       if (!this.errorsPassword.length && !this.errorsEmail.length) {
         userService.login(this.email, this.password)
           .then((res) => {
+            console.log(res.status)
             if (res.status >= 200 && res.status < 400) {
+              // save data
+              sessionStorage.setItem('token', res.token);
+              sessionStorage.setItem('email', res.email);
+              sessionStorage.setItem('userId', res.id);
+
+              // move to the next page
               this.$router.push('/your-recipes');
             } else {
               this.errorsPassword.push("Credentials error, try it again")

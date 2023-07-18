@@ -1,4 +1,4 @@
-package com.empathy.restapi.security;
+package com.empathy.restapi.security.util;
 
 
 public class AuthCredentials {
