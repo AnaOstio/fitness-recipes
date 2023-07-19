@@ -52,7 +52,7 @@ export default {
 }
 
 .deleteButtonIngredients:hover {
-  filter: brightness(90%);
+  filter: brightness(95%);
   cursor: pointer;
 }
 

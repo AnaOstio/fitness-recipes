@@ -1,55 +1,71 @@
 <template>
-  <div class="sidebar">
-    <section class="aggregation">
-      <p class="aggregation-title">Type o meal</p>
-      <div
-        v-for="(type, index) in typeOfMeal"
-        :key="index"
-        class="aggregation-options"
-      >
-        <input type="checkbox" :id="type" :name="type" />
-        <label :for="type">{{ type }}</label>
-      </div>
-    </section>
-
-    <section class="aggregation">
-      <p class="aggregation-title">Average rating</p>
-
-      <div
-        v-for="(rate, index1) in rates"
-        :key="index1"
-        class="stars aggregation-options"
-      >
-        <i
-          v-for="(rateStar, index2) in rate"
-          :key="index2"
-          class="fa-solid fa-star"
-          :class="{ rated: rateStar, unrated: !rateStar }"
-        ></i>
-        or more
-      </div>
-    </section>
-
-    <section class="aggregation">
-      <p class="aggregation-title">Preparation time</p>
-
-      <div
-        v-for="(time, index1) in times"
-        :key="index1"
-        class="aggregation-options time"
-      >
-        Less than {{ time }} minutes
-      </div>
-
-      <form class="preparatio-time-filter">
-        <label for="prepTime">Limit time</label>
-        <div class="d-flex-row">
-          <input type="number" id="prepTime" min="0" />
-
-          <button @click="" type="button" class="btn-time-filter">Go</button>
+  <div class="sidebar-wrapper">
+    <div class="sidebar">
+      <section class="aggregation">
+        <p class="aggregation-title">Type o meal</p>
+        <div
+          v-for="(type, index) in typeOfMeal"
+          :key="index"
+          class="aggregation-options"
+        >
+          <input
+            type="checkbox"
+            :id="type"
+            :name="type"
+            :value="type"
+            @change="setTypeOfMealFilter($event)"
+          />
+          <label :for="type">{{ type }}</label>
         </div>
-      </form>
-    </section>
+      </section>
+
+      <section class="aggregation">
+        <p class="aggregation-title">Average rating</p>
+
+        <div
+          v-for="(rate, index1) in rates"
+          :key="index1"
+          class="stars aggregation-options"
+          @click="setRateFilter(index1)"
+        >
+          <i
+            v-for="(rateStar, index2) in rate"
+            :key="index2"
+            class="fa-solid fa-star"
+            :class="{ rated: rateStar, unrated: !rateStar }"
+          ></i>
+          or more
+        </div>
+      </section>
+
+      <section class="aggregation">
+        <p class="aggregation-title">Preparation time</p>
+
+        <div
+          v-for="(time, index1) in times"
+          :key="index1"
+          class="aggregation-options time"
+          @click="setTimeFilter(time)"
+        >
+          Less than {{ time }} minutes
+        </div>
+
+        <form class="preparatio-time-filter">
+          <label for="prepTime">Limit time</label>
+          <div class="d-flex-row">
+            <input type="number" id="prepTime" min="0" v-model="timeFilter" />
+
+            <button
+              @click="setTimeFilter(timeFilter)"
+              type="button"
+              class="btn-time-filter"
+            >
+              Go
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -67,6 +83,9 @@ export default {
       ],
       rates: [],
       times: [15, 30, 45, 60, 120],
+      typeOfMealFilter: {},
+      rateFilter: 0,
+      timeFilter: 0,
     };
   },
   created() {
@@ -75,17 +94,43 @@ export default {
       this.rates.push(rate.fill(true, 0, i + 1));
     }
   },
+  methods: {
+    setTypeOfMealFilter(e) {
+      this.typeOfMealFilter[e.target.value] = e.target.checked;
+      // Here call to the endpoint method
+    },
+
+    setRateFilter(index) {
+      // Here call to the endpoint method
+    },
+
+    setTimeFilter(time) {
+      // Here call to the endpoint method
+    },
+  },
 };
 </script>
 
 <style>
 .sidebar {
   width: 20%;
-  min-width: 200px;
+  min-width: 210px;
   padding-top: 15px;
+  padding-right: 10px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* background-color: aqua; */
+}
+
+.sidebar-wrapper {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(168, 168, 168, 0.596);
+  z-index: 3;
+  position: fixed;
+  left: 0;
+  top: 90px;
 }
 
 .aggregation {
@@ -174,7 +219,12 @@ input[id="prepTime"] {
 
 @media screen and (max-width: 640px) {
   .sidebar {
-    display: none;
+    /* display: none; */
+    /* z-index: 3; */
+    /* position: absolute; */
+    /* height: 100%; */
+    /* min-width: 0px; */
+    /* width: 0px; */
   }
 }
 </style>
