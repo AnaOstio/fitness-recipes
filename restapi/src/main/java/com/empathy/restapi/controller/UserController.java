@@ -92,7 +92,9 @@ public class UserController {
             response.put("id", authDTO.getId());
             response.put("status", HttpStatus.OK.value());
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(response, HttpStatus.OK);
+
+            return responseEntity;
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", e.getMessage());

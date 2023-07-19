@@ -11,12 +11,12 @@
           <div id="logo-no-mobile">Logo</div>
           <router-link to="#" class="nav-btn">All recipes</router-link>
           <SearchBox v-if="!showMobileMenu"/>
-          <router-link to="#" class="nav-btn">Weekly plan</router-link>
-          <router-link to="#" class="nav-btn">Your recipes</router-link>
+          <router-link to="/week-plan" class="nav-btn">Weekly plan</router-link>
+          <router-link to="/your-recipes" class="nav-btn">Your recipes</router-link>
         </div>
 
-        <LogOutBtn v-if="isLogged == null" :btn-text='loginBtn'/>
-        <LogOutBtn v-else :btn-text='logoutBtn'/>
+        <LogOutBtn v-if="isLogged == null" :btn-text='loginBtn' :click="login"/>
+        <LogOutBtn v-else :btn-text='logoutBtn' :click="logout"/>
       </div>
     </nav>
   </header>
@@ -40,6 +40,16 @@ export default {
   methods: {
     showMenu() {
       this.showMobileMenu = !this.showMobileMenu;
+    },
+    logout() {
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("email");
+      sessionStorage.removeItem("userId");
+      this.isLogged = false;
+      this.$router.push("/");
+    },
+    login() {
+      this.$router.push("/login");
     },
   },
 };

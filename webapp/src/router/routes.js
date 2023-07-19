@@ -7,7 +7,7 @@ import WeeklyPlan from "@/views/WeeklyPlan.vue";
 const routes = [
   { path: "/login", name: "Login", component: Login, meta: { auth: false } },
   { path: "/signup", name: "Signup", component: Signup,  meta: { auth: false } },
-  { path: "/weekplan", name: "Week Plan", component: WeeklyPlan,  meta: { auth: true } },
+  { path: "/week-plan", name: "Week Plan", component: WeeklyPlan,  meta: { auth: true } },
   { path: "/your-recipes", name: "YourRecipes", component: YourRecipes,  meta: { auth: true } },
 ];
 
@@ -21,7 +21,8 @@ const  isAuthenticated = () => {
   const username = sessionStorage.getItem('email');
   const token = sessionStorage.getItem('token');
 
-  const authenticated = username !== null && token !== null && username !== undefined && token !== undefined;
+  const authenticated = username !== null && token !== null
+        && username !== undefined && token !== undefined;
 
   if (!authenticated) {
     router.push({ name: 'Login' });

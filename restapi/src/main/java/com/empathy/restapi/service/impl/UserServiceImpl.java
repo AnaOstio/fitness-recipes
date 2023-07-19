@@ -15,6 +15,8 @@ import com.empathy.restapi.model.User;
 import com.empathy.restapi.service.UserService;
 import com.empathy.restapi.util.UserBD;
 
+import javax.servlet.http.Cookie;
+
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
@@ -75,21 +77,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String loginUser(String email, String password) {
-        // Find the user by username
         User user = userBD.getUserByEmail(email).get();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        // Check if the user exists and the provided password matches the stored encoded password
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 
             UserDetails userDetails = loadUserByUsername(email);
-            // Generate and return a JWT token
             String token = tokenUtil.generateToken(userDetails);
 
             return token;
         }
-
-        // Return null if authentication fails
         return null;
     }
 

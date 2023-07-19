@@ -10,4 +10,6 @@ public interface QueryService {
     List<Recipe> getRecipeByTitle(String title) throws IOException;
 
     List<Recipe> getRecipesByUserId(String userId) throws IOException;
+
+    List<Recipe> findRecipesByIngredients(String[] ingredients) throws IOException;
 }
