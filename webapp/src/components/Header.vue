@@ -3,20 +3,29 @@
     <nav class="nav-menu">
       <div class="only-mobile">
         <div id="logo">Logo</div>
-        <i class="fas fa-bars" @click="showMenu()"></i>
+        <i class="fas fa-bars btn-menu" @click="showMenu()"></i>
       </div>
 
-      <div class="nav-content" :class="showMobileMenu ? 'open-menu' : 'closed-menu'">
+      <div
+        class="nav-content"
+        :class="showMobileMenu ? 'open-menu' : 'closed-menu'"
+      >
         <div class="nav-items">
           <div id="logo-no-mobile">Logo</div>
           <router-link to="#" class="nav-btn">All recipes</router-link>
-          <SearchBox v-if="!showMobileMenu"/>
+          <SearchBox v-if="!showMobileMenu" />
           <router-link to="/week-plan" class="nav-btn">Weekly plan</router-link>
-          <router-link to="/your-recipes" class="nav-btn">Your recipes</router-link>
-        </div>
+          <router-link to="/your-recipes" class="nav-btn"
+            >Your recipes</router-link
+          >
 
-        <LogOutBtn v-if="isLogged == null" :btn-text='loginBtn' :click="login"/>
-        <LogOutBtn v-else :btn-text='logoutBtn' :click="logout"/>
+          <LogOutBtn
+            v-if="isLogged == null"
+            :btn-text="loginBtn"
+            :click="login"
+          />
+          <LogOutBtn v-else :btn-text="logoutBtn" :click="logout" />
+        </div>
       </div>
     </nav>
   </header>
@@ -34,7 +43,7 @@ export default {
       showMobileMenu: false,
       loginBtn: "Log in",
       logoutBtn: "Log out",
-      isLogged : (sessionStorage.getItem("token"))
+      isLogged: sessionStorage.getItem("token"),
     };
   },
   methods: {
@@ -56,6 +65,12 @@ export default {
 </script>
 
 <style scoped>
+header {
+  width: 100%;
+  position: fixed;
+  z-index: 4;
+}
+
 nav {
   position: relative;
   z-index: 100;
@@ -85,6 +100,7 @@ nav {
   padding: 0 10px;
   text-decoration: none;
   color: black;
+  white-space: nowrap;
 }
 
 #logo {
@@ -103,8 +119,8 @@ nav {
   border-radius: 4px;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 70px;
+  min-width: 70px;
+  min-height: 70px;
 }
 
 i {
@@ -112,28 +128,46 @@ i {
   font-size: 1.5rem;
   color: black;
   cursor: pointer;
+  padding: 0px;
 }
 
 @media screen and (max-width: 768px) {
   .nav-menu {
-    padding-top: 10px;
     position: relative;
   }
 
+  .nav-items,
+  .nav-items a {
+    width: 100%;
+    padding: 10px 0px;
+    text-align: center;
+  }
+
+  .nav-items a:hover {
+    background-color: #ababab47;
+  }
+
   .open-menu {
-    background-color: #7f7f7f;
+    background-color: #ffffff;
     opacity: 1;
+    height: 200px;
+    transition: all 0.2s ease-out;
+    padding: 0px 0px 15px 0px;
   }
 
   .closed-menu {
     opacity: 0;
     height: 0;
     padding: 0;
+    transition: all 0.2s ease-out;
+  }
+
+  .closed-menu * {
+    display: none;
   }
 
   .nav-content {
     flex-direction: column;
-    transition: all 0.2s ease-out;
   }
 
   .only-mobile {
@@ -141,7 +175,7 @@ i {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 5px 0;
+    padding: 10px 30px;
   }
 
   #logo {
@@ -151,7 +185,6 @@ i {
   i {
     display: block;
     text-align: right;
-    padding: 0 10px 10px 0;
   }
 
   .nav-items {
@@ -166,6 +199,10 @@ i {
 
   #logo-no-mobile {
     display: none;
+  }
+
+  .btn {
+    margin-top: 10px;
   }
 }
 

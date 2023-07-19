@@ -1,5 +1,10 @@
 <template>
-  <div class="sidebar-wrapper">
+  <div
+    :class="{
+      'sidebar-wrapper': !showMobileSidebar,
+      'sidebar-wrapper-mobile-open': !showMobileSidebar,
+    }"
+  >
     <div class="sidebar">
       <section class="aggregation">
         <p class="aggregation-title">Type o meal</p>
@@ -70,6 +75,8 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "Sidebar",
   data() {
@@ -86,6 +93,7 @@ export default {
       typeOfMealFilter: {},
       rateFilter: 0,
       timeFilter: 0,
+      showMobileSidebar: false,
     };
   },
   created() {
@@ -95,6 +103,10 @@ export default {
     }
   },
   methods: {
+    showSidebar() {
+      this.showMobileSidebar = !this.showMobileSidebar;
+    },
+
     setTypeOfMealFilter(e) {
       this.typeOfMealFilter[e.target.value] = e.target.checked;
       // Here call to the endpoint method
@@ -114,23 +126,18 @@ export default {
 <style>
 .sidebar {
   width: 20%;
-  min-width: 210px;
-  padding-top: 15px;
-  padding-right: 10px;
+  height: 100%;
+  min-width: 230px;
+  padding: 35px 15px 20px 15px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* background-color: aqua; */
+  background-color: #ffff;
 }
 
 .sidebar-wrapper {
   height: 100%;
-  width: 100%;
   background-color: rgba(168, 168, 168, 0.596);
-  z-index: 3;
-  position: fixed;
-  left: 0;
-  top: 90px;
 }
 
 .aggregation {
@@ -217,14 +224,20 @@ input[id="prepTime"] {
   filter: brightness(95%);
 }
 
-@media screen and (max-width: 640px) {
-  .sidebar {
-    /* display: none; */
-    /* z-index: 3; */
-    /* position: absolute; */
-    /* height: 100%; */
-    /* min-width: 0px; */
-    /* width: 0px; */
-  }
+.sidebar-wrapper-mobile-open {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 90px;
+  z-index: 3;
+  transition: width 0.2s ease-out;
+}
+
+.sidebar-wrapper-mobile-closed {
+  width: 0px;
+}
+
+.sidebar-wrapper-mobile-closed * {
+  display: none;
 }
 </style>

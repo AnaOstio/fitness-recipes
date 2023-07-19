@@ -7,7 +7,7 @@
       <main>
         <div class="flex-top">
           <PageTitle />
-          <SearchBox class="search-box-mobile"/>
+          <SearchBox class="search-box-mobile" />
           <AddRecipeBtn />
         </div>
         <section>
@@ -45,7 +45,7 @@ export default {
     AddRecipeBtn,
   },
   data() {
-    return { recipes: []};
+    return { recipes: [] };
   },
   created() {
     this.getRecipes(sessionStorage.getItem("userId"));
@@ -147,6 +147,8 @@ main {
   margin: 0 auto;
   padding: 40px 0px;
   width: calc(100% - 50px);
+  position: absolute;
+  top: 90px;
 }
 
 .btn {
