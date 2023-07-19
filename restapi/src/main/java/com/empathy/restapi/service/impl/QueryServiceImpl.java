@@ -69,4 +69,9 @@ public class QueryServiceImpl implements QueryService {
 
         return recipes;
     }
+
+    @Override
+    public List<Recipe> findRecipesByIngredients(String[] ingredients) throws IOException {
+        return null;
+    }
 }

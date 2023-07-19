@@ -56,4 +56,7 @@ public class UserBD {
         }
     }
 
+    public Optional<User> getUserByUsername(String username) {
+        return this.userList.stream().filter((user) -> user.getUsername().equals(username)).findFirst();
+    }
 }

@@ -7,6 +7,7 @@
       <main>
         <div class="flex-top">
           <PageTitle />
+          <SearchBox class="search-box-mobile"/>
           <AddRecipeBtn />
         </div>
         <section>
@@ -31,10 +32,12 @@ import PageTitle from "@/components/PageTitle.vue";
 import RecipeCard from "@/components/RecipeCard.vue";
 import AddRecipeBtn from "@/components/AddRecipeBtn.vue";
 import recipeService from "@/services/recipeService";
+import SearchBox from "@/components/SearchBox.vue";
 
 export default {
   name: "YourRecipes",
   components: {
+    SearchBox,
     Header,
     SideBar,
     PageTitle,
@@ -42,10 +45,10 @@ export default {
     AddRecipeBtn,
   },
   data() {
-    return { recipes: [] };
+    return { recipes: []};
   },
   created() {
-    this.getRecipes(1);
+    this.getRecipes(sessionStorage.getItem("userId"));
   },
   methods: {
     getRecipes(userId) {
@@ -86,6 +89,10 @@ export default {
   margin-left: 25px;
 }
 
+.search-box-mobile {
+  display: none;
+}
+
 @media screen and (max-width: 1350px) {
   .grid-recipes {
     grid-template-columns: repeat(3, 1fr);
@@ -105,9 +112,15 @@ export default {
 
   .flex-top {
     flex-direction: column;
-    height: 130px;
+    height: 200px;
     justify-content: space-between;
     align-items: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .search-box-mobile {
+    display: block;
+    margin: 5px 0;
   }
 }
 

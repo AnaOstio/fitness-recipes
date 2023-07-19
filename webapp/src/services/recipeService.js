@@ -9,6 +9,7 @@ export default {
     })
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         return result;
       });
   },
@@ -56,7 +57,6 @@ export default {
       console.log(error);
     });
     const data = await response.json();
-    console.log(data);
     return data;
   },
 };

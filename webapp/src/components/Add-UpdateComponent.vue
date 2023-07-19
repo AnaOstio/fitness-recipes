@@ -3,26 +3,26 @@
     <h1 class="separated" v-if="recipe">Update Recipe</h1>
     <h1 class="separated" v-else>Add new Recipe</h1>
     <form @submit="addRecipeForm">
-      <label for="recipeTitle">Title (*)</label>
+      <label for="recipeTitle">Title*</label>
       <input type="text" id="recipeTitle" class="separated" v-model="title" />
-      <div v-if="errors.get('title')">
+      <div class="errorMsg" v-if="errors.get('title')">
         <span>{{ errors.get("title") }}</span>
       </div>
 
-      <label for="instructions">Instructions (*)</label>
+      <label for="instructions">Instructions*</label>
       <textarea
         id="instructions"
         class="separated"
         v-model="description"
       ></textarea>
-      <div v-if="errors.get('description')">
+      <div class="errorMsg" v-if="errors.get('description')">
         <span>{{ errors.get("description") }}</span>
       </div>
 
       <div class="second-part">
         <table class="separated">
           <caption>
-            Macronutrients Percentages in Gr. (*)
+            Macronutrients Percentages in Gr.*
           </caption>
           <tr>
             <th>Protein</th>
@@ -45,7 +45,7 @@
         <div class="state">
           <div class="preparation-time separated">
             <label for="prepTime" class="border"
-              >Preparation Time in minutes (*)</label
+              >Preparation Time in minutes*</label
             >
             <input
               type="number"
@@ -54,11 +54,11 @@
               min="0"
             />
           </div>
-          <div v-if="errors.get('preparationTime')">
+          <div class="errorMsg" v-if="errors.get('preparationTime')">
             <span>{{ errors.get("preparationTime") }}</span>
           </div>
 
-          <label for="typeMeal" class="type-of-meal">Type of Meal (*)</label>
+          <label for="typeMeal" class="type-of-meal">Type of Meal*</label>
           <select id="typeMeal" class="separated" v-model="typeMeal">
             <option value="" selected>Select an option...</option>
             <option value="Breakfast">Breakfast</option>
@@ -66,10 +66,13 @@
             <option value="Dinner">Dinner</option>
             <option value="Dessert">Dessert</option>
           </select>
+          <div class="errorMsg" v-if="errors.get('typeOfMeal')">
+            <span>{{ errors.get("typeOfMeal") }}</span>
+          </div>
         </div>
       </div>
 
-      <label for="ingredients">Ingredients (*)</label>
+      <label for="ingredients">Ingredients*</label>
       <div class="input-ingredients separated">
         <input
           type="text"
@@ -86,14 +89,17 @@
           <span class="tooltip">Add</span>
         </button>
       </div>
+      <div class="errorMsg" v-if="errors.get('ingredients')">
+        <span>{{ errors.get("ingredients") }}</span>
+      </div>
 
       <p v-if="ingredients.length">Added ingredients</p>
       <div class="added-ingredients separated" v-if="ingredients.length">
         <ul>
           <added-ingredients-input
-            v-for="ingredient in ingredients"
+            v-for="(ingredient, index) in ingredients"
             :ingredient="ingredient"
-            :key="ingredient.id"
+            :key="index"
             @removeIngredient="deleteIngredient"
           ></added-ingredients-input>
         </ul>
@@ -208,7 +214,7 @@ export default {
             userId: 1,
           })
           .then((res) => {
-            console.log(res);
+            this.$emit("toggleModalAdd");
           });
       }
     },
@@ -227,11 +233,11 @@ export default {
 
       // check description errors
       if (this.description === "") {
-        this.errors.set("description", "Description is required");
+        this.errors.set("description", "Instructions is required");
       } else if (this.description.length < 3) {
         this.errors.set(
           "description",
-          "Description must be at least 3 characters"
+          "Instructions must be at least 3 characters"
         );
       } else {
         this.errors.delete("description");
@@ -286,6 +292,18 @@ export default {
         this.errors.delete("table");
       }
 
+      if (this.typeMeal === "") {
+        this.errors.set("typeOfMeal", "Type of meal is required");
+      } else {
+        this.errors.delete("typeOfMeal");
+      }
+
+      if (!this.ingredients.length) {
+        this.errors.set("ingredients", "At least one ingredient is required");
+      } else {
+        this.errors.delete("ingredients");
+      }
+
       return this.errors.size === 0;
     },
   },
@@ -293,7 +311,6 @@ export default {
     const ingredients = ref([]);
     const inputTextIngredients = ref("");
     const addIngredientsList = () => {
-      console.log("entro " + inputTextIngredients.value);
       inputTextIngredients.value !== ""
         ? ingredients.value.push({
             value: inputTextIngredients.value,
@@ -342,7 +359,7 @@ form {
 }
 
 .separated {
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 
 .border {
@@ -359,7 +376,7 @@ th {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
 }
 
 input[type="number"] {
@@ -388,12 +405,15 @@ li {
 
 .addButtonIngredients {
   background-color: rgb(0, 255, 127);
-  border-radius: 50%;
-  border: none;
-  align-items: center;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
   justify-content: center;
-  height: 30px;
-  width: 30px;
+  align-items: center;
+  border-radius: 100%;
+  border: none;
+  float: right;
+  position: relative;
 }
 
 button:hover .tooltip {
@@ -403,7 +423,6 @@ button:hover .tooltip {
 img {
   height: 1.5rem;
   width: 1.5rem;
-  margin-top: 0.2rem;
 }
 
 body {
@@ -413,17 +432,19 @@ body {
 .tooltip {
   position: absolute;
   display: none;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 5px;
   padding: 3px;
-  background-color: gray;
-  color: white;
+  background-color: rgb(224, 224, 224);
+  color: rgb(47, 15, 15);
   width: 100px;
-  right: 60%;
-  top: 100%;
+  right: -150%;
+  top: -110%;
 }
 
 .input-ingredients {
   display: flex;
+  align-items: center;
 }
 
 .input-ingredients input {
@@ -453,8 +474,12 @@ caption,
   margin-bottom: 10px;
 }
 
+label[for="prepTime"] {
+  margin: 0px;
+}
+
 select {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 caption {
@@ -463,6 +488,12 @@ caption {
 
 table {
   width: 50%;
+}
+
+.errorMsg {
+  color: rgb(255, 70, 70);
+  margin-top: -12px;
+  margin-bottom: 15px;
 }
 
 @media screen and (max-width: 1150px) {

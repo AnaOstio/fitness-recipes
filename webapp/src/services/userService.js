@@ -5,9 +5,7 @@ export default {
       password: password,
     };
 
-    console.log(JSON.stringify(aux));
-
-    const response = await fetch("http://localhost:8080/api/login", {
+    const response = await fetch("http://localhost:8080/authenticate/login", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -15,7 +13,8 @@ export default {
       },
       body: JSON.stringify(aux),
     });
-    const data = await response;
+    const data = await response.json();
+    console.log(data);
     return data;
   },
 };

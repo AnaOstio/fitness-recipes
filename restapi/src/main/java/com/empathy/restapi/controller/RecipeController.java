@@ -43,7 +43,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<Map<String, Object>> getRecipeById(@PathVariable Long id) throws IOException {
+    public ResponseEntity<Map<String, Object>> getRecipeById(@PathVariable String id) throws IOException {
         Recipe recipe = queryService.getRecipeById(id);
         HashMap<String, Object> response = new HashMap<>();
         response.put("recipe", recipe);
