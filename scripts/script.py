@@ -26,7 +26,7 @@ ratingValues = np.arange(0, 5.5, 0.5).tolist()
 ids = np.arange(10000, 10005, 1).tolist()
 randomRating = [{str(ids[j]):random.choice(ratingValues) for j in range(len(ids))} for _ in range(len(dataFrame))]
 
-macroLabels = ["Carbohydrates", "Greases", "Protein", "Fiber"]
+macroLabels = ["carbohydrates", "greases", "protein", "fiber"]
 randomMacroPercentage = np.round(np.random.dirichlet(np.ones(4), len(dataFrame))*100, decimals=2)
 macroPerentagesSet = [{macroLabels[j]:randomMacroPercentage[i][j] for j in range(len(macroLabels))} for i in range(len(randomMacroPercentage))]
 

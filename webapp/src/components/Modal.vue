@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-animation">
-    <div v-show="modalActive" class="modal">
+    <div v-if="modalActive" class="modal">
       <transition name="modal-animation-inner">
         <div v-show="modalActive" class="modal-inner">
           <slot />

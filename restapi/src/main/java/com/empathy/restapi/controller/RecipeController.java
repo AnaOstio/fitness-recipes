@@ -89,9 +89,10 @@ public class RecipeController {
 
     // Cuando haga un actualizar, acordarse de volver a actualizar el averageRating
     @PutMapping("/recipes/update/{id}")
-    public ResponseEntity<HashMap<String, Object>> updateRecipe(@PathVariable String id, @RequestBody Recipe updateRecipe) throws IOException {
+    public ResponseEntity<HashMap<String, Object>> updateRecipe(@PathVariable String id,
+            @RequestBody Recipe updateRecipe) throws IOException {
         String updated = recipeService.updateRecipeById(id, updateRecipe);
-        if(updated.equals("Recipe updated successfully")) {
+        if (updated.equals("Recipe updated successfully")) {
             HashMap<String, Object> response = new HashMap<String, Object>();
             response.put("data", updateRecipe);
             response.put("status", HttpStatus.OK.value());
