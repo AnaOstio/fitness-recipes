@@ -156,7 +156,7 @@ export default {
       this.recipeId = this.recipe.id;
       this.title = this.recipe.title;
       this.description = this.recipe.instructions;
-      this.preparationTime = this.recipe.timeOfPreparation.split(" ")[0];
+      this.preparationTime = this.recipe.timeOfPreparation;
       this.typeMeal = this.recipe.typeOfMeal;
       this.protein = this.recipe.macronutrientsPercentages.Protein;
       this.carbohydrates = this.recipe.macronutrientsPercentages.Carbohydrates;
@@ -172,7 +172,7 @@ export default {
         id: this.recipeId,
         title: this.title,
         instructions: this.description,
-        timeOfPreparation: this.preparationTime + " minutes",
+        timeOfPreparation: this.preparationTime,
         typeOfMeal: this.typeMeal,
         macronutrientsPercentages: {
           Protein: this.protein,
@@ -181,6 +181,8 @@ export default {
           Fiber: this.fiber,
         },
         rating: this.recipe.rating,
+        imageName: this.recipe.imageName,
+        averageRating: this.recipe.averageRating,
         userId: this.recipe.userId,
         ingredients: this.ingredients.map((ingredient) => ingredient.value),
       };
@@ -211,7 +213,8 @@ export default {
               Greases: this.greases,
               // Get userId with Principal in back
             },
-            userId: 1,
+            userId: sessionStorage.getItem("userId"),
+            averageRating: 0.0,
           })
           .then((res) => {
             this.$emit("toggleModalAdd");
