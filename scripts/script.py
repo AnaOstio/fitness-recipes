@@ -31,7 +31,7 @@ randomMacroPercentage = np.round(np.random.dirichlet(np.ones(4), len(dataFrame))
 macroPerentagesSet = [{macroLabels[j]:randomMacroPercentage[i][j] for j in range(len(macroLabels))} for i in range(len(randomMacroPercentage))]
 
 minutes = np.arange(10, 180, 2).tolist()
-timeOfPreparation = [str(random.choice(minutes)) + " minutes" for _ in range(len(dataFrame))]
+timeOfPreparation = [random.choice(minutes) for _ in range(len(dataFrame))]
 
 userId = np.arange(0, 5, 1).tolist()
 userListId = [str(random.choice(userId))  for _ in range(len(dataFrame))]
