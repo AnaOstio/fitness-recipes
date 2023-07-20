@@ -1,8 +1,8 @@
 <template>
   <div
     :class="{
-      'sidebar-wrapper': !showMobileSidebar,
-      'sidebar-wrapper-mobile-open': !showMobileSidebar,
+      'sidebar-wrapper': showMobileSidebar || !onMobile,
+      'sidebar-wrapper-mobile-closed': !showMobileSidebar && onMobile,
     }"
   >
     <div class="sidebar">
@@ -70,13 +70,23 @@
           </div>
         </form>
       </section>
+
+      <div v-show="onMobile" @click="showSidebar" class="sidebar-close-btn">
+        <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+      </div>
+    </div>
+
+    <div
+      v-show="onMobile && !showMobileSidebar"
+      @click="showSidebar"
+      class="sidebar-open-btn"
+    >
+      <i class="fa-solid fa-caret-down"></i>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-
 export default {
   name: "Sidebar",
   data() {
@@ -101,6 +111,11 @@ export default {
       let rate = [false, false, false, false, false];
       this.rates.push(rate.fill(true, 0, i + 1));
     }
+  },
+  computed: {
+    onMobile() {
+      return screen.width <= 640;
+    },
   },
   methods: {
     showSidebar() {
@@ -133,11 +148,13 @@ export default {
   flex-direction: column;
   gap: 20px;
   background-color: #ffff;
+  position: relative;
 }
 
 .sidebar-wrapper {
   height: 100%;
-  background-color: rgba(168, 168, 168, 0.596);
+  min-width: 230px;
+  width: 20%;
 }
 
 .aggregation {
@@ -224,20 +241,63 @@ input[id="prepTime"] {
   filter: brightness(95%);
 }
 
-.sidebar-wrapper-mobile-open {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 90px;
-  z-index: 3;
-  transition: width 0.2s ease-out;
-}
-
 .sidebar-wrapper-mobile-closed {
   width: 0px;
 }
 
-.sidebar-wrapper-mobile-closed * {
+.sidebar-wrapper-mobile-closed .sidebar {
   display: none;
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.sidebar-open-btn {
+  position: fixed;
+  top: 290px;
+  left: 0px;
+  z-index: 3;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(221, 221, 221, 0.607);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.sidebar-open-btn i {
+  font-size: 30px;
+  transform: rotate(-90deg);
+}
+
+.sidebar-close-btn i::before {
+  color: rgb(129, 129, 129);
+}
+
+.sidebar-close-btn i::before {
+  font-size: 20px;
+}
+
+.sidebar-close-btn i:hover {
+  filter: brightness(70%);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 640px) {
+  .sidebar-wrapper {
+    background-color: rgba(168, 168, 168, 0.596);
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 90px;
+    z-index: 3;
+    transition: width 0.2s ease-out;
+    overflow: hidden;
+    overflow-y: auto;
+  }
 }
 </style>

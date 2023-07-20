@@ -153,6 +153,7 @@ i {
     height: 200px;
     transition: all 0.2s ease-out;
     padding: 0px 0px 15px 0px;
+    box-shadow: 0 20px 20px -20px gray;
   }
 
   .closed-menu {
