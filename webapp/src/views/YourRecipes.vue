@@ -156,12 +156,8 @@ main {
 
 @media screen and (max-width: 768px) {
   .search-box-mobile {
-    display: block;
-    margin: 5px 0;
-  }
-
-  .flex-top {
-    height: 200px;
+    display: flex;
+    flex-direction: row;
   }
 }
 

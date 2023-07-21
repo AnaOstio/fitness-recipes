@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "Sidebar",
   data() {
@@ -101,23 +103,31 @@ export default {
       rates: [],
       times: [15, 30, 45, 60, 120],
       typeOfMealFilter: {},
-      rateFilter: 0,
+      rateFilter: ref(0),
       timeFilter: 0,
       showMobileSidebar: false,
+      onMobile: false,
     };
+  },
+  mounted() {
+    window.addEventListener("resize", this.onResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResize);
   },
   created() {
     for (let i = 0; i < 4; ++i) {
       let rate = [false, false, false, false, false];
       this.rates.push(rate.fill(true, 0, i + 1));
     }
-  },
-  computed: {
-    onMobile() {
-      return screen.width <= 640;
-    },
+
+    this.onResize();
   },
   methods: {
+    onResize() {
+      this.onMobile = window.innerWidth <= 640;
+    },
+
     showSidebar() {
       this.showMobileSidebar = !this.showMobileSidebar;
     },
@@ -128,10 +138,12 @@ export default {
     },
 
     setRateFilter(index) {
+      this.rateFilter = index + 1;
       // Here call to the endpoint method
     },
 
     setTimeFilter(time) {
+      this.timeFilter = time;
       // Here call to the endpoint method
     },
   },
@@ -264,9 +276,14 @@ input[id="prepTime"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(221, 221, 221, 0.607);
+  background-color: #eeeeeeb8;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+}
+
+.sidebar-open-btn:hover {
+  cursor: pointer;
+  filter: brightness(95%);
 }
 
 .sidebar-open-btn i {
