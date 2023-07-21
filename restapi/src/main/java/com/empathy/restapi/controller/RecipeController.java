@@ -1,16 +1,22 @@
 package com.empathy.restapi.controller;
 
 import com.empathy.restapi.model.Recipe;
+import com.empathy.restapi.model.util.Filter;
+import com.empathy.restapi.security.util.TokenUtil;
 import com.empathy.restapi.service.ElasticService;
 import com.empathy.restapi.service.QueryService;
 import com.empathy.restapi.service.RecipeService;
 import com.empathy.restapi.service.impl.ElasticServiceImpl;
 import com.empathy.restapi.service.impl.QueryServiceImpl;
 import com.empathy.restapi.service.impl.RecipeServiceImpl;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +30,15 @@ public class RecipeController {
     private QueryService queryService;
     private RecipeService recipeService;
 
+    private TokenUtil tokenUtil;
+
     @Autowired
     public RecipeController(ElasticServiceImpl elasticService, QueryServiceImpl queryService,
-            RecipeServiceImpl recipeService) {
+            RecipeServiceImpl recipeService, TokenUtil tokenUtil) {
         this.elasticService = elasticService;
         this.queryService = queryService;
         this.recipeService = recipeService;
+        this.tokenUtil = tokenUtil;
     }
 
     @GetMapping("/bulk-recipes")
@@ -58,12 +67,19 @@ public class RecipeController {
     }
 
     @GetMapping("/recipes/user/{userId}")
-    public ResponseEntity<HashMap<String, Object>> getRecipesByUserId(@PathVariable String userId) throws IOException {
+    public ResponseEntity<HashMap<String, Object>> getRecipesByUserId(@PathVariable String userId,
+                                                                      HttpServletRequest request) throws IOException {
+
+        String token = tokenUtil.getToken(request);
+        System.out.println("Username: " + tokenUtil.getUsernameFromToken(token));
+
         List<Recipe> recipes = queryService.getRecipesByUserId(userId);
 
         HashMap<String, Object> response = new HashMap<String, Object>();
         response.put("data", recipes);
         response.put("status", HttpStatus.OK.value());
+
+
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -99,5 +115,13 @@ public class RecipeController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/recipes/filters")
+    public ResponseEntity<HashMap<String, Object>> getFiltersResult(@RequestBody Filter filter) throws IOException {
+        HashMap<String, Object> response = new HashMap<String, Object>();
+        response.put("data", queryService.findRecipesByIngredients(filter.getTypeOfMeal(), filter.getAverageRating(), filter.getTimePreparation()));
+        response.put("status", HttpStatus.OK.value());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

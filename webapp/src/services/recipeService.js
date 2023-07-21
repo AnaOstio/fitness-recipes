@@ -14,7 +14,7 @@ export default {
   },
 
   async addRecipe(newRecipe) {
-    const response = await fetch("http://localhost:8080/recipes/add/1", {
+    const response = await fetch(`http://localhost:8080/recipes/add/${newRecipe.userId}`, {
       method: "POST",
       credentials: "include",
       headers: {
