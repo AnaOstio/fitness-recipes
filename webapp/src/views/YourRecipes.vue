@@ -7,7 +7,7 @@
       <main>
         <div class="flex-top">
           <PageTitle />
-          <SearchBox class="search-box-mobile"/>
+          <SearchBox class="search-box-mobile" />
           <AddRecipeBtn />
         </div>
         <section>
@@ -45,7 +45,7 @@ export default {
     AddRecipeBtn,
   },
   data() {
-    return { recipes: []};
+    return { recipes: [] };
   },
   created() {
     this.getRecipes(sessionStorage.getItem("userId"));
@@ -93,6 +93,41 @@ export default {
   display: none;
 }
 
+/* Common */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  width: 100%;
+}
+
+.btn {
+  height: fit-content;
+  white-space: nowrap;
+  padding: 10px 20px;
+  border: 0px;
+  background-color: #00ff7f;
+  border-radius: 8px;
+  font-size: larger;
+}
+
+.btn:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
+
+.wrapped {
+  display: flex;
+  margin: 0 auto;
+  padding: 40px 0px;
+  width: calc(100% - 50px);
+  position: absolute;
+  top: 90px;
+}
+
 @media screen and (max-width: 1350px) {
   .grid-recipes {
     grid-template-columns: repeat(3, 1fr);
@@ -109,18 +144,20 @@ export default {
   .grid-recipes {
     grid-template-columns: repeat(1, 1fr);
   }
+}
 
+@media screen and (max-width: 900px) {
   .flex-top {
     flex-direction: column;
-    height: 200px;
-    justify-content: space-between;
+    gap: 30px;
     align-items: center;
   }
 }
+
 @media screen and (max-width: 768px) {
   .search-box-mobile {
-    display: block;
-    margin: 5px 0;
+    display: flex;
+    flex-direction: row;
   }
 }
 
@@ -129,38 +166,9 @@ export default {
   .flex-top {
     margin-left: 0;
   }
-}
 
-/* Common */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-main {
-  width: 100%;
-}
-
-.wrapped {
-  display: flex;
-  margin: 0 auto;
-  padding: 40px 0px;
-  width: calc(100% - 50px);
-}
-
-.btn {
-  height: fit-content;
-  white-space: nowrap;
-  padding: 10px 20px;
-  border: 0px;
-  background-color: #00ff7f;
-  border-radius: 8px;
-  font-size: larger;
-}
-
-.btn:hover {
-  filter: brightness(95%);
-  cursor: pointer;
+  .wrapped {
+    width: 100%;
+  }
 }
 </style>

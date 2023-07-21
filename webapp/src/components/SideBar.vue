@@ -1,5 +1,10 @@
 <template>
-  <div class="sidebar-wrapper">
+  <div
+    :class="{
+      'sidebar-wrapper': showMobileSidebar || !onMobile,
+      'sidebar-wrapper-mobile-closed': !showMobileSidebar && onMobile,
+    }"
+  >
     <div class="sidebar">
       <section class="aggregation">
         <p class="aggregation-title">Type o meal</p>
@@ -65,11 +70,25 @@
           </div>
         </form>
       </section>
+
+      <div v-show="onMobile" @click="showSidebar" class="sidebar-close-btn">
+        <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+      </div>
+    </div>
+
+    <div
+      v-show="onMobile && !showMobileSidebar"
+      @click="showSidebar"
+      class="sidebar-open-btn"
+    >
+      <i class="fa-solid fa-caret-down"></i>
     </div>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "Sidebar",
   data() {
@@ -84,27 +103,47 @@ export default {
       rates: [],
       times: [15, 30, 45, 60, 120],
       typeOfMealFilter: {},
-      rateFilter: 0,
+      rateFilter: ref(0),
       timeFilter: 0,
+      showMobileSidebar: false,
+      onMobile: false,
     };
+  },
+  mounted() {
+    window.addEventListener("resize", this.onResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResize);
   },
   created() {
     for (let i = 0; i < 4; ++i) {
       let rate = [false, false, false, false, false];
       this.rates.push(rate.fill(true, 0, i + 1));
     }
+
+    this.onResize();
   },
   methods: {
+    onResize() {
+      this.onMobile = window.innerWidth <= 640;
+    },
+
+    showSidebar() {
+      this.showMobileSidebar = !this.showMobileSidebar;
+    },
+
     setTypeOfMealFilter(e) {
       this.typeOfMealFilter[e.target.value] = e.target.checked;
       // Here call to the endpoint method
     },
 
     setRateFilter(index) {
+      this.rateFilter = index + 1;
       // Here call to the endpoint method
     },
 
     setTimeFilter(time) {
+      this.timeFilter = time;
       // Here call to the endpoint method
     },
   },
@@ -114,23 +153,20 @@ export default {
 <style>
 .sidebar {
   width: 20%;
-  min-width: 210px;
-  padding-top: 15px;
-  padding-right: 10px;
+  height: 100%;
+  min-width: 230px;
+  padding: 35px 15px 20px 15px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* background-color: aqua; */
+  background-color: #ffff;
+  position: relative;
 }
 
 .sidebar-wrapper {
   height: 100%;
-  width: 100%;
-  background-color: rgba(168, 168, 168, 0.596);
-  z-index: 3;
-  position: fixed;
-  left: 0;
-  top: 90px;
+  min-width: 230px;
+  width: 20%;
 }
 
 .aggregation {
@@ -217,14 +253,68 @@ input[id="prepTime"] {
   filter: brightness(95%);
 }
 
+.sidebar-wrapper-mobile-closed {
+  width: 0px;
+}
+
+.sidebar-wrapper-mobile-closed .sidebar {
+  display: none;
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.sidebar-open-btn {
+  position: fixed;
+  top: 290px;
+  left: 0px;
+  z-index: 3;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eeeeeeb8;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.sidebar-open-btn:hover {
+  cursor: pointer;
+  filter: brightness(95%);
+}
+
+.sidebar-open-btn i {
+  font-size: 30px;
+  transform: rotate(-90deg);
+}
+
+.sidebar-close-btn i::before {
+  color: rgb(129, 129, 129);
+}
+
+.sidebar-close-btn i::before {
+  font-size: 20px;
+}
+
+.sidebar-close-btn i:hover {
+  filter: brightness(70%);
+  cursor: pointer;
+}
+
 @media screen and (max-width: 640px) {
-  .sidebar {
-    /* display: none; */
-    /* z-index: 3; */
-    /* position: absolute; */
-    /* height: 100%; */
-    /* min-width: 0px; */
-    /* width: 0px; */
+  .sidebar-wrapper {
+    background-color: rgba(168, 168, 168, 0.596);
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 90px;
+    z-index: 3;
+    transition: width 0.2s ease-out;
+    overflow: hidden;
+    overflow-y: auto;
   }
 }
 </style>

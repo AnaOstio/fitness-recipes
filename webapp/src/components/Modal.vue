@@ -40,7 +40,7 @@ export default {
   left: 0;
   overflow-y: auto;
   background-color: rgba(168, 168, 168, 0.596);
-  z-index: 3;
+  z-index: 4;
 }
 
 .modal-inner {
