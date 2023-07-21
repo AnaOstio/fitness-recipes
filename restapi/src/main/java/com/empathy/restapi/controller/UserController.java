@@ -7,20 +7,19 @@ import java.util.Map;
 import com.empathy.restapi.security.util.AuthCredentials;
 import com.empathy.restapi.security.util.AuthResponse;
 import com.empathy.restapi.security.util.TokenUtil;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.empathy.restapi.model.User;
 import com.empathy.restapi.service.UserService;
 import com.empathy.restapi.service.impl.UserServiceImpl;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/")
@@ -73,7 +72,7 @@ public class UserController {
     }
 
     @PostMapping("/authenticate/login")
-    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody AuthCredentials user) {
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody AuthCredentials user, HttpServletResponse response2) {
 
         try {
             // Call the loginUser method of the userService to authenticate the user and generate JWT token
@@ -91,6 +90,14 @@ public class UserController {
             response.put("email", authDTO.getUsername());
             response.put("id", authDTO.getId());
             response.put("status", HttpStatus.OK.value());
+
+            Cookie jwtCookie = new Cookie("jwt", token);
+            jwtCookie.setPath("/");
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(false);
+            response2.addCookie(jwtCookie);
+
+            response2.addHeader("Authorization", "Bearer " + token);
 
             ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(response, HttpStatus.OK);
 
