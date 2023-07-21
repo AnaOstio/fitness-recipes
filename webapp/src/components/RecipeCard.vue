@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="card-recipe">
-      <div class="card-hover"></div>
+      <div
+        class="card-hover"
+        @click="
+          {
+            setModalContent(2);
+            toggleModal();
+          }
+        "
+      ></div>
       <div class="card-recipe-img">Recipe image</div>
       <div class="card-recipe-body">
         <h2 class="recipe-name">{{ recipeData.title }}</h2>
@@ -42,6 +50,11 @@
           :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
           :toggleModal="toggleModal"
         />
+        <RecipeVisualization
+          v-show="modalContent == 2"
+          :recipe="recipeData"
+          :updateRecipeData="(newRecipe) => updateRecipeData(newRecipe)"
+        />
       </div>
     </modal-view>
   </div>
@@ -53,6 +66,7 @@ import UpdateRecipeBtn from "./UpdateRecipeBtn.vue";
 import ModalView from "./Modal.vue";
 import DeleteRecipeConfirm from "./DeleteRecipeConfirm.vue";
 import AddUpdateComponent from "./Add-UpdateComponent.vue";
+import RecipeVisualization from "./RecipeVisualization.vue";
 import { ref } from "vue";
 
 export default {
@@ -62,6 +76,7 @@ export default {
     UpdateRecipeBtn,
     DeleteRecipeConfirm,
     AddUpdateComponent,
+    RecipeVisualization,
     ModalView,
   },
   data() {
@@ -94,7 +109,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card-recipe {
   height: 390px;
   width: 100%;
@@ -166,24 +181,5 @@ export default {
 
 .recipe-rating i::before {
   font-size: 13px;
-}
-
-/* Common */
-.card-crud-btn i::before {
-  font-size: 20px;
-}
-
-.card-crud-btn i:hover {
-  color: #7f7f7f;
-  cursor: pointer;
-}
-
-.card-crud-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 15%;
-  height: 100%;
-  z-index: 2;
 }
 </style>

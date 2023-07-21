@@ -6,7 +6,7 @@
       type="button"
       class="deleteButtonIngredients"
     >
-      <img class="list__icon" src="../assets/minus.png" alt="add" />
+      <i class="fa-solid fa-minus"></i>
       <span class="tooltip">Delete</span>
     </button>
   </li>
@@ -47,6 +47,15 @@ export default {
   position: relative;
 }
 
+.deleteButtonIngredients i {
+  font-size: large;
+}
+
+.deleteButtonIngredients:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
+
 button:hover .tooltip {
   display: block;
 }
@@ -65,7 +74,7 @@ img {
   background-color: rgb(224, 224, 224);
   color: rgb(47, 15, 15);
   width: 100px;
-  right: -150%;
+  right: -125%;
   top: -110%;
 }
 </style>

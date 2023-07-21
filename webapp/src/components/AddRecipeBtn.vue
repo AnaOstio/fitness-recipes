@@ -37,7 +37,7 @@ export default {
   max-width: 350px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   .btn-add-recipe {
     width: 100%;
     position: initial;

@@ -16,16 +16,15 @@ export default {
   width: calc(100% - 50px);
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   .page-title {
     text-align: center;
   }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 768px) {
   .page-title {
     font-size: 3rem;
   }
 }
-
 </style>

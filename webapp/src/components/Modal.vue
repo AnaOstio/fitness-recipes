@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-animation">
-    <div v-show="modalActive" class="modal">
+    <div v-if="modalActive" class="modal">
       <transition name="modal-animation-inner">
         <div v-show="modalActive" class="modal-inner">
           <slot />
@@ -40,7 +40,7 @@ export default {
   left: 0;
   overflow-y: auto;
   background-color: rgba(168, 168, 168, 0.596);
-  z-index: 3;
+  z-index: 4;
 }
 
 .modal-inner {

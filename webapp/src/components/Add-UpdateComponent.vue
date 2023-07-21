@@ -2,7 +2,7 @@
   <div class="form-recipe">
     <h1 class="separated" v-if="recipe">Update Recipe</h1>
     <h1 class="separated" v-else>Add new Recipe</h1>
-    <form @submit="addRecipeForm">
+    <form>
       <label for="recipeTitle">Title*</label>
       <input type="text" id="recipeTitle" class="separated" v-model="title" />
       <div class="errorMsg" v-if="errors.get('title')">
@@ -20,27 +20,10 @@
       </div>
 
       <div class="second-part">
-        <table class="separated">
-          <caption>
-            Macronutrients Percentages in Gr.*
-          </caption>
-          <tr>
-            <th>Protein</th>
-            <td><input id="protein" v-model="protein" /></td>
-          </tr>
-          <tr>
-            <th>Carbohydrates</th>
-            <td><input id="carbo" v-model="carbohydrates" /></td>
-          </tr>
-          <tr>
-            <th>Greases</th>
-            <td><input id="greases" v-model="greases" /></td>
-          </tr>
-          <tr>
-            <th>Fiber</th>
-            <td><input id="fiber" v-model="fiber" /></td>
-          </tr>
-        </table>
+        <MacroPercentageTable
+          :macros="macronutrientsPercentages"
+          @setMacroContent="setMacroContent"
+        />
 
         <div class="state">
           <div class="preparation-time separated">
@@ -85,7 +68,7 @@
           class="addButtonIngredients"
           @click="addIngredientsList"
         >
-          <img class="list__icon" src="../assets/add.png" alt="add" />
+          <i class="fa-solid fa-plus"></i>
           <span class="tooltip">Add</span>
         </button>
       </div>
@@ -93,7 +76,7 @@
         <span>{{ errors.get("ingredients") }}</span>
       </div>
 
-      <p v-if="ingredients.length">Added ingredients</p>
+      <p v-if="ingredients.length" class="separated">Added ingredients</p>
       <div class="added-ingredients separated" v-if="ingredients.length">
         <ul>
           <added-ingredients-input
@@ -119,12 +102,15 @@
 
 <script>
 import AddedIngredientsInput from "./AddedIngredientsInput.vue";
+import MacroPercentageTable from "./MacroPercentageTable.vue";
 import recipeService from "@/services/recipeService";
 import { ref } from "vue";
+
 export default {
   name: "AddUpdateComponent",
   components: {
     AddedIngredientsInput,
+    MacroPercentageTable,
   },
   props: ["recipe", "updateRecipeData", "toggleModal"],
   data: function () {
@@ -133,16 +119,18 @@ export default {
       description: "",
       preparationTime: "",
       typeMeal: "",
-      protein: "",
-      carbohydrates: "",
-      greases: "",
-      fiber: "",
+      macronutrientsPercentages: {
+        protein: "",
+        carbohydrates: "",
+        greases: "",
+        fiber: "",
+      },
       recipeId: "",
       errors: new Map(),
     };
   },
   watch: {
-    recipe(recipe) {
+    recipe() {
       this.getInfoFromRecipe();
     },
   },
@@ -158,10 +146,14 @@ export default {
       this.description = this.recipe.instructions;
       this.preparationTime = this.recipe.timeOfPreparation;
       this.typeMeal = this.recipe.typeOfMeal;
-      this.protein = this.recipe.macronutrientsPercentages.Protein;
-      this.carbohydrates = this.recipe.macronutrientsPercentages.Carbohydrates;
-      this.greases = this.recipe.macronutrientsPercentages.Greases;
-      this.fiber = this.recipe.macronutrientsPercentages.Fiber;
+      this.macronutrientsPercentages.protein =
+        this.recipe.macronutrientsPercentages.protein;
+      this.macronutrientsPercentages.carbohydrates =
+        this.recipe.macronutrientsPercentages.carbohydrates;
+      this.macronutrientsPercentages.greases =
+        this.recipe.macronutrientsPercentages.greases;
+      this.macronutrientsPercentages.fiber =
+        this.recipe.macronutrientsPercentages.fiber;
       for (let i = 0; i < this.recipe.ingredients.length; i++) {
         this.ingredients.push({ value: this.recipe.ingredients[i], id: i });
       }
@@ -174,12 +166,7 @@ export default {
         instructions: this.description,
         timeOfPreparation: this.preparationTime,
         typeOfMeal: this.typeMeal,
-        macronutrientsPercentages: {
-          Protein: this.protein,
-          Carbohydrates: this.carbohydrates,
-          Greases: this.greases,
-          Fiber: this.fiber,
-        },
+        macronutrientsPercentages: this.macronutrientsPercentages,
         rating: this.recipe.rating,
         imageName: this.recipe.imageName,
         averageRating: this.recipe.averageRating,
@@ -193,11 +180,11 @@ export default {
         updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe),
       });
     },
+
     addRecipeForm: function (event) {
       event.preventDefault();
       // then here we will send the data to the server
       if (this.validateForm()) {
-        console.log("ingredients" + this.ingredients);
         recipeService
           .addRecipe({
             title: this.title,
@@ -206,21 +193,18 @@ export default {
             instructions: this.description,
             timeOfPreparation: this.preparationTime,
             typeOfMeal: this.typeMeal,
-            macronutrientsPercentages: {
-              Protein: this.protein,
-              Carbohydrates: this.carbohydrates,
-              Fiber: this.fiber,
-              Greases: this.greases,
-              // Get userId with Principal in back
-            },
             userId: sessionStorage.getItem("userId"),
             averageRating: 0.0,
+            macronutrientsPercentages: this.macronutrientsPercentages,
           })
           .then((res) => {
-            this.$emit("toggleModalAdd");
+            if (res.status === 200) {
+              this.$emit("toggleModalAdd");
+            }
           });
       }
     },
+
     validateForm() {
       this.errors = new Map();
       // check title errors
@@ -261,35 +245,35 @@ export default {
       }
 
       // table errors
-      if (this.protein === "") {
+      if (this.macronutrientsPercentages.protein === "") {
         this.errors.get("table").push("Protein is required");
-      } else if (this.protein < 1) {
+      } else if (this.macronutrientsPercentages.protein < 1) {
         this.errors.get("table").push("Protein must be at least 1 gr");
       } else {
         this.errors.delete("table");
       }
 
       // table errors
-      if (this.carbohydrates === "") {
+      if (this.macronutrientsPercentages.carbohydrates === "") {
         this.errors.get("table").push("carbohydrates is required");
-      } else if (this.protein < 1) {
+      } else if (this.macronutrientsPercentages.carbohydrates < 1) {
         this.errors.get("table").push("carbohydrates must be at least 1 gr");
       } else {
         this.errors.delete("table");
       }
 
       // table errors
-      if (this.greases === "") {
+      if (this.macronutrientsPercentages.greases === "") {
         this.errors.get("table").push("greases is required");
-      } else if (this.protein < 1) {
+      } else if (this.macronutrientsPercentages.greases < 1) {
         this.errors.get("table").push("greases must be at least 1 gr");
       } else {
         this.errors.delete("table");
       }
 
-      if (this.fiber === "") {
+      if (this.macronutrientsPercentages.fiber === "") {
         this.errors.get("table").push("fiber is required");
-      } else if (this.protein < 1) {
+      } else if (this.macronutrientsPercentages.fiber < 1) {
         this.errors.get("table").push("fiber must be at least 1 gr");
       } else {
         this.errors.delete("table");
@@ -308,6 +292,10 @@ export default {
       }
 
       return this.errors.size === 0;
+    },
+
+    setMacroContent(newMacro) {
+      this.macronutrientsPercentages = newMacro;
     },
   },
   setup() {
@@ -331,9 +319,9 @@ export default {
 
     return {
       addIngredientsList,
+      deleteIngredient,
       inputTextIngredients,
       ingredients,
-      deleteIngredient,
     };
   },
 };
@@ -367,11 +355,6 @@ form {
 
 .border {
   margin-right: 10px;
-}
-
-th {
-  background-color: rgb(217, 227, 235);
-  padding: 0px 10px;
 }
 
 .preparation-time {
@@ -419,6 +402,15 @@ li {
   position: relative;
 }
 
+.addButtonIngredients:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
+
+.addButtonIngredients i {
+  font-size: large;
+}
+
 button:hover .tooltip {
   display: block;
 }
@@ -441,8 +433,8 @@ body {
   background-color: rgb(224, 224, 224);
   color: rgb(47, 15, 15);
   width: 100px;
-  right: -150%;
-  top: -110%;
+  right: -100%;
+  top: -100%;
 }
 
 .input-ingredients {
@@ -472,7 +464,6 @@ textarea {
 }
 
 label,
-caption,
 .type-of-meal {
   margin-bottom: 10px;
 }
@@ -483,14 +474,6 @@ label[for="prepTime"] {
 
 select {
   margin-top: 10px;
-}
-
-caption {
-  text-align: left;
-}
-
-table {
-  width: 50%;
 }
 
 .errorMsg {
@@ -508,7 +491,6 @@ table {
     flex-direction: column;
   }
 
-  table,
   .state {
     width: 100%;
   }
