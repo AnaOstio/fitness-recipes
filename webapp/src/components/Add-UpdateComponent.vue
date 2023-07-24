@@ -24,6 +24,10 @@
           :macros="macronutrientsPercentages"
           @setMacroContent="setMacroContent"
         />
+        <ul class="errorMsg" v-if="errors.get('table')">
+          <li v-for="e in errors.get('table')">{{ e }}</li>
+        </ul>
+
 
         <div class="state">
           <div class="preparation-time separated">
@@ -84,6 +88,7 @@
             :ingredient="ingredient"
             :key="index"
             @removeIngredient="deleteIngredient"
+            class="ingredient-item"
           ></added-ingredients-input>
         </ul>
       </div>
@@ -230,8 +235,6 @@ export default {
         this.errors.delete("description");
       }
 
-      this.errors.set("table", []);
-
       // check preparationTime errors
       if (this.preparationTime === "") {
         this.errors.set("preparationTime", "Preparation Time is required");
@@ -244,37 +247,39 @@ export default {
         this.errors.delete("preparationTime");
       }
 
+      this.errors.set("table", []);
+
       // table errors
       if (this.macronutrientsPercentages.protein === "") {
-        this.errors.get("table").push("Protein is required");
+        this.errors.get("table").push("Protein is required\n");
       } else if (this.macronutrientsPercentages.protein < 1) {
-        this.errors.get("table").push("Protein must be at least 1 gr");
+        this.errors.get("table").push("Protein must be at least 1 gr\n");
       } else {
         this.errors.delete("table");
       }
 
       // table errors
       if (this.macronutrientsPercentages.carbohydrates === "") {
-        this.errors.get("table").push("carbohydrates is required");
+        this.errors.get("table").push("carbohydrates is required\n");
       } else if (this.macronutrientsPercentages.carbohydrates < 1) {
-        this.errors.get("table").push("carbohydrates must be at least 1 gr");
+        this.errors.get("table").push("carbohydrates must be at least 1 gr\n");
       } else {
         this.errors.delete("table");
       }
 
       // table errors
       if (this.macronutrientsPercentages.greases === "") {
-        this.errors.get("table").push("greases is required");
+        this.errors.get("table").push("greases is required\n");
       } else if (this.macronutrientsPercentages.greases < 1) {
-        this.errors.get("table").push("greases must be at least 1 gr");
+        this.errors.get("table").push("greases must be at least 1 gr\n");
       } else {
         this.errors.delete("table");
       }
 
       if (this.macronutrientsPercentages.fiber === "") {
-        this.errors.get("table").push("fiber is required");
+        this.errors.get("table").push("fiber is required\n");
       } else if (this.macronutrientsPercentages.fiber < 1) {
-        this.errors.get("table").push("fiber must be at least 1 gr");
+        this.errors.get("table").push("fiber must be at least 1 gr\n");
       } else {
         this.errors.delete("table");
       }
@@ -378,7 +383,7 @@ li {
 input,
 textarea,
 select,
-li {
+.ingredient-item {
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.5rem;
