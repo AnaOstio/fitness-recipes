@@ -57,7 +57,6 @@ export default {
       if (!this.errorsPassword.length && !this.errorsEmail.length) {
         userService.login(this.email, this.password)
           .then((res) => {
-            console.log(res.status)
             if (res.status >= 200 && res.status < 400) {
               // save data
               sessionStorage.setItem('token', res.token);

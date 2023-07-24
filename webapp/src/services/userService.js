@@ -14,7 +14,6 @@ export default {
       body: JSON.stringify(aux),
     });
     const data = await response.json();
-    console.log(data);
     return data;
   },
 };

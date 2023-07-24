@@ -58,21 +58,9 @@ export default {
     };
   },
   created() {
-    this.getRecipes(sessionStorage.getItem("userId"));
+    this.getFilteredRecipes(this.filter);
   },
   methods: {
-    getRecipes(userId) {
-      recipeService
-        .getUserRecipes(userId)
-        .then((result) => {
-          if (result.status == 200) {
-            this.recipes = result.data;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
 
     spliceRecipe(index) {
       this.recipes.splice(index, 1);
