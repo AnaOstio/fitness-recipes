@@ -8,9 +8,9 @@
       <SideBar @filter="getFilteredRecipes"/>
       <main>
         <div class="flex-top">
-          <PageTitle />
+          <PageTitle :own-recipes="ownRecipes"/>
           <SearchBox class="search-box-mobile" @filter="getFilteredRecipes"/>
-          <AddRecipeBtn />
+          <AddRecipeBtn v-if="ownRecipes" />
         </div>
         <section>
           <div class="grid grid-recipes">
@@ -19,6 +19,7 @@
               :key="index"
               :recipe="recipe"
               :spliceRecipe="() => spliceRecipe(index)"
+              :own-recipes="ownRecipes"
             />
           </div>
         </section>
@@ -57,7 +58,14 @@ export default {
       },
     };
   },
+  props: {
+    ownRecipes: {
+      type: Boolean,
+      required: true,
+    },
+  },
   created() {
+    this.filter.ownRecipes = this.ownRecipes;
     this.getFilteredRecipes(this.filter);
   },
   methods: {

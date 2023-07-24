@@ -28,11 +28,13 @@
           :toggleModal="toggleModal"
           :setModalContent="setModalContent"
           :recipe="recipeData"
+          v-if="ownRecipes"
         />
         <DeleteRecipeBtn
           :id="recipeData.id"
           :toggleModal="toggleModal"
           :setModalContent="setModalContent"
+          v-if="ownRecipes"
         />
       </div>
     </div>
@@ -86,7 +88,7 @@ export default {
       recipeData: {},
     };
   },
-  props: ["recipe", "spliceRecipe"],
+  props: ["recipe", "spliceRecipe", "ownRecipes"],
   watch: {
     recipe(recipe) {
       this.recipeData = { ...recipe };
