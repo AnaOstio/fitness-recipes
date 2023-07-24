@@ -6,6 +6,7 @@ import com.empathy.restapi.security.util.TokenUtil;
 import com.empathy.restapi.service.ElasticService;
 import com.empathy.restapi.service.QueryService;
 import com.empathy.restapi.service.RecipeService;
+import com.empathy.restapi.service.UserService;
 import com.empathy.restapi.service.impl.ElasticServiceImpl;
 import com.empathy.restapi.service.impl.QueryServiceImpl;
 import com.empathy.restapi.service.impl.RecipeServiceImpl;
@@ -29,16 +30,18 @@ public class RecipeController {
     private ElasticService elasticService;
     private QueryService queryService;
     private RecipeService recipeService;
+    private UserService userService;
 
     private TokenUtil tokenUtil;
 
     @Autowired
     public RecipeController(ElasticServiceImpl elasticService, QueryServiceImpl queryService,
-            RecipeServiceImpl recipeService, TokenUtil tokenUtil) {
+            RecipeServiceImpl recipeService, TokenUtil tokenUtil, UserService userService) {
         this.elasticService = elasticService;
         this.queryService = queryService;
         this.recipeService = recipeService;
         this.tokenUtil = tokenUtil;
+        this.userService = userService;
     }
 
     @GetMapping("/bulk-recipes")
@@ -107,20 +110,30 @@ public class RecipeController {
     @PutMapping("/recipes/update/{id}")
     public ResponseEntity<HashMap<String, Object>> updateRecipe(@PathVariable String id,
             @RequestBody Recipe updateRecipe) throws IOException {
-        String updated = recipeService.updateRecipeById(id, updateRecipe);
-        if (updated.equals("Recipe updated successfully")) {
+        Recipe updated = recipeService.updateRecipeById(id, updateRecipe);
+        if (updated != null) {
             HashMap<String, Object> response = new HashMap<String, Object>();
-            response.put("data", updateRecipe);
+            response.put("data", updated);
             response.put("status", HttpStatus.OK.value());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/recipes/filters")
-    public ResponseEntity<HashMap<String, Object>> getFiltersResult(@RequestBody Filter filter) throws IOException {
+    @PostMapping("/recipes/filters")
+    public ResponseEntity<HashMap<String, Object>> getFiltersResultUser(@RequestBody Filter filter,
+                                                                        HttpServletRequest request) throws IOException {
         HashMap<String, Object> response = new HashMap<String, Object>();
-        response.put("data", queryService.findRecipesByIngredients(filter.getTypeOfMeal(), filter.getAverageRating(), filter.getTimePreparation()));
+
+        // User in session
+        String token = tokenUtil.getToken(request);
+        String username = tokenUtil.getUsernameFromToken(token);
+        String id = userService.findByUsername(username).getId();
+
+        List<Recipe> recipes = queryService.findByFilters(filter.getTypeOfMeal(),
+                filter.getAverageRating(), filter.getTimePreparation(), filter.getTitle(), filter.isOwnRecipes(), id);
+
+        response.put("data", recipes);
         response.put("status", HttpStatus.OK.value());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
