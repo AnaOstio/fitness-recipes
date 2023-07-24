@@ -1,13 +1,15 @@
 <template>
   <div>
-    <Header />
+    <Header>
+      <SearchBox @filter="getFilteredRecipes"/>
+    </Header>
 
     <div class="wrapped">
-      <SideBar />
+      <SideBar @filter="getFilteredRecipes"/>
       <main>
         <div class="flex-top">
           <PageTitle />
-          <SearchBox class="search-box-mobile" />
+          <SearchBox class="search-box-mobile" @filter="getFilteredRecipes"/>
           <AddRecipeBtn />
         </div>
         <section>
@@ -45,7 +47,15 @@ export default {
     AddRecipeBtn,
   },
   data() {
-    return { recipes: [] };
+    return { recipes: [],
+      filter: {
+        title: "",
+        typeOfMeal: [],
+        timePreparation: 0,
+        averageRating: 0.0,
+        ownRecipes: true,
+      },
+    };
   },
   created() {
     this.getRecipes(sessionStorage.getItem("userId"));
@@ -66,6 +76,26 @@ export default {
 
     spliceRecipe(index) {
       this.recipes.splice(index, 1);
+    },
+
+    getFilteredRecipes(payload) {
+      payload.title && (this.filter.title = payload.title);
+      payload.typeOfMeal && (this.filter.typeOfMeal = payload.typeOfMeal);
+      payload.timePreparation &&
+        (this.filter.timePreparation = payload.timePreparation);
+      payload.averageRating &&
+        (this.filter.averageRating = payload.averageRating);
+
+      recipeService
+        .filterRecipes(this.filter)
+        .then((result) => {
+          if (result.status === 200) {
+            this.recipes = result.data;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

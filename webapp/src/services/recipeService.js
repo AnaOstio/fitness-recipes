@@ -58,4 +58,23 @@ export default {
     const data = await response.json();
     return data;
   },
+
+  async filterRecipes(filter) {
+    console.log(filter)
+    const response = await fetch(`http://localhost:8080/recipes/filters`,{
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+
+      },
+      body: JSON.stringify(filter)
+    }).catch((error) => {
+        console.log(error);
+    });
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }
 };

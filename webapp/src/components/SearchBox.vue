@@ -1,7 +1,7 @@
 <template>
   <form class="search-form">
     <input class="search-input" type="text" v-model="titleFilter" />
-    <button @click="" class="search-btn">
+    <button @click="search" class="search-btn" type="button">
       <i class="fa-solid fa-arrow-right-long"></i>
     </button>
   </form>
@@ -14,6 +14,11 @@ export default {
     return {
       titleFilter: "",
     };
+  },
+  methods: {
+    search() {
+      this.$emit("filter", {title: this.titleFilter});
+    },
   },
 };
 </script>

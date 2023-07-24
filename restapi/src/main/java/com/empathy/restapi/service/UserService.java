@@ -3,6 +3,7 @@ package com.empathy.restapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.empathy.restapi.model.Recipe;
 import com.empathy.restapi.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,4 +22,6 @@ public interface UserService extends UserDetailsService {
     UserDetails loadUserByUsername(String userName);
 
     String loginUser(String email, String password);
+
+    User findByUsername(String username);
 }

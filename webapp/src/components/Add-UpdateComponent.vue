@@ -49,7 +49,8 @@
           <select id="typeMeal" class="separated" v-model="typeMeal">
             <option value="" selected>Select an option...</option>
             <option value="Breakfast">Breakfast</option>
-            <option value="Launch">Lunch</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Mid-morning meal">Mid-morning meal</option>
             <option value="Dinner">Dinner</option>
             <option value="Dessert">Dessert</option>
           </select>

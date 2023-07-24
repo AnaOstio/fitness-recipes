@@ -13,7 +13,7 @@
         <div class="nav-items">
           <div id="logo-no-mobile">Logo</div>
           <router-link to="#" class="nav-btn">All recipes</router-link>
-          <SearchBox v-if="!showMobileMenu" />
+          <slot v-if="!showMobileMenu" />
           <router-link to="/week-plan" class="nav-btn">Weekly plan</router-link>
           <router-link to="/your-recipes" class="nav-btn"
             >Your recipes</router-link

@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return null;
     }
 
+    @Override
+    public User findByUsername(String username) {
+        return userBD.getUserByUsername(username).get();
+    }
+
 }

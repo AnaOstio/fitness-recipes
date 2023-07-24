@@ -75,17 +75,28 @@ public class QueryServiceImpl implements QueryService {
     }
 
     @Override
-    public List<Recipe> findRecipesByIngredients(String[] types, Double review, Integer timePreparation)
+    public List<Recipe> findByFilters(String[] types, Double review,
+                                                 Integer timePreparation, String title, boolean user, String id)
             throws IOException {
 
         List<Recipe> recipes = new ArrayList<>();
+        System.out.println(title);
         if(types.length != 0 && types != null){
             for (String type : types) {
                 List<Query> queries = new ArrayList<>();
                 queries.add(MatchQuery.of(m -> m.field("typeOfMeal").query(type))._toQuery());
 
-                queries.add(queryAverage(review));
-                queries.add(queryTime(timePreparation));
+                if(review != null && review > 0)
+                    queries.add(queryAverage(review));
+
+                if(timePreparation != null && timePreparation > 0)
+                    queries.add(queryTime(timePreparation));
+
+                if(title != null && !title.trim().isEmpty())
+                    queries.add(queryTitle(title.trim()));
+
+                if(user)
+                    queries.add(queryUser(id));
 
                 Query query =
                         BoolQuery.of(q -> q.must(queries))._toQuery();
@@ -104,8 +115,17 @@ public class QueryServiceImpl implements QueryService {
             }
         } else {
             List<Query> queries = new ArrayList<>();
-            queries.add(queryAverage(review));
-            queries.add(queryTime(timePreparation));
+            if(review != null && review > 0)
+                queries.add(queryAverage(review));
+
+            if(timePreparation != null && timePreparation > 0)
+                queries.add(queryTime(timePreparation));
+
+            if(title != null && !title.trim().isEmpty())
+                queries.add(queryTitle(title.trim()));
+
+            if(user)
+                queries.add(queryUser(id));
 
             Query query =
                     BoolQuery.of(q -> q.must(queries))._toQuery();
@@ -148,5 +168,15 @@ public class QueryServiceImpl implements QueryService {
             return query;
         }
         return null;
+    }
+
+    public Query queryUser(String user) {
+        Query q = MatchQuery.of(m -> m.field("userId").query(user))._toQuery();
+        return q;
+    }
+
+    public Query queryTitle(String title){
+        Query q = MatchQuery.of(m -> m.field("title").query(title))._toQuery();
+        return q;
     }
 }

@@ -103,13 +103,12 @@ form {
   flex-direction: column;
 }
 
-input[type="text"],
-input[type="password"] {
-  margin-top: 5px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #d8dada;
-  padding: 5px;
+input{
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(218, 226, 232);
+  margin-bottom: 5px;
 }
 
 button {

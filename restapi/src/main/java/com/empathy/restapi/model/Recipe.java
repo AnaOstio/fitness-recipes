@@ -96,7 +96,7 @@ public class Recipe {
         calculateAverageRating();
     }
 
-    private void calculateAverageRating() {
+    public void calculateAverageRating() {
         double aux = 0.0;
         for (Map.Entry<String, Double> entry : this.rating.entrySet()) {
             aux += entry.getValue();

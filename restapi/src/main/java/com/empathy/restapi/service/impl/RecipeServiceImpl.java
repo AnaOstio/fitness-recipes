@@ -35,7 +35,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public String updateRecipeById(String id, Recipe updateRecipe) throws IOException {
+    public Recipe updateRecipeById(String id, Recipe updateRecipe) throws IOException {
         Recipe toUpdate = queryService.getRecipeById(id);
 
         if (toUpdate != null) {
@@ -50,10 +50,11 @@ public class RecipeServiceImpl implements RecipeService {
             toUpdate.setMacronutrientsPercentages(updateRecipe.getMacronutrientsPercentages());
             toUpdate.setAverageRating(updateRecipe.getAverageRating());
             toUpdate.setUserId(updateRecipe.getUserId());
+            toUpdate.calculateAverageRating();
             return elasticService.updateRecipe(toUpdate);
         }
 
-        return "This recipe is not present in the database";
+        return null;
 
     }
 
