@@ -1,14 +1,15 @@
 import Login from "../views/Login.vue";
 import Signup from "../views/Signup.vue";
-import YourRecipes from "../views/YourRecipes.vue";
 import VueRouter from "vue-router";
 import WeeklyPlan from "@/views/WeeklyPlan.vue";
+import Recipes from "@/views/Recipes.vue";
 
 const routes = [
   { path: "/login", name: "Login", component: Login, meta: { auth: false } },
   { path: "/signup", name: "Signup", component: Signup,  meta: { auth: false } },
   { path: "/week-plan", name: "Week Plan", component: WeeklyPlan,  meta: { auth: true } },
-  { path: "/your-recipes", name: "YourRecipes", component: YourRecipes,  meta: { auth: true } },
+  { path: "/your-recipes", name: "Your Recipes", component: Recipes,  meta: { auth: true }, props: { ownRecipes: true } },
+  { path: "/all-recipes", name: "All Recipes", component: Recipes,  meta: { auth: true }, props: { ownRecipes: false } },
 ];
 
 const router = new VueRouter({
