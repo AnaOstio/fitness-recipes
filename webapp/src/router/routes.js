@@ -3,13 +3,16 @@ import Signup from "../views/Signup.vue";
 import VueRouter from "vue-router";
 import WeeklyPlan from "@/views/WeeklyPlan.vue";
 import Recipes from "@/views/Recipes.vue";
+import PageNotFound from "@/views/404.vue";
 
 const routes = [
-  { path: "/login", name: "Login", component: Login, meta: { auth: false } },
-  { path: "/signup", name: "Signup", component: Signup,  meta: { auth: false } },
-  { path: "/week-plan", name: "Week Plan", component: WeeklyPlan,  meta: { auth: true } },
-  { path: "/your-recipes", name: "Your Recipes", component: Recipes,  meta: { auth: true }, props: { ownRecipes: true } },
-  { path: "/all-recipes", name: "All Recipes", component: Recipes,  meta: { auth: true }, props: { ownRecipes: false } },
+    { path: "/", name: "Home", component: Login, meta: { auth: false } },
+    { path: "/login", name: "Login", component: Login, meta: { auth: false } },
+    { path: "/signup", name: "Signup", component: Signup,  meta: { auth: false } },
+    { path: "/week-plan", name: "Week Plan", component: WeeklyPlan,  meta: { auth: true } },
+    { path: "/your-recipes", name: "Your Recipes", component: Recipes,  meta: { auth: true }, props: { ownRecipes: true } },
+    { path: "/all-recipes", name: "All Recipes", component: Recipes,  meta: { auth: true }, props: { ownRecipes: false } },
+    { path: "*", component: PageNotFound },
 ];
 
 const router = new VueRouter({
