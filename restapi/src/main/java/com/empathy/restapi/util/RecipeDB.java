@@ -17,9 +17,9 @@ public class RecipeDB {
     private UserBD userBD;
 
     public void readLines() throws FileNotFoundException {
-        String filePath =
-         "//Users//anafo//Documents//Proyectos//fitness-recipes//scripts//foodFilled2.csv";
-        // String filePath = "//Users//carlosda//Documents//GitHub//fitness-recipes//scripts//foodFilled2.csv";
+        // String filePath =
+        // "//Users//anafo//Documents//Proyectos//fitness-recipes//scripts//foodFilled2.csv";
+        String filePath = "//Users//carlosda//Documents//GitHub//fitness-recipes//scripts//foodFilled2.csv";
 
         Scanner sc = new Scanner(new File(filePath));
         sc.useDelimiter("---\n");

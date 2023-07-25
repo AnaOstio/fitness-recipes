@@ -16,12 +16,18 @@
         <h3 class="recipe-type">Type: {{ recipeData.typeOfMeal }}</h3>
         <div class="recipe-time">
           <i class="fa-solid fa-clock"></i>
-          <h3 class="time">{{ recipeData.timeOfPreparation }}</h3>
+          <h3 class="time">{{ `${recipeData.timeOfPreparation} minutes` }}</h3>
         </div>
       </div>
       <div class="card-recipe-footer">
         <div class="recipe-rating">
-          <h3>{{ recipeData.averageRating }}</h3>
+          <h3>
+            {{
+              recipeData.averageRating % 1
+                ? recipeData.averageRating.toFixed(1)
+                : recipeData.averageRating
+            }}
+          </h3>
           <i class="fa-solid fa-star"></i>
         </div>
         <UpdateRecipeBtn
