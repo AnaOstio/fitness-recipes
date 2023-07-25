@@ -57,7 +57,6 @@ export default {
       if (!this.errorsPassword.length && !this.errorsEmail.length) {
         userService.login(this.email, this.password)
           .then((res) => {
-            console.log(res.status)
             if (res.status >= 200 && res.status < 400) {
               // save data
               sessionStorage.setItem('token', res.token);
@@ -103,13 +102,12 @@ form {
   flex-direction: column;
 }
 
-input[type="text"],
-input[type="password"] {
-  margin-top: 5px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #d8dada;
-  padding: 5px;
+input{
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(218, 226, 232);
+  margin-bottom: 5px;
 }
 
 button {

@@ -134,18 +134,38 @@ export default {
 
     setTypeOfMealFilter(e) {
       this.typeOfMealFilter[e.target.value] = e.target.checked;
-      // Here call to the endpoint method
+
+      this.$emit("filter", {typeOfMeal: this.getTypeMealValues(),
+                                      averageRating: this.rateFilter,
+                                      timePreparation: this.timeFilter});
     },
 
     setRateFilter(index) {
       this.rateFilter = index + 1;
-      // Here call to the endpoint method
+
+      this.$emit("filter", {typeOfMeal: this.getTypeMealValues(),
+                                      averageRating: this.rateFilter,
+                                      timePreparation: this.timeFilter});
     },
 
     setTimeFilter(time) {
       this.timeFilter = time;
-      // Here call to the endpoint method
+
+
+      this.$emit("filter", {typeOfMeal: this.getTypeMealValues(),
+                                      averageRating: this.rateFilter,
+                                      timePreparation: this.timeFilter});
     },
+
+    getTypeMealValues(){
+      let typeMealFilters = [];
+      for (let key in this.typeOfMealFilter) {
+        if (this.typeOfMealFilter[key]) {
+          typeMealFilters.push(key);
+        }
+      }
+      return typeMealFilters;
+    }
   },
 };
 </script>

@@ -11,5 +11,7 @@ public interface QueryService {
 
     List<Recipe> getRecipesByUserId(String userId) throws IOException;
 
-    List<Recipe> findRecipesByIngredients(String[] ingredients) throws IOException;
+    List<Recipe> findByFilters(String[] ingredients, Double review,
+                                          Integer timePreparation, String title, boolean user,
+                               String id) throws IOException;
 }

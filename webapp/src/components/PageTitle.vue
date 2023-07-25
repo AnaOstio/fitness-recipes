@@ -1,10 +1,11 @@
 <template>
-  <h1 class="page-title">Your recipes</h1>
+  <h1 class="page-title">{{ ownRecipes ? "Your" : "All"}} recipes</h1>
 </template>
 
 <script>
 export default {
   name: "PageTitle",
+  props: ["ownRecipes"]
 };
 </script>
 

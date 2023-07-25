@@ -35,8 +35,8 @@ public class Recipe {
     @Field(type = FieldType.Double, name = "averageRating")
     private Double averageRating;
 
-    @Field(type = FieldType.Text, name = "timeOfPreparation")
-    private String timeOfPreparation;
+    @Field(type = FieldType.Integer, name = "timeOfPreparation")
+    private int timeOfPreparation;
 
     @Field(type = FieldType.Object, name = "macronutrientsPercentages")
     private Map<String, Double> macronutrientsPercentages;
@@ -52,7 +52,7 @@ public class Recipe {
 
     public Recipe(String id, String title, List<String> ingredients, String instructions, String imageName,
             String typeOfMeal, Map<String, Double> rating, Map<String, Double> macronutrientsPercentages,
-            String timeOfPreparation, String userId) {
+            int timeOfPreparation, String userId) {
         this.id = id;
         this.title = title;
         this.imageName = imageName;
@@ -77,7 +77,7 @@ public class Recipe {
         this.instructions = recipe[3].replaceAll("^\"|\"$", "");
         this.imageName = recipe[4];
         this.typeOfMeal = recipe[5];
-        this.timeOfPreparation = recipe[8];
+        this.timeOfPreparation = Integer.parseInt(recipe[8]);
         this.userId = recipe[9];
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -91,6 +91,17 @@ public class Recipe {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // I need to put the average rating
+        calculateAverageRating();
+    }
+
+    public void calculateAverageRating() {
+        double aux = 0.0;
+        for (Map.Entry<String, Double> entry : this.rating.entrySet()) {
+            aux += entry.getValue();
+        }
+        this.averageRating = aux / this.rating.size();
     }
 
     public String getId() {
@@ -125,7 +136,7 @@ public class Recipe {
         return rating;
     }
 
-    public String getTimeOfPreparation() {
+    public int getTimeOfPreparation() {
         return timeOfPreparation;
     }
 
@@ -157,7 +168,7 @@ public class Recipe {
         this.rating = rating;
     }
 
-    public void setTimeOfPreparation(String timeOfPreparation) {
+    public void setTimeOfPreparation(int timeOfPreparation) {
         this.timeOfPreparation = timeOfPreparation;
     }
 

@@ -75,19 +75,20 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
     @Override
-    public String updateRecipe(Recipe recipe) throws IOException {
+    public Recipe updateRecipe(Recipe recipe) throws IOException {
         // First delete the recipe
         String res = DeleteRecipeById(recipe.getId().toString());
         if(res.equals("Recipe deleted successfully")){
             // Now I added the new recipe
+            recipe.calculateAverageRating();
             res = indexRecipe(recipe);
             if(res.equals("No errors")){
-                return "Recipe updated successfully";
+                return recipe;
             }
-            return res;
+            return null;
         }
 
-        return res;
+        return null;
     }
 
     @Override

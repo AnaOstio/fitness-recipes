@@ -9,7 +9,7 @@ import com.empathy.restapi.model.Recipe;
 public interface RecipeService {
     void add(Recipe recipe, String userId);
 
-    String updateRecipeById(String id, Recipe updateRecipe) throws IOException;
+    Recipe updateRecipeById(String id, Recipe updateRecipe) throws IOException;
 
     Recipe addRecipeById(String id, Recipe addRecipe);
 }

@@ -12,8 +12,8 @@
       >
         <div class="nav-items">
           <div id="logo-no-mobile">Logo</div>
-          <router-link to="#" class="nav-btn">All recipes</router-link>
-          <SearchBox v-if="!showMobileMenu" />
+          <router-link to="/all-recipes" class="nav-btn">All recipes</router-link>
+          <slot v-if="!showMobileMenu" />
           <router-link to="/week-plan" class="nav-btn">Weekly plan</router-link>
           <router-link to="/your-recipes" class="nav-btn"
             >Your recipes</router-link

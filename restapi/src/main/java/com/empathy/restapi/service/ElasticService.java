@@ -8,5 +8,5 @@ public interface ElasticService {
     String indexRecipes() throws IOException;
     String DeleteRecipeById(String id) throws IOException;
     String indexRecipe(Recipe r) throws IOException;
-    String updateRecipe(Recipe recipe) throws IOException;
+    Recipe updateRecipe(Recipe recipe) throws IOException;
 }
