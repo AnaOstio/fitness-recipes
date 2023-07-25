@@ -1,15 +1,15 @@
 <template>
   <div>
     <Header>
-      <SearchBox @filter="getFilteredRecipes"/>
+      <SearchBox @filter="getFilteredRecipes" />
     </Header>
 
     <div class="wrapped">
-      <SideBar @filter="getFilteredRecipes"/>
+      <SideBar @filter="getFilteredRecipes" />
       <main>
         <div class="flex-top">
-          <PageTitle :own-recipes="ownRecipes"/>
-          <SearchBox class="search-box-mobile" @filter="getFilteredRecipes"/>
+          <PageTitle :own-recipes="ownRecipes" />
+          <SearchBox class="search-box-mobile" @filter="getFilteredRecipes" />
           <AddRecipeBtn v-if="ownRecipes" />
         </div>
         <section>
@@ -48,7 +48,8 @@ export default {
     AddRecipeBtn,
   },
   data() {
-    return { recipes: [],
+    return {
+      recipes: [],
       filter: {
         title: "",
         typeOfMeal: [],
@@ -68,13 +69,18 @@ export default {
     this.filter.ownRecipes = this.ownRecipes;
     this.getFilteredRecipes(this.filter);
   },
+  watch: {
+    ownRecipes() {
+      this.getFilteredRecipes(this.filter);
+    },
+  },
   methods: {
-
     spliceRecipe(index) {
       this.recipes.splice(index, 1);
     },
 
     getFilteredRecipes(payload) {
+      this.filter.ownRecipes = this.ownRecipes;
       payload.title && (this.filter.title = payload.title);
       payload.typeOfMeal && (this.filter.typeOfMeal = payload.typeOfMeal);
       payload.timePreparation &&

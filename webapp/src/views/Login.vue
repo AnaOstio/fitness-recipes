@@ -1,37 +1,46 @@
 <template>
-  <section class="login" id="login">
-    <h1>Login</h1>
-    <form @submit="submitForm">
-      <label for="email">Email:</label>
-      <input type="text" id="email" v-model="email" />
-      <div v-if="errorsEmail.length">
-        <ul>
-          <li v-for="error in errorsEmail">{{ error }}</li>
-        </ul>
-      </div>
+  <main>
+    <section>
+      <div id="logo">Logo</div>
+      <form class="login">
+        <h1 class="separated">Login</h1>
+        <label for="email">Email</label>
+        <input class="separated" type="text" id="email" v-model="email" />
+        <div class="errorMsg" v-if="errorEmail">
+          <span>{{ errorEmail }}</span>
+        </div>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" v-model="password" />
-      <div v-if="errorsPassword.length" class="errors">
-        <ul>
-          <li v-for="error in errorsPassword">{{ error }}</li>
-        </ul>
-      </div>
+        <label for="password">Password</label>
+        <input
+          class="separated"
+          type="password"
+          id="password"
+          v-model="password"
+        />
+        <div class="errorMsg" v-if="errorPassword">
+          <span>{{ errorPassword }}</span>
+        </div>
 
-      <button type="submit">Log in</button>
-    </form>
-    <a href="/signup">Create new account!</a>
-  </section>
+        <div class="login-btn">
+          <LogOutBtn :click="submitForm" :btnText="'Log in'" type="submit" />
+          <a href="/signup">Create new account!</a>
+        </div>
+      </form>
+    </section>
+  </main>
 </template>
 
 <script>
 import userService from "@/services/userService";
+import LogOutBtn from "@/components/LogOutBtn.vue";
+
 export default {
   name: "Login",
+  components: { LogOutBtn },
   data: function () {
     return {
-      errorsEmail: [],
-      errorsPassword: [],
+      errorEmail: "",
+      errorPassword: "",
       email: "",
       password: "",
     };
@@ -39,34 +48,32 @@ export default {
 
   methods: {
     submitForm: function (e) {
-      this.errorsEmail = [];
-      this.errorsPassword = [];
+      this.errorEmail = "";
+      this.errorPassword = "";
       if (!this.email || !this.email.trim().length) {
-        this.errorsEmail.push("Email field is required");
-      }
-      if (!this.validEmail(this.email)) {
-        this.errorsEmail.push("Email address must be valid.");
+        this.errorEmail = "Email field is required";
       }
 
       if (!this.password) {
-        this.errorsPassword.push("Password field is required");
+        this.errorPassword = "Password field is required";
       }
 
       e.preventDefault();
 
-      if (!this.errorsPassword.length && !this.errorsEmail.length) {
-        userService.login(this.email, this.password)
+      if (!this.errorPassword.length && !this.errorEmail.length) {
+        userService
+          .login(this.email, this.password)
           .then((res) => {
             if (res.status >= 200 && res.status < 400) {
               // save data
-              sessionStorage.setItem('token', res.token);
-              sessionStorage.setItem('email', res.email);
-              sessionStorage.setItem('userId', res.id);
+              sessionStorage.setItem("token", res.token);
+              sessionStorage.setItem("email", res.email);
+              sessionStorage.setItem("userId", res.id);
 
               // move to the next page
-              this.$router.push('/your-recipes');
+              this.$router.push("/your-recipes");
             } else {
-              this.errorsPassword.push("Credentials error, try it again")
+              this.errorPassword = "Credentials error, try it again";
             }
           })
           .catch((err) => {
@@ -74,27 +81,66 @@ export default {
           });
       }
     },
-    validEmail: function (email) {
-      let re =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    },
   },
 };
 </script>
 
 <style scoped>
-section {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Inter", sans-serif;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  background-color: #d8dada;
+  width: 100%;
+  height: 100%;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+#logo {
+  display: flex;
+  background-color: #eeeeee;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  font-size: 25px;
+}
+
+.login {
+  background-color: #eeeeee;
   padding: 25px;
   border-radius: 13px;
-  max-width: 400px;
-  width: 100%;
-  transform: translate(-50%, -50%);
+  min-width: 400px;
+}
+
+.login-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+}
+
+.login-btn button {
+  min-width: 200px;
+}
+
+.separated {
+  margin-bottom: 15px;
 }
 
 form {
@@ -102,32 +148,25 @@ form {
   flex-direction: column;
 }
 
-input{
+input {
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.5rem;
   border: 1px solid rgb(218, 226, 232);
-  margin-bottom: 5px;
 }
 
-button {
+label {
   margin-bottom: 10px;
-  max-width: 50%;
-  width: 100%;
-  align-self: center;
-  background-color: rgb(0, 255, 127);
-  color: rgb(73, 41, 86);
-  height: 30px;
-  border-radius: 13px;
+}
+
+.errorMsg {
+  color: rgb(255, 70, 70);
+  margin-top: -12px;
+  margin-bottom: 15px;
 }
 
 a,
 h1 {
-  margin-top: 6px;
   text-align: center;
-}
-
-a {
-  display: block;
 }
 </style>

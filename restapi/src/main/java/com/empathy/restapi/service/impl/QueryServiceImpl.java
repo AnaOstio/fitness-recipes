@@ -76,37 +76,35 @@ public class QueryServiceImpl implements QueryService {
 
     @Override
     public List<Recipe> findByFilters(String[] types, Double review,
-                                                 Integer timePreparation, String title, boolean user, String id)
+            Integer timePreparation, String title, boolean user, String id)
             throws IOException {
 
         List<Recipe> recipes = new ArrayList<>();
         System.out.println(title);
-        if(types.length != 0 && types != null){
+        if (types.length != 0 && types != null) {
             for (String type : types) {
                 List<Query> queries = new ArrayList<>();
                 queries.add(MatchQuery.of(m -> m.field("typeOfMeal").query(type))._toQuery());
 
-                if(review != null && review > 0)
+                if (review != null && review > 0)
                     queries.add(queryAverage(review));
 
-                if(timePreparation != null && timePreparation > 0)
+                if (timePreparation != null && timePreparation > 0)
                     queries.add(queryTime(timePreparation));
 
-                if(title != null && !title.trim().isEmpty())
+                if (title != null && !title.trim().isEmpty())
                     queries.add(queryTitle(title.trim()));
 
-                if(user)
+                if (user)
                     queries.add(queryUser(id));
 
-                Query query =
-                        BoolQuery.of(q -> q.must(queries))._toQuery();
+                Query query = BoolQuery.of(q -> q.must(queries))._toQuery();
 
-                SearchResponse response =
-                        elasticsearchClient.search(i -> i
-                                        .index(INDEX)
-                                        .query(query)
-                                        .size(100),
-                                Recipe.class);
+                SearchResponse response = elasticsearchClient.search(i -> i
+                        .index(INDEX)
+                        .query(query)
+                        .size(100),
+                        Recipe.class);
 
                 List<Hit<Recipe>> hits = response.hits().hits();
                 for (Hit<Recipe> hit : hits) {
@@ -115,27 +113,25 @@ public class QueryServiceImpl implements QueryService {
             }
         } else {
             List<Query> queries = new ArrayList<>();
-            if(review != null && review > 0)
+            if (review != null && review > 0)
                 queries.add(queryAverage(review));
 
-            if(timePreparation != null && timePreparation > 0)
+            if (timePreparation != null && timePreparation > 0)
                 queries.add(queryTime(timePreparation));
 
-            if(title != null && !title.trim().isEmpty())
+            if (title != null && !title.trim().isEmpty())
                 queries.add(queryTitle(title.trim()));
 
-            if(user)
+            if (user)
                 queries.add(queryUser(id));
 
-            Query query =
-                    BoolQuery.of(q -> q.must(queries))._toQuery();
+            Query query = BoolQuery.of(q -> q.must(queries))._toQuery();
 
-            SearchResponse response =
-                    elasticsearchClient.search(i -> i
-                                    .index(INDEX)
-                                    .query(query)
-                                    .size(100),
-                            Recipe.class);
+            SearchResponse response = elasticsearchClient.search(i -> i
+                    .index(INDEX)
+                    .query(query)
+                    .size(100),
+                    Recipe.class);
 
             List<Hit<Recipe>> hits = response.hits().hits();
             for (Hit<Recipe> hit : hits) {
@@ -146,24 +142,22 @@ public class QueryServiceImpl implements QueryService {
         return recipes;
     }
 
-    public Query queryTime(Integer value){
-        if(value != null && value > 0){
+    public Query queryTime(Integer value) {
+        if (value != null && value > 0) {
             Query qTime = RangeQuery.of(r -> r
                     .field("timeOfPreparation")
-                    .lte(JsonData.of(value))
-            )._toQuery();
+                    .lte(JsonData.of(value)))._toQuery();
 
             return qTime;
         }
         return null;
     }
 
-    public Query queryAverage(Double value){
-        if(value != null && value > 0){
+    public Query queryAverage(Double value) {
+        if (value != null && value > 0) {
             Query query = RangeQuery.of(r -> r
                     .field("averageRating")
-                    .gte(JsonData.of(value))
-            )._toQuery();
+                    .gte(JsonData.of(value)))._toQuery();
 
             return query;
         }
@@ -175,7 +169,7 @@ public class QueryServiceImpl implements QueryService {
         return q;
     }
 
-    public Query queryTitle(String title){
+    public Query queryTitle(String title) {
         Query q = MatchQuery.of(m -> m.field("title").query(title))._toQuery();
         return q;
     }

@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 public class ElasticSearchConfiguration {
 
     @Bean
-    public ElasticsearchClient getElasticClient(){
+    public ElasticsearchClient getElasticClient() {
 
         // Create the low-level client
         // To put it on the Docker I have to change the HttpPost
         // in this case to "elasticsearch"
-        RestClient restClient = RestClient.builder(
-                new HttpHost("localhost", 9200)).build();
+        RestClient restClient = RestClient.builder(new HttpHost("localhost", 9200),
+                new HttpHost("elasticsearch", 9200)).build();
 
         // Create the transport with a Jackson mapper
         ElasticsearchTransport transport = new RestClientTransport(
@@ -30,6 +30,5 @@ public class ElasticSearchConfiguration {
 
         return client;
     }
-
 
 }
