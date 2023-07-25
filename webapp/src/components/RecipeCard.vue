@@ -187,7 +187,12 @@ export default {
   height: fit-content;
 }
 
+.recipe-rating i {
+  display: flex;
+  align-items: center;
+}
+
 .recipe-rating i::before {
-  font-size: 13px;
+  font-size: 14px;
 }
 </style>
