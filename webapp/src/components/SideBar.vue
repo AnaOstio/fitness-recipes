@@ -58,7 +58,13 @@
         <form class="preparatio-time-filter">
           <label for="prepTime">Limit time</label>
           <div class="d-flex-row">
-            <input type="number" id="prepTime" min="0" v-model="timeFilter" />
+            <input
+              type="number"
+              id="prepTime"
+              min="0"
+              v-model="timeFilter"
+              v-on:keydown.enter.prevent="setTimeFilter(timeFilter)"
+            />
 
             <button
               @click="setTimeFilter(timeFilter)"
@@ -135,29 +141,34 @@ export default {
     setTypeOfMealFilter(e) {
       this.typeOfMealFilter[e.target.value] = e.target.checked;
 
-      this.$emit("filter", {typeOfMeal: this.getTypeMealValues(),
-                                      averageRating: this.rateFilter,
-                                      timePreparation: this.timeFilter});
+      this.$emit("filter", {
+        typeOfMeal: this.getTypeMealValues(),
+        averageRating: this.rateFilter,
+        timePreparation: this.timeFilter,
+      });
     },
 
     setRateFilter(index) {
       this.rateFilter = index + 1;
 
-      this.$emit("filter", {typeOfMeal: this.getTypeMealValues(),
-                                      averageRating: this.rateFilter,
-                                      timePreparation: this.timeFilter});
+      this.$emit("filter", {
+        typeOfMeal: this.getTypeMealValues(),
+        averageRating: this.rateFilter,
+        timePreparation: this.timeFilter,
+      });
     },
 
     setTimeFilter(time) {
       this.timeFilter = time;
 
-
-      this.$emit("filter", {typeOfMeal: this.getTypeMealValues(),
-                                      averageRating: this.rateFilter,
-                                      timePreparation: this.timeFilter});
+      this.$emit("filter", {
+        typeOfMeal: this.getTypeMealValues(),
+        averageRating: this.rateFilter,
+        timePreparation: this.timeFilter,
+      });
     },
 
-    getTypeMealValues(){
+    getTypeMealValues() {
       let typeMealFilters = [];
       for (let key in this.typeOfMealFilter) {
         if (this.typeOfMealFilter[key]) {
@@ -165,7 +176,7 @@ export default {
         }
       }
       return typeMealFilters;
-    }
+    },
   },
 };
 </script>
