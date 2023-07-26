@@ -181,11 +181,13 @@ export default {
         ingredients: this.ingredients.map((ingredient) => ingredient.value),
       };
 
-      this.$store.dispatch("updateRecipe", {
-        recipe: aux,
-        toggleModal: this.toggleModal,
-        updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe),
-      });
+      if (this.validateForm()) {
+        this.$store.dispatch("updateRecipe", {
+          recipe: aux,
+          toggleModal: this.toggleModal,
+          updateRecipeData: (newRecipe) => this.updateRecipeData(newRecipe),
+        });
+      }
     },
 
     addRecipeForm: function (event) {
