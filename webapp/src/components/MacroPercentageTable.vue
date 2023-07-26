@@ -101,7 +101,7 @@ input {
 }
 
 table {
-  width: 50%;
+  width: 100%;
 }
 
 caption {
@@ -112,11 +112,5 @@ caption {
 th {
   background-color: rgb(217, 227, 235);
   padding: 0px 10px;
-}
-
-@media screen and (max-width: 1150px) {
-  table {
-    width: 100%;
-  }
 }
 </style>

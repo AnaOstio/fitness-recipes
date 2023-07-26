@@ -20,14 +20,15 @@
       </div>
 
       <div class="second-part">
-        <MacroPercentageTable
-          :macros="macronutrientsPercentages"
-          @setMacroContent="setMacroContent"
-        />
-        <ul class="errorMsg" v-if="errors.get('table')">
-          <li v-for="e in errors.get('table')">{{ e }}</li>
-        </ul>
-
+        <div class="d-flex-column">
+          <MacroPercentageTable
+            :macros="macronutrientsPercentages"
+            @setMacroContent="setMacroContent"
+          />
+          <div class="errorMsg" v-if="errors.get('table')">
+            <span>{{ errors.get("table") }}</span>
+          </div>
+        </div>
 
         <div class="state">
           <div class="preparation-time separated">
@@ -248,39 +249,14 @@ export default {
         this.errors.delete("preparationTime");
       }
 
-      this.errors.set("table", []);
-
       // table errors
-      if (this.macronutrientsPercentages.protein === "") {
-        this.errors.get("table").push("Protein is required\n");
-      } else if (this.macronutrientsPercentages.protein < 1) {
-        this.errors.get("table").push("Protein must be at least 1 gr\n");
-      } else {
-        this.errors.delete("table");
-      }
-
-      // table errors
-      if (this.macronutrientsPercentages.carbohydrates === "") {
-        this.errors.get("table").push("carbohydrates is required\n");
-      } else if (this.macronutrientsPercentages.carbohydrates < 1) {
-        this.errors.get("table").push("carbohydrates must be at least 1 gr\n");
-      } else {
-        this.errors.delete("table");
-      }
-
-      // table errors
-      if (this.macronutrientsPercentages.greases === "") {
-        this.errors.get("table").push("greases is required\n");
-      } else if (this.macronutrientsPercentages.greases < 1) {
-        this.errors.get("table").push("greases must be at least 1 gr\n");
-      } else {
-        this.errors.delete("table");
-      }
-
-      if (this.macronutrientsPercentages.fiber === "") {
-        this.errors.get("table").push("fiber is required\n");
-      } else if (this.macronutrientsPercentages.fiber < 1) {
-        this.errors.get("table").push("fiber must be at least 1 gr\n");
+      if (
+        this.macronutrientsPercentages.protein === "" ||
+        this.macronutrientsPercentages.carbohydrates === "" ||
+        this.macronutrientsPercentages.greases === "" ||
+        this.macronutrientsPercentages.fiber === ""
+      ) {
+        this.errors.set("table", "All macronutrients percentages are required");
       } else {
         this.errors.delete("table");
       }
@@ -349,6 +325,12 @@ form {
   justify-content: space-between;
   width: 100%;
   gap: 5%;
+}
+
+.d-flex-column {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
 }
 
 .tam {
@@ -498,6 +480,10 @@ select {
   }
 
   .state {
+    width: 100%;
+  }
+
+  .d-flex-column {
     width: 100%;
   }
 }
